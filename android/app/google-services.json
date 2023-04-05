@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "281626527451",
+    "project_id": "game-online-6a05f",
+    "storage_bucket": "game-online-6a05f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281626527451:android:a74f8e99de23c328ca2efe",
+        "android_client_info": {
+          "package_name": "com.example.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281626527451-k9km2ebuteq0uug6r57jeqbtlvovs2un.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnAfpoONd2rsLHPoFUrqBSUw6RfI55KfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281626527451-k9km2ebuteq0uug6r57jeqbtlvovs2un.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
