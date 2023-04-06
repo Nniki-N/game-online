@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:game/common/typedefs.dart';
 import 'package:game/data/models/schemas/account_schema.dart';
 import 'package:game/domain/entities/account.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'account_model.g.dart';
 
@@ -64,4 +66,30 @@ class AccountModel {
         friendsUidList: userAccount.friendsUidList,
         notificationsUidList: userAccount.notificationsUidList,
       );
+
+  AccountModel copyWith({
+    String? username,
+    String? login,
+    String? uid,
+    String? avatarLink,
+    bool? isActiv,
+    bool? isInGame,
+    int? gamesCount,
+    int? victoriesCount,
+    Iterable<String>? friendsUidList,
+    Iterable<String>? notificationsUidList,
+  }) {
+    return AccountModel(
+      username: username ?? this.username,
+      login: login ?? this.login,
+      uid: uid ?? this.uid,
+      avatarLink: avatarLink ?? this.avatarLink,
+      isActiv: isActiv ?? this.isActiv,
+      isInGame: isInGame ?? this.isInGame,
+      gamesCount: gamesCount ?? this.gamesCount,
+      victoriesCount: victoriesCount ?? this.victoriesCount,
+      friendsUidList: friendsUidList ?? this.friendsUidList,
+      notificationsUidList: notificationsUidList ?? this.notificationsUidList,
+    );
+  }
 }
