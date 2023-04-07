@@ -20,6 +20,8 @@ abstract class AuthenticationRepository {
   Future<Account?> registerWithEmailAndPassword({
     required String email,
     required String password,
+    required String username,
+    required String login,
   });
 
   Future<Account?> registerAnonymousUserWithEmailAndPassword({

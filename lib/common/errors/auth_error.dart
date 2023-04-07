@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show immutable;
 
 /// Map of all child errors of type [AuthError].
-const Map<String, AuthError> authErrorsMapping = {
+const Map<String, AuthError> firebaseAuthErrorsMapping = {
   'user-not-found': AuthErrorUserNotFound(),
   'no-current-user': AuthErrorNoCurrentUser(),
   'requires-recent-login': AuthErrorRequiresRecentLogin(),
@@ -34,7 +34,7 @@ abstract class AuthError {
   factory AuthError.fromFirebaseAuthExeption({
     required FirebaseAuthException exception,
   }) =>
-      authErrorsMapping[exception.code.toLowerCase().trim()] ??
+      firebaseAuthErrorsMapping[exception.code.toLowerCase().trim()] ??
       const AuthErrorUnknown();
 }
 
@@ -43,8 +43,8 @@ abstract class AuthError {
 class AuthErrorUnknown extends AuthError {
   const AuthErrorUnknown()
       : super(
-          errorTitle: 'Authentication error',
-          errorText: 'Unknown authentication error',
+          errorTitle: 'Error',
+          errorText: 'Unknown error happend',
         );
 }
 
@@ -167,5 +167,15 @@ class AuthErrorCredentialAlreadyInUse extends AuthError {
       : super(
           errorTitle: 'Invalid credential',
           errorText: 'The credential is already in use!',
+        );
+}
+
+/// The [AuthError] child for error "specific login is already used"
+@immutable
+class AuthErrorLoginIsAlreadyUsed extends AuthError {
+  const AuthErrorLoginIsAlreadyUsed()
+      : super(
+          errorTitle: 'Login is already used',
+          errorText: 'This login is already used, try another one!',
         );
 }
