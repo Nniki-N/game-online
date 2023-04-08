@@ -2,20 +2,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:flutter/services.dart';
 import 'package:game/common/errors/auth_error.dart';
-import 'package:game/data/datasources/firebase_authentication_datasource.dart';
+import 'package:game/data/datasources/firebase_auth_datasource.dart';
 import 'package:game/data/models/account_model.dart';
 import 'package:game/domain/entities/account.dart';
-import 'package:game/domain/repositories/authentication_repository.dart';
+import 'package:game/domain/repositories/auth_repository.dart';
 
 @immutable
-class FirebaseAuthenticationRepository implements AuthenticationRepository {
-  final FirebaseAuthenticationDataSource _authenticationDatasource;
+class FirebaseAuthRepository implements AuthRepository {
+  final FirebaseAuthDataSource _authDatasource;
 
-  const FirebaseAuthenticationRepository({
-    required FirebaseAuthenticationDataSource authenticationDatasource,
-  }) : _authenticationDatasource = authenticationDatasource;
+  const FirebaseAuthRepository({
+    required FirebaseAuthDataSource authDatasource,
+  }) : _authDatasource = authDatasource;
 
   /// Logs the user in the app with email and password.
+  /// 
+  /// Returns [Account] if login process is successful and null if not.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
@@ -25,7 +27,7 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   }) async {
     try {
       final AccountModel? accountModel =
-          await _authenticationDatasource.logInWithEmailAndPassword(
+          await _authDatasource.logInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -40,13 +42,15 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
 
   /// Logs the user in the app via Gogle Authentication.
   /// 
+  /// Returns [Account] if login process is successful and null if not.
+  ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   /// Throws [AuthErrorUnknown] when the error of type [PlatformException] occurs.
   @override
   Future<Account?> logInWithGoogle() async {
     try {
       final AccountModel? accountModel =
-          await _authenticationDatasource.logInWithGoogle();
+          await _authDatasource.logInWithGoogle();
 
       return _returnAccountEntity(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
@@ -59,13 +63,15 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   }
 
   /// Logs the user in the app anonymously.
+  /// 
+  /// Returns [Account] if login process is successful and null if not.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
   Future<Account?> logInAnonymously() async {
     try {
       final AccountModel? accountModel =
-          await _authenticationDatasource.logInAnonymously();
+          await _authDatasource.logInAnonymously();
 
       return _returnAccountEntity(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
@@ -82,13 +88,15 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   @override
   Future<void> logOut() async {
     try {
-      await _authenticationDatasource.logOut();
+      await _authDatasource.logOut();
     } on PlatformException {
       throw const AuthErrorUnknown();
     }
   }
 
-  /// Registers user with email and password.
+  /// Registers user with email, password, username and login.
+  /// 
+  /// Returns [Account] if register process is successful and null if not.
   ///
   /// Throws [AuthErrorLoginIsAlreadyUsed] if specific login is already used
   /// by someone.
@@ -102,12 +110,12 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   }) async {
     try {
       // checks if specific login is already used by someone
-      if (await _authenticationDatasource.loginIsAlreadyUsed(login: login)) {
+      if (await _authDatasource.loginIsAlreadyUsed(login: login)) {
         throw const AuthErrorLoginIsAlreadyUsed();
       }
 
       final AccountModel? accountModel =
-          await _authenticationDatasource.registerWithEmailAndPassword(
+          await _authDatasource.registerWithEmailAndPassword(
         email: email,
         password: password,
         username: username,
@@ -125,18 +133,18 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   }
 
   /// Registers anonymous user with email and password.
+  /// 
+  /// Returns [Account] if register process is successful and null if not.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
   Future<Account?> registerAnonymousUserWithEmailAndPassword({
-    required AccountModel accountModel,
     required String email,
     required String password,
   }) async {
     try {
-      final AccountModel? newAccountModel = await _authenticationDatasource
+      final AccountModel? newAccountModel = await _authDatasource
           .registerAnonymousUserWithEmailAndPassword(
-        accountModel: accountModel,
         email: email,
         password: password,
       );
@@ -155,7 +163,7 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
   @override
   Future<void> deleteAccount() async {
     try {
-      await _authenticationDatasource.deleteAccount();
+      await _authDatasource.deleteAccount();
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -167,7 +175,7 @@ class FirebaseAuthenticationRepository implements AuthenticationRepository {
 
   /// Checks if user is logged in.
   @override
-  Future<bool> isLoggedIn() async => _authenticationDatasource.isLoggedIn();
+  Future<bool> isLoggedIn() async => _authDatasource.isLoggedIn();
 
   /// Converts [AccountModel] in [Account].
   Account? _returnAccountEntity({required AccountModel? accountModel}) {

@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:game/data/models/account_model.dart';
 import 'package:game/domain/entities/account.dart';
 
 @immutable
-abstract class AuthenticationRepository {
-  const AuthenticationRepository();
+abstract class AuthRepository {
+  const AuthRepository();
 
   Future<Account?> logInWithEmailAndPassword({
     required String email,
@@ -25,7 +24,6 @@ abstract class AuthenticationRepository {
   });
 
   Future<Account?> registerAnonymousUserWithEmailAndPassword({
-    required AccountModel accountModel,
     required String email,
     required String password,
   });

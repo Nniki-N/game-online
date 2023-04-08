@@ -9,14 +9,14 @@ import 'package:game/data/models/schemas/account_schema.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 
-class FirebaseAuthenticationDataSource {
+class FirebaseAuthDataSource {
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSingIn;
   final Logger _logger;
   late final FirebaseAccountDatasourceHelper _accountDatasourceHelper;
 
-  FirebaseAuthenticationDataSource({
+  FirebaseAuthDataSource({
     required FirebaseFirestore firebaseFirestore,
     required FirebaseAuth firebaseAuth,
     required GoogleSignIn googleSignIn,
@@ -179,9 +179,10 @@ class FirebaseAuthenticationDataSource {
     }
   }
 
-  /// Registers a user with email and password and creates account.
+  /// Registers a user with email, password, username and login
+  /// and creates account.
   ///
-  /// Returns [AccountModel] if login process is successful and null if not.
+  /// Returns [AccountModel] if register process is successful and null if not.
   Future<AccountModel?> registerWithEmailAndPassword({
     required String email,
     required String password,
@@ -230,9 +231,8 @@ class FirebaseAuthenticationDataSource {
 
   /// Links anonymous user with email and password.
   ///
-  /// Returns [AccountModel] if login process is successful and null if not.
+  /// Returns [AccountModel] if register process is successful and null if not.
   Future<AccountModel?> registerAnonymousUserWithEmailAndPassword({
-    required AccountModel accountModel,
     required String email,
     required String password,
   }) async {
