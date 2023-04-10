@@ -12,13 +12,10 @@ GameRoomModel _$GameRoomModelFromJson(Map<String, dynamic> json) =>
       players: (json['players'] as List<dynamic>)
           .map((e) => PlayerModel.fromJson(e as Map<String, dynamic>)),
       turnOfPlayerUid: json['turnOfPlayerUid'] as String,
-      fieldWithChips: (json['fieldwithChips'] as List<dynamic>)
-          .map((e) => (e as List<dynamic>)
-              .map((e) => e == null
-                  ? null
-                  : ChipModel.fromJson(e as Map<String, dynamic>))
-              .toList())
-          .toList(),
+      fieldWithChips: (json['fieldwithChips'] as List<dynamic>).map((e) =>
+          (e as List<dynamic>).map((e) => e == null
+              ? null
+              : ChipModel.fromJson(e as Map<String, dynamic>))),
     );
 
 Map<String, dynamic> _$GameRoomModelToJson(GameRoomModel instance) =>

@@ -7,8 +7,10 @@ import 'package:game/data/datasources/helpers/firebase_account_datasource_helper
 import 'package:game/data/models/account_model.dart';
 import 'package:game/data/models/schemas/account_schema.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+@lazySingleton
 class FirebaseAuthDataSource {
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _firebaseAuth;
@@ -66,7 +68,7 @@ class FirebaseAuthDataSource {
   /// Returns [AccountModel] if login process is successful and null if not.
   Future<AccountModel?> logInWithGoogle() async {
     try {
-      // s in with Google service
+      // logs in with Google service
       final GoogleSignInAccount? googleAccount = await _googleSingIn.signIn();
 
       // if login process was not aborted
@@ -93,9 +95,12 @@ class FirebaseAuthDataSource {
 
           // creates account if it doesn't exist
           if (!exists) {
+            final String username = _generateUsername();
+
             final AccountModel accountModel = AccountModel(
-              username: user.displayName ?? _generateUsername(),
-              login: _generateLogin(),
+              username: user.displayName ?? username,
+              login: user.displayName?.replaceAll(' ', '').toLowerCase() ??
+                  username.toLowerCase(),
               uid: user.uid,
               avatarLink: null,
               isActiv: true,
@@ -141,9 +146,11 @@ class FirebaseAuthDataSource {
 
       // if the Firebase anonymous login process was successful
       if (user != null) {
+        final String username = _generateUsername();
+
         final AccountModel accountModel = AccountModel(
-          username: user.displayName ?? _generateUsername(),
-          login: _generateLogin(),
+          username: username,
+          login: username.toLowerCase(),
           uid: user.uid,
           avatarLink: null,
           isActiv: true,
@@ -316,6 +323,9 @@ class FirebaseAuthDataSource {
   /// Checks if user is logged in.
   bool isLoggedIn() => _firebaseAuth.currentUser == null ? false : true;
 
+  /// Checks if user is logged in anonymously.
+  bool isAnonymousUser() => _firebaseAuth.currentUser?.isAnonymous ?? false;
+
   /// Returns true if an account with a specific login exists
   Future<bool> loginIsAlreadyUsed({required String login}) async {
     try {
@@ -331,6 +341,6 @@ class FirebaseAuthDataSource {
     }
   }
 
-  String _generateLogin() => 'user${randomNDigitNumber(digitsCount: 10)}';
-  String _generateUsername() => 'User${randomNDigitNumber(digitsCount: 10)}';
+  String _generateUsername() =>
+      'User${randomNDigitNumber(digitsCount: 6)}${randomNDigitNumber(digitsCount: 6)}';
 }

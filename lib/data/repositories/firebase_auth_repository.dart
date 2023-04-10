@@ -177,6 +177,10 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<bool> isLoggedIn() async => _authDatasource.isLoggedIn();
 
+  /// Checks if user is logged in anonymously.
+  @override
+  Future<void> isAnonymousUser() async => _authDatasource.isAnonymousUser();
+
   /// Converts [AccountModel] in [Account].
   Account? _returnAccountEntity({required AccountModel? accountModel}) {
     if (accountModel != null) {

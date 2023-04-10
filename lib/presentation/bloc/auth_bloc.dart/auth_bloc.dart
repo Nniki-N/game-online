@@ -99,7 +99,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final Account? account = await _authRepository.logInAnonymously();
 
       if (account != null) {
-        emit(const LoggedInAuthState());
+        emit(const LoggedInAuthState(isAnonymousUser: true));
       } else {
         emit(const LoggedOutAuthState());
       }

@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "281626527451-k9km2ebuteq0uug6r57jeqbtlvovs2un.apps.googleusercontent.com",
+          "client_id": "281626527451-2aj45tikbmcp5hmc6tevsuo2ehojn6u7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +27,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "281626527451-k9km2ebuteq0uug6r57jeqbtlvovs2un.apps.googleusercontent.com",
+              "client_id": "281626527451-2aj45tikbmcp5hmc6tevsuo2ehojn6u7.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "281626527451-fagrmciq3pveqr78d37nme52g61neoqn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.game"
+              }
             }
           ]
         }

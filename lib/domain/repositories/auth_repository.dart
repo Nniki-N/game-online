@@ -31,4 +31,6 @@ abstract class AuthRepository {
   Future<void> deleteAccount();
 
   Future<bool> isLoggedIn();
+
+  Future<void> isAnonymousUser();
 }

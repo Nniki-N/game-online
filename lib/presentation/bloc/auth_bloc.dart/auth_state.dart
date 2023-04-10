@@ -21,8 +21,11 @@ class LoadingAuthState extends AuthState {
 
 @immutable
 class LoggedInAuthState extends AuthState {
+  final bool isAnonymousUser;
+
   const LoggedInAuthState({
     AuthError? error,
+    this.isAnonymousUser = false,
   }) : super(
           error: error,
         );
@@ -35,4 +38,16 @@ class LoggedOutAuthState extends AuthState {
   }) : super(
           error: error,
         );
+}
+
+extension IsAnonymousUser on AuthState {
+  bool isAnonymousUser() {
+    final AuthState state = this;
+    
+    if (state is LoggedInAuthState) {
+      return state.isAnonymousUser;
+    } else {
+      return false;
+    }
+  }
 }
