@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,22 +14,26 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (content, state) {
         // navigates to the login screen if an error accurs
-        final error = state.error;
-        if (error != null) {
-           AutoRouter.of(context).navigate(const LoginRouter());
+        final authError = state.error;
+        if (authError != null) {
+          log('error initial');
+          AutoRouter.of(context).replace(const LoginRouter());
         }
 
         // navigates to the main screen if the user is logged in
         if (state is LoggedInAuthState) {
-          AutoRouter.of(context).navigate(const MainRouter());
+          log('initial ------------------ go to main');
+          AutoRouter.of(context).replace(const MainRouter());
         }
 
         // navigates to the login screen if the user is logged out
         if (state is LoggedOutAuthState) {
-          AutoRouter.of(context).navigate(const LoginRouter());
+          log('initial ------------------ go to login');
+          AutoRouter.of(context).replace(const LoginRouter());
         }
       },
       builder: (content, state) {

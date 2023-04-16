@@ -59,8 +59,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
-    } catch (e) {
-      emit(const LoggedOutAuthState());
     }
   }
 

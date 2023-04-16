@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +7,8 @@ import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/auth_bloc.dart/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc.dart/auth_event.dart';
 import 'package:game/presentation/bloc/auth_bloc.dart/auth_state.dart';
-import 'package:game/presentation/widgets/loading_overlay.dart';
+import 'package:game/presentation/widgets/dialogs/show_auth_error.dart';
+import 'package:game/presentation/widgets/loading_overlay/loading_overlay.dart';
 
 class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({super.key});
@@ -19,33 +22,44 @@ class RegistrationScreen extends StatelessWidget {
     final repeatPasswordasswordController =
         TextEditingController(text: '12345678');
 
-    final AuthBloc authBloc = context.read<AuthBloc>();
+    return Scaffold(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (content, state) {
+          // shows loading
+          if (state is LoadingAuthState) {
+            log('registration ------------------ show loading');
+            LoadingOverlay.instance().show(
+              context: context,
+              text: 'Loading...',
+            );
+          } else {
+            log('registration ------------------ hide loading');
+            LoadingOverlay.instance().hide();
+          }
 
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (content, state) {
-        // displays an error message if an error accurs
-        final error = state.error;
-        if (error != null) {
-          AutoRouter.of(context).navigate(const LoginRouter());
-        }
+          // displays an error message if an error accurs
+          final authError = state.error;
+          if (authError != null) {
+            log('error login');
+            showAuthError(
+              context: context,
+              authError: authError,
+            );
+          }
 
-        // shows loading
-        if (state is LoadingAuthState) {
-          LoadingOverlay.instance().show(
-            context: context,
-            text: 'Loading...',
-          );
-        } else {
-          LoadingOverlay.instance().hide();
-        }
-      },
-      builder: (context, state) {
-        // if (state is LoadingAuthState) {
-        //   return const LoadingScreen();
-        // }
-        
-        return Scaffold(
-          body: Center(
+          // navigates to the main screen if the user is logged in
+          if (state is LoggedInAuthState) {
+            log('registration ------------------ go to main');
+            // LoadingOverlay.instance().hide();
+            AutoRouter.of(context).replace(const MainRouter());
+          }
+        },
+        builder: (context, state) {
+          // if (state is LoadingAuthState) {
+          //   return const LoadingScreen();
+          // }
+
+          return Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -57,7 +71,8 @@ class RegistrationScreen extends StatelessWidget {
                       const Text('Register'),
                       TextButton(
                         onPressed: () {
-                          AutoRouter.of(context).navigate(const LoginRouter());
+                          log('registration ------------------ go to login');
+                          AutoRouter.of(context).replace(const LoginRouter());
                         },
                         child: const Text('Log in'),
                       ),
@@ -92,6 +107,7 @@ class RegistrationScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      log('registration ------------------ register button');
                       final username = usernameController.text.trim();
                       final login = loginController.text.trim();
                       final email = emailController.text.trim();
@@ -111,7 +127,7 @@ class RegistrationScreen extends StatelessWidget {
                           login: login,
                         );
 
-                        authBloc.add(event);
+                        context.read<AuthBloc>().add(event);
                       }
                     },
                     child: const Text('Register'),
@@ -119,9 +135,9 @@ class RegistrationScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

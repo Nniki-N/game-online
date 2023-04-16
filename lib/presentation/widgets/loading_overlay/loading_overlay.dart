@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:game/presentation/widgets/loading_overlay_controller.dart';
+import 'package:game/presentation/widgets/loading_overlay/loading_overlay_controller.dart';
 
 class LoadingOverlay {
   LoadingOverlay._sharedInstance();

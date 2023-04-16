@@ -12,6 +12,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   
+  
+  #Navigation
   auto_route: ^5.0.3
   
 
