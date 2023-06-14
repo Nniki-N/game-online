@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart' show immutable;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 import 'package:game/data/models/game_room_model.dart';
 import 'package:game/domain/entities/chip.dart';
 import 'package:game/domain/entities/player.dart';
@@ -6,16 +7,19 @@ import 'package:game/domain/entities/player.dart';
 /// This entity is used for the main game logic.
 /// It contains data about players and fiels.
 /// This entity can be converted from [GameRoomModel] model.
-@immutable
 class GameRoom {
   final String uid;
-  final Iterable<Player> players;
+  final List<Player> players;
+  final GameRoomState gameRoomState;
+  final String winnerUid;
   final String turnOfPlayerUid;
-  final Iterable<Iterable<Chip?>> fieldWithChips;
+  final List<List<Chip?>> fieldWithChips;
 
   const GameRoom({
     required this.uid,
     required this.players,
+    required this.gameRoomState,
+    required this.winnerUid,
     required this.turnOfPlayerUid,
     required this.fieldWithChips,
   });
@@ -27,14 +31,40 @@ class GameRoom {
           (playerModel) => Player.fromPlayerModel(
             playerModel: playerModel,
           ),
-        ),
+        ).toList(),
+        gameRoomState: gameRoomModel.gameRoomState,
+        winnerUid: gameRoomModel.winnerUid,
         turnOfPlayerUid: gameRoomModel.turnOfPlayerUid,
         fieldWithChips: gameRoomModel.fieldWithChips.map(
           (chipsList) => chipsList.map(
             (chipModel) => chipModel != null
                 ? Chip.fromChipModel(chipModel: chipModel)
                 : null,
-          ),
-        ),
+          ).toList(),
+        ).toList(),
       );
+
+  GameRoom copyWith({
+    String? uid,
+    List<Player>? players,
+    GameRoomState? gameRoomState,
+    String? winnerUid,
+    String? turnOfPlayerUid,
+    List<List<Chip?>>? fieldWithChips,
+  }) {
+    return GameRoom(
+      uid: uid ?? this.uid,
+      players: players ?? this.players,
+      gameRoomState: gameRoomState ?? this.gameRoomState,
+      winnerUid: winnerUid ?? this.winnerUid,
+      turnOfPlayerUid: turnOfPlayerUid ?? this.turnOfPlayerUid,
+      fieldWithChips: fieldWithChips ?? this.fieldWithChips,
+    );
+  }
+}
+
+enum GameRoomState {
+  init,
+  inGame,
+  result,
 }

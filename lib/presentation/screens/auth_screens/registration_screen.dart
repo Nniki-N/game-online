@@ -4,9 +4,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_bloc.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_event.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_state.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/widgets/dialogs/show_auth_error.dart';
 import 'package:game/presentation/widgets/loading_overlay/loading_overlay.dart';
 

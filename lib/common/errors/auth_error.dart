@@ -58,6 +58,36 @@ class AuthErrorUserNotFound extends AuthError {
         );
 }
 
+/// The [AuthError] child error due to absence of a user in received credentials
+@immutable
+class AuthErrorUserCredentialUserNotFound extends AuthError {
+  const AuthErrorUserCredentialUserNotFound()
+      : super(
+          errorTitle: 'User not found',
+          errorText: 'The user was not found in credentials',
+        );
+}
+
+/// The [AuthError] child error due to googl sign in aborting
+@immutable
+class AuthErrorGoogleSignInWasAborted extends AuthError {
+  const AuthErrorGoogleSignInWasAborted()
+      : super(
+          errorTitle: 'Google sign in was aborted',
+          errorText: 'Google sign in was aborted',
+        );
+}
+
+/// The [AuthError] child for local firebase database
+@immutable
+class AuthErrorLocalCurrentUserNotFound extends AuthError {
+  const AuthErrorLocalCurrentUserNotFound()
+      : super(
+          errorTitle: 'User not found',
+          errorText: 'The given user was not found in the local database!',
+        );
+}
+
 /// The [AuthError] child for firebase error "auth/no-current-user"
 @immutable
 class AuthErrorNoCurrentUser extends AuthError {

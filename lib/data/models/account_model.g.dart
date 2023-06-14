@@ -13,12 +13,15 @@ AccountModel _$AccountModelFromJson(Map<String, dynamic> json) => AccountModel(
       avatarLink: json['avatarLink'] as String?,
       isActiv: json['isActiv'] as bool,
       isInGame: json['isInGame'] as bool,
+      inGameRoomId: json['inGameRoomId'] as String,
       gamesCount: json['gamesCount'] as int,
       victoriesCount: json['victoriesCount'] as int,
-      friendsUidList:
-          (json['friendsUidList'] as List<dynamic>).map((e) => e as String),
+      friendsUidList: (json['friendsUidList'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       notificationsUidList: (json['notificationsUidList'] as List<dynamic>)
-          .map((e) => e as String),
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$AccountModelToJson(AccountModel instance) =>
@@ -29,8 +32,9 @@ Map<String, dynamic> _$AccountModelToJson(AccountModel instance) =>
       'avatarLink': instance.avatarLink,
       'isActiv': instance.isActiv,
       'isInGame': instance.isInGame,
+      'inGameRoomId': instance.inGameRoomId,
       'gamesCount': instance.gamesCount,
       'victoriesCount': instance.victoriesCount,
-      'friendsUidList': instance.friendsUidList.toList(),
-      'notificationsUidList': instance.notificationsUidList.toList(),
+      'friendsUidList': instance.friendsUidList,
+      'notificationsUidList': instance.notificationsUidList,
     };

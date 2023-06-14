@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart' show immutable;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:game/common/typedefs.dart';
 import 'package:game/data/models/schemas/notification_schema.dart';
 import 'package:game/domain/entities/notification.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'notification_model.g.dart';
 
@@ -13,7 +14,6 @@ part 'notification_model.g.dart';
 ///
 /// This model can be converted in [TextNotification] and [NotificationFromUser]
 /// entities.
-@immutable
 @JsonSerializable(explicitToJson: true)
 class NotificationModel {
   @JsonKey(name: NotificationSchema.uid)
@@ -50,6 +50,30 @@ class NotificationModel {
   factory NotificationModel.fromJson(Json json) =>
       _$NotificationModelFromJson(json);
   Json toJson() => _$NotificationModelToJson(this);
+
+  NotificationModel copyWith({
+    String? uid,
+    String? title,
+    String? message,
+    NotificationType? notificationType,
+    DateTime? sendingTime,
+    String? senderUid,
+    String? senderUsername,
+    String? senderAvatarLink,
+    NotificationOffer? notificationOffer,
+  }) {
+    return NotificationModel(
+      uid: uid ?? this.uid,
+      title: title ?? this.title,
+      message: message ?? this.message,
+      notificationType: notificationType ?? this.notificationType,
+      sendingTime: sendingTime ?? this.sendingTime,
+      senderUid: senderUid ?? this.senderUid,
+      senderUsername: senderUsername ?? this.senderUsername,
+      senderAvatarLink: senderAvatarLink ?? this.senderAvatarLink,
+      notificationOffer: notificationOffer ?? this.notificationOffer,
+    );
+  }
 }
 
 enum NotificationType {

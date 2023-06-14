@@ -1,8 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/foundation.dart' show immutable;
+
 import 'package:game/data/models/notification_model.dart';
 
 /// An abstract entity used to display and respond to notifications.
-@immutable
 abstract class Notification {
   final String uid;
   final String message;
@@ -17,7 +18,6 @@ abstract class Notification {
 
 /// The [Notification] child entity is only used to display general message.
 /// This entity can be converted from [NotificationModel] model.
-@immutable
 class TextNotification extends Notification {
   final String? title;
 
@@ -41,6 +41,20 @@ class TextNotification extends Notification {
         sendingTime: notificationModel.sendingTime,
         title: notificationModel.title,
       );
+
+  TextNotification copyWith({
+    String? title,
+    String? uid,
+    String? message,
+    DateTime? sendingTime,
+  }) {
+    return TextNotification(
+      title: title ?? this.title,
+      uid: uid ?? this.uid,
+      message: message ?? this.message,
+      sendingTime: sendingTime ?? this.sendingTime,
+    );
+  }
 }
 
 /// The [Notification] child entity can be sent only by autorized users.
@@ -79,6 +93,26 @@ class NotificationFromUser extends Notification {
         senderAvatarLink: notificationModel.senderAvatarLink,
         notificationOffer: notificationModel.notificationOffer,
       );
+
+  NotificationFromUser copyWith({
+    String? uid,
+    String? message,
+    DateTime? sendingTime,
+    String? senderUsername,
+    String? senderUid,
+    String? senderAvatarLink,
+    NotificationOffer? notificationOffer,
+  }) {
+    return NotificationFromUser(
+      uid: uid ?? this.uid,
+      message: message ?? this.message,
+      sendingTime: sendingTime ?? this.sendingTime,
+      senderUsername: senderUsername ?? this.senderUsername,
+      senderUid: senderUid ?? this.senderUid,
+      senderAvatarLink: senderAvatarLink ?? this.senderAvatarLink,
+      notificationOffer: notificationOffer ?? this.notificationOffer,
+    );
+  }
 }
 
 enum NotificationOffer {

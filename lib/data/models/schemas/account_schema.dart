@@ -5,6 +5,7 @@ class AccountSchema {
   static const String avatarLink = 'avatarLink';
   static const String isActiv = 'isActiv';
   static const String isInGame = 'isInGame';
+  static const String inGameRoomId = 'inGameRoomId';
   static const String gamesCount = 'gamesCount';
   static const String victoriesCount = 'victoriesCount';
   static const String friendsUidList = 'friendsUidList';

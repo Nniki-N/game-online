@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_bloc.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_state.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 
 class ProfileSettingsScreen extends StatelessWidget {
   const ProfileSettingsScreen({super.key});

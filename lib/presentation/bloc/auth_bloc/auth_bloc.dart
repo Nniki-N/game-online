@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/errors/auth_error.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/domain/repositories/auth_repository.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_event.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_state.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;

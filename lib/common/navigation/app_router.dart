@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:game/presentation/screens/auth_screens/login_screen.dart';
 import 'package:game/presentation/screens/auth_screens/registration_screen.dart';
 import 'package:game/presentation/screens/game_screens/offline_game_screen/offline_game_screen.dart';

@@ -9,7 +9,7 @@ part of 'player_model.dart';
 PlayerModel _$PlayerModelFromJson(Map<String, dynamic> json) => PlayerModel(
       uid: json['uid'] as String,
       username: json['username'] as String,
-      avatarLink: json['avatarLink'] as String,
+      avatarLink: json['avatarLink'] as String?,
       chipsCount: (json['chipsCount'] as Map<String, dynamic>).map(
         (k, e) => MapEntry($enumDecode(_$ChipsEnumMap, k), e as int),
       ),

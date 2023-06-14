@@ -1,30 +1,36 @@
-import 'package:flutter/foundation.dart' show immutable;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:json_annotation/json_annotation.dart';
+
+import 'package:game/common/typedefs.dart';
 import 'package:game/data/models/chip_model.dart';
 import 'package:game/data/models/player_model.dart';
 import 'package:game/data/models/schemas/game_room_schema.dart';
 import 'package:game/domain/entities/game_room.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:game/common/typedefs.dart';
 
 part 'game_room_model.g.dart';
 
 /// This model contains all game data and stores in Firebase.
 /// This model can be converted from [GameRoom] entity.
-@immutable
 @JsonSerializable(explicitToJson: true)
 class GameRoomModel {
   @JsonKey(name: GameRoomSchema.uid)
   final String uid;
   @JsonKey(name: GameRoomSchema.players)
-  final Iterable<PlayerModel> players;
+  final List<PlayerModel> players;
+  @JsonKey(name: GameRoomSchema.gameRoomState)
+  final GameRoomState gameRoomState;
+  @JsonKey(name: GameRoomSchema.winnerUid)
+  final String winnerUid;
   @JsonKey(name: GameRoomSchema.turnOfPlayerUid)
   final String turnOfPlayerUid;
   @JsonKey(name: GameRoomSchema.fieldWithChips)
-  final Iterable<Iterable<ChipModel?>> fieldWithChips;
+  final List<List<ChipModel?>> fieldWithChips;
 
   const GameRoomModel({
     required this.uid,
     required this.players,
+    required this.gameRoomState,
+    required this.winnerUid,
     required this.turnOfPlayerUid,
     required this.fieldWithChips,
   });
@@ -37,14 +43,34 @@ class GameRoomModel {
         uid: gameRoom.uid,
         players: gameRoom.players.map(
           (playerEntity) => PlayerModel.fromPlayerEntity(player: playerEntity),
-        ),
+        ).toList(),
+        gameRoomState: gameRoom.gameRoomState,
+        winnerUid: gameRoom.winnerUid,
         turnOfPlayerUid: gameRoom.turnOfPlayerUid,
         fieldWithChips: gameRoom.fieldWithChips.map(
           (chipsList) => chipsList.map(
             (chipEntity) => chipEntity != null
                 ? ChipModel.fromChipEntity(chip: chipEntity)
                 : null,
-          ),
-        ),
+          ).toList(),
+        ).toList(),
       );
+
+  GameRoomModel copyWith({
+    String? uid,
+    List<PlayerModel>? players,
+    GameRoomState? gameRoomState,
+    String? winnerUid,
+    String? turnOfPlayerUid,
+    List<List<ChipModel?>>? fieldWithChips,
+  }) {
+    return GameRoomModel(
+      uid: uid ?? this.uid,
+      players: players ?? this.players,
+      gameRoomState: gameRoomState ?? this.gameRoomState,
+      winnerUid: winnerUid ?? this.winnerUid,
+      turnOfPlayerUid: turnOfPlayerUid ?? this.turnOfPlayerUid,
+      fieldWithChips: fieldWithChips ?? this.fieldWithChips,
+    );
+  }
 }

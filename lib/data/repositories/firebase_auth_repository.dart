@@ -16,8 +16,8 @@ class FirebaseAuthRepository implements AuthRepository {
   }) : _authDatasource = authDatasource;
 
   /// Logs the user in the app with email and password.
-  /// 
-  /// Returns [Account] if login process is successful and null if not.
+  ///
+  /// Returns [Account] if a login process is successful.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
@@ -26,13 +26,13 @@ class FirebaseAuthRepository implements AuthRepository {
     required String password,
   }) async {
     try {
-      final AccountModel? accountModel =
+      final AccountModel accountModel =
           await _authDatasource.logInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      return _returnAccountEntity(accountModel: accountModel);
+      return Account.fromAccountModel(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -41,18 +41,18 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   /// Logs the user in the app via Gogle Authentication.
-  /// 
-  /// Returns [Account] if login process is successful and null if not.
+  ///
+  /// Returns [Account] if a login process is successful.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   /// Throws [AuthErrorUnknown] when the error of type [PlatformException] occurs.
   @override
-  Future<Account?> logInWithGoogle() async {
+  Future<Account> logInWithGoogle() async {
     try {
-      final AccountModel? accountModel =
+      final AccountModel accountModel =
           await _authDatasource.logInWithGoogle();
 
-      return _returnAccountEntity(accountModel: accountModel);
+      return Account.fromAccountModel(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -63,17 +63,17 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   /// Logs the user in the app anonymously.
-  /// 
-  /// Returns [Account] if login process is successful and null if not.
+  ///
+  /// Returns [Account] if a login process is successful.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
-  Future<Account?> logInAnonymously() async {
+  Future<Account> logInAnonymously() async {
     try {
-      final AccountModel? accountModel =
+      final AccountModel accountModel =
           await _authDatasource.logInAnonymously();
 
-      return _returnAccountEntity(accountModel: accountModel);
+      return Account.fromAccountModel(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -94,15 +94,15 @@ class FirebaseAuthRepository implements AuthRepository {
     }
   }
 
-  /// Registers user with email, password, username and login.
-  /// 
-  /// Returns [Account] if register process is successful and null if not.
+  /// Registers the user with email, password, username and login.
+  ///
+  /// Returns [Account] if a register process is successful.
   ///
   /// Throws [AuthErrorLoginIsAlreadyUsed] if specific login is already used
   /// by someone.
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
-  Future<Account?> registerWithEmailAndPassword({
+  Future<Account> registerWithEmailAndPassword({
     required String email,
     required String password,
     required String username,
@@ -114,7 +114,7 @@ class FirebaseAuthRepository implements AuthRepository {
         throw const AuthErrorLoginIsAlreadyUsed();
       }
 
-      final AccountModel? accountModel =
+      final AccountModel accountModel =
           await _authDatasource.registerWithEmailAndPassword(
         email: email,
         password: password,
@@ -122,7 +122,7 @@ class FirebaseAuthRepository implements AuthRepository {
         login: login,
       );
 
-      return _returnAccountEntity(accountModel: accountModel);
+      return Account.fromAccountModel(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -132,24 +132,24 @@ class FirebaseAuthRepository implements AuthRepository {
     }
   }
 
-  /// Registers anonymous user with email and password.
-  /// 
-  /// Returns [Account] if register process is successful and null if not.
+  /// Registers an anonymous user with email and password.
+  ///
+  /// Returns [Account] if a register process is successful.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
-  Future<Account?> registerAnonymousUserWithEmailAndPassword({
+  Future<Account> registerAnonymousUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-      final AccountModel? newAccountModel = await _authDatasource
-          .registerAnonymousUserWithEmailAndPassword(
+      final AccountModel newAccountModel =
+          await _authDatasource.registerAnonymousUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      return _returnAccountEntity(accountModel: newAccountModel);
+      return Account.fromAccountModel(accountModel: newAccountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -157,7 +157,7 @@ class FirebaseAuthRepository implements AuthRepository {
     }
   }
 
-  /// Deletes user account.
+  /// Deletes the user account.
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
@@ -173,20 +173,12 @@ class FirebaseAuthRepository implements AuthRepository {
     }
   }
 
-  /// Checks if user is logged in.
+  /// Checks if the user is logged in.
   @override
   Future<bool> isLoggedIn() async => _authDatasource.isLoggedIn();
 
-  /// Checks if user is logged in anonymously.
+  /// Checks if the user is logged in anonymously.
   @override
   Future<void> isAnonymousUser() async => _authDatasource.isAnonymousUser();
 
-  /// Converts [AccountModel] in [Account].
-  Account? _returnAccountEntity({required AccountModel? accountModel}) {
-    if (accountModel != null) {
-      return Account.fromAccountModel(accountModel: accountModel);
-    } else {
-      return null;
-    }
-  }
 }

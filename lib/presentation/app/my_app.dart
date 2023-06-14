@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/di/locator.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_bloc.dart';
-import 'package:game/presentation/bloc/auth_bloc.dart/auth_event.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

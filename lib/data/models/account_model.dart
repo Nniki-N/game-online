@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/foundation.dart' show immutable;
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:game/common/typedefs.dart';
@@ -11,7 +10,6 @@ part 'account_model.g.dart';
 /// This model contains all account data.
 /// All accounts are stored in Firebase.
 /// This model can be converted from [UserAccount] entity.
-@immutable
 @JsonSerializable(explicitToJson: true)
 class AccountModel {
   @JsonKey(name: AccountSchema.username)
@@ -26,14 +24,16 @@ class AccountModel {
   final bool isActiv;
   @JsonKey(name: AccountSchema.isInGame)
   final bool isInGame;
+  @JsonKey(name: AccountSchema.inGameRoomId)
+  final String inGameRoomId;
   @JsonKey(name: AccountSchema.gamesCount)
   final int gamesCount;
   @JsonKey(name: AccountSchema.victoriesCount)
   final int victoriesCount;
   @JsonKey(name: AccountSchema.friendsUidList)
-  final Iterable<String> friendsUidList;
+  final List<String> friendsUidList;
   @JsonKey(name: AccountSchema.notificationsUidList)
-  final Iterable<String> notificationsUidList;
+  final List<String> notificationsUidList;
 
   const AccountModel({
     required this.username,
@@ -42,6 +42,7 @@ class AccountModel {
     required this.avatarLink,
     required this.isActiv,
     required this.isInGame,
+    required this.inGameRoomId,
     required this.gamesCount,
     required this.victoriesCount,
     required this.friendsUidList,
@@ -61,6 +62,7 @@ class AccountModel {
         avatarLink: userAccount.avatarLink,
         isActiv: userAccount.isActiv,
         isInGame: userAccount.isInGame,
+        inGameRoomId: userAccount.inGameRoomId,
         gamesCount: userAccount.gamesCount,
         victoriesCount: userAccount.victoriesCount,
         friendsUidList: userAccount.friendsUidList,
@@ -74,10 +76,11 @@ class AccountModel {
     String? avatarLink,
     bool? isActiv,
     bool? isInGame,
+    String? inGameRoomId,
     int? gamesCount,
     int? victoriesCount,
-    Iterable<String>? friendsUidList,
-    Iterable<String>? notificationsUidList,
+    List<String>? friendsUidList,
+    List<String>? notificationsUidList,
   }) {
     return AccountModel(
       username: username ?? this.username,
@@ -86,6 +89,7 @@ class AccountModel {
       avatarLink: avatarLink ?? this.avatarLink,
       isActiv: isActiv ?? this.isActiv,
       isInGame: isInGame ?? this.isInGame,
+      inGameRoomId: inGameRoomId ?? this.inGameRoomId,
       gamesCount: gamesCount ?? this.gamesCount,
       victoriesCount: victoriesCount ?? this.victoriesCount,
       friendsUidList: friendsUidList ?? this.friendsUidList,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/common/constants/firebase_constants.dart';
+import 'package:game/common/errors/auth_error.dart';
 import 'package:game/common/typedefs.dart';
 import 'package:game/data/models/account_model.dart';
 import 'package:logger/logger.dart';
@@ -40,9 +41,11 @@ class FirebaseAccountDatasourceHelper {
     }
   }
 
-  /// Retrieves account data from the Firestore Database and returns
-  /// [AccountModel] if the request was successful or null if not.
-  Future<AccountModel?> getAccountModel({required String uid}) async {
+  /// Retrieves a user account data from the Firestore Database and returns
+  /// [AccountModel] if the request was successful.
+  ///
+  /// Throws [AuthErrorLocalCurrentUserNotFound] if an account data was not retrieved.
+  Future<AccountModel> getAccountModel({required String uid}) async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await _firebaseFirestore
@@ -52,16 +55,33 @@ class FirebaseAccountDatasourceHelper {
 
       final Json? json = snapshot.data();
 
-      if (json != null) return AccountModel.fromJson(json);
+      if (json == null) throw const AuthErrorUserNotFound();
 
-      return null;
+      return AccountModel.fromJson(json);
     } catch (exception) {
       _logger.e(exception);
-      return null;
+      rethrow;
     }
   }
 
-  /// Updates account data in the Firestore Database.
+  /// Retrieves a stream of changes of an account data from the Firestore Database
+  /// and returns a stream of[AccountModel] if the request was successful.
+  Stream<AccountModel> getAccountModelStream({required String uid}) {
+    try {
+      final Stream<AccountModel> accountModelStream = _firebaseFirestore
+          .collection(FirebaseConstants.accounts)
+          .doc(uid)
+          .snapshots()
+          .map((snapshot) => AccountModel.fromJson(snapshot.data() as Json));
+
+      return accountModelStream;
+    } catch (exception) {
+      _logger.e(exception);
+      rethrow;
+    }
+  }
+
+  /// Updates a user account data in the Firestore Database.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
       await _firebaseFirestore
@@ -74,7 +94,7 @@ class FirebaseAccountDatasourceHelper {
     }
   }
 
-  /// Checks if account already exists in the Firestore Database.
+  /// Checks if a user account already exists in the Firestore Database.
   Future<bool> accountExists({required String uid}) async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> snapshot =

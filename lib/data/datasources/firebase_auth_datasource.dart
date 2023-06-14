@@ -35,7 +35,9 @@ class FirebaseAuthDataSource {
   /// Logs the user in the app via Firebase Authentication with email and password.
   ///
   /// Returns [AccountModel] if login process is successful and null if not.
-  Future<AccountModel?> logInWithEmailAndPassword({
+  ///
+  /// Throws [AuthErrorUserCredentialUserNotFound] if a login process failed.
+  Future<AccountModel> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -48,12 +50,11 @@ class FirebaseAuthDataSource {
 
       final user = userCredential.user;
 
-      // returns account data if login process is successful
-      if (user != null) {
-        return await _accountDatasourceHelper.getAccountModel(uid: user.uid);
-      } else {
-        return null;
-      }
+      // Throws an error if a login process in the Firebase failed.
+      if (user == null) throw const AuthErrorUserCredentialUserNotFound();
+
+      // returns account data if a login process is successful
+      return await _accountDatasourceHelper.getAccountModel(uid: user.uid);
     } catch (exception) {
       _logger.e(exception);
       rethrow;
@@ -66,95 +67,52 @@ class FirebaseAuthDataSource {
   /// Creates an account the first time user logs in with Google.
   ///
   /// Returns [AccountModel] if login process is successful and null if not.
-  Future<AccountModel?> logInWithGoogle() async {
+  ///
+  /// Throws [AuthErrorGoogleSignInWasAborted] if a gogle signin process was aborted.
+  /// Throws [AuthErrorUserCredentialUserNotFound] if a login process failed.
+  Future<AccountModel> logInWithGoogle() async {
     try {
       // logs in with Google service
       final GoogleSignInAccount? googleAccount = await _googleSingIn.signIn();
 
-      // if login process was not aborted
-      if (googleAccount != null) {
-        // gets authentication tokens after sign in
-        final GoogleSignInAuthentication gogleAuth =
-            await googleAccount.authentication;
+      // Throws an error if a google signin process was aborted.
+      if (googleAccount == null) throw const AuthErrorGoogleSignInWasAborted();
 
-        final OAuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: gogleAuth.accessToken,
-          idToken: gogleAuth.idToken,
-        );
+      // gets authentication tokens after sign in
+      final GoogleSignInAuthentication gogleAuth =
+          await googleAccount.authentication;
 
-        // logs in to Firebase with credentials
-        final UserCredential userCredential =
-            await _firebaseAuth.signInWithCredential(credential);
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: gogleAuth.accessToken,
+        idToken: gogleAuth.idToken,
+      );
 
-        final User? user = userCredential.user;
-
-        // if the Firebase login process was successful
-        if (user != null) {
-          final bool exists =
-              await _accountDatasourceHelper.accountExists(uid: user.uid);
-
-          // creates account if it doesn't exist
-          if (!exists) {
-            final String username = _generateUsername();
-
-            final AccountModel accountModel = AccountModel(
-              username: user.displayName ?? username,
-              login: user.displayName?.replaceAll(' ', '').toLowerCase() ??
-                  username.toLowerCase(),
-              uid: user.uid,
-              avatarLink: null,
-              isActiv: true,
-              isInGame: false,
-              gamesCount: 0,
-              victoriesCount: 0,
-              friendsUidList: const [],
-              notificationsUidList: const [],
-            );
-
-            await _accountDatasourceHelper.createAccount(
-                accountModel: accountModel);
-
-            // return new account data
-            return accountModel;
-          } else {
-            // returns existing account data
-            return await _accountDatasourceHelper.getAccountModel(
-                uid: user.uid);
-          }
-        } else {
-          // login process was not successful
-          return null;
-        }
-      } else {
-        // login process was aborted
-        return null;
-      }
-    } catch (exception) {
-      _logger.e(exception);
-      rethrow;
-    }
-  }
-
-  /// Creates account and logs the user in the app anonymously.
-  ///
-  /// Returns [AccountModel] if login process is successful and null if not.
-  Future<AccountModel?> logInAnonymously() async {
-    try {
+      // logs in to Firebase with credentials
       final UserCredential userCredential =
-          await _firebaseAuth.signInAnonymously();
+          await _firebaseAuth.signInWithCredential(credential);
+
       final User? user = userCredential.user;
 
-      // if the Firebase anonymous login process was successful
-      if (user != null) {
+      // Throws an error if a login process in the Firebase failed.
+      if (user == null) throw const AuthErrorUserCredentialUserNotFound();
+
+      // if the Firebase login process was successful
+      final bool exists =
+          await _accountDatasourceHelper.accountExists(uid: user.uid);
+
+      // creates account if it doesn't exist
+      if (!exists) {
         final String username = _generateUsername();
 
         final AccountModel accountModel = AccountModel(
-          username: username,
-          login: username.toLowerCase(),
+          username: user.displayName ?? username,
+          login: user.displayName?.replaceAll(' ', '').toLowerCase() ??
+              username.toLowerCase(),
           uid: user.uid,
           avatarLink: null,
           isActiv: true,
           isInGame: false,
+          inGameRoomId: '',
           gamesCount: 0,
           victoriesCount: 0,
           friendsUidList: const [],
@@ -167,8 +125,49 @@ class FirebaseAuthDataSource {
         // return new account data
         return accountModel;
       } else {
-        return null;
+        // returns existing account data
+        return await _accountDatasourceHelper.getAccountModel(uid: user.uid);
       }
+    } catch (exception) {
+      _logger.e(exception);
+      rethrow;
+    }
+  }
+
+  /// Creates account and logs the user in the app anonymously.
+  ///
+  /// Returns [AccountModel] if login process is successful and null if not.
+  ///
+  /// Throws [AuthErrorUserCredentialUserNotFound] if an anonymous login process failed.
+  Future<AccountModel> logInAnonymously() async {
+    try {
+      final UserCredential userCredential =
+          await _firebaseAuth.signInAnonymously();
+      final User? user = userCredential.user;
+
+      // Throws an error if a anonymous login process in the Firebase failed.
+      if (user == null) throw const AuthErrorUserCredentialUserNotFound();
+
+      final String username = _generateUsername();
+
+      final AccountModel accountModel = AccountModel(
+        username: username,
+        login: username.toLowerCase(),
+        uid: user.uid,
+        avatarLink: null,
+        isActiv: true,
+        isInGame: false,
+        inGameRoomId: '',
+        gamesCount: 0,
+        victoriesCount: 0,
+        friendsUidList: const [],
+        notificationsUidList: const [],
+      );
+
+      await _accountDatasourceHelper.createAccount(accountModel: accountModel);
+
+      // return new account data
+      return accountModel;
     } catch (exception) {
       _logger.e(exception);
       rethrow;
@@ -190,7 +189,9 @@ class FirebaseAuthDataSource {
   /// and creates account.
   ///
   /// Returns [AccountModel] if register process is successful and null if not.
-  Future<AccountModel?> registerWithEmailAndPassword({
+  ///
+  /// Throws [AuthErrorUserCredentialUserNotFound] if a registration process failed.
+  Future<AccountModel> registerWithEmailAndPassword({
     required String email,
     required String password,
     required String username,
@@ -206,30 +207,28 @@ class FirebaseAuthDataSource {
 
       final User? user = userCredential.user;
 
+      // Throws an error if a registration process in the Firebase failed.
+      if (user == null) throw const AuthErrorUserCredentialUserNotFound();
+
       // creates a user account
-      if (user != null) {
-        final AccountModel accountModel = AccountModel(
-          username: username,
-          login: login,
-          uid: user.uid,
-          avatarLink: null,
-          isActiv: true,
-          isInGame: false,
-          gamesCount: 0,
-          victoriesCount: 0,
-          friendsUidList: const [],
-          notificationsUidList: const [],
-        );
+      final AccountModel accountModel = AccountModel(
+        username: username,
+        login: login,
+        uid: user.uid,
+        avatarLink: null,
+        isActiv: true,
+        isInGame: false,
+        inGameRoomId: '',
+        gamesCount: 0,
+        victoriesCount: 0,
+        friendsUidList: const [],
+        notificationsUidList: const [],
+      );
 
-        await _accountDatasourceHelper.createAccount(
-            accountModel: accountModel);
+      await _accountDatasourceHelper.createAccount(accountModel: accountModel);
 
-        // return new account data
-        return accountModel;
-      } else {
-        // register process was not successful
-        return null;
-      }
+      // return new account data
+      return accountModel;
     } catch (exception) {
       _logger.e(exception);
       rethrow;
@@ -239,32 +238,32 @@ class FirebaseAuthDataSource {
   /// Links anonymous user with email and password.
   ///
   /// Returns [AccountModel] if register process is successful and null if not.
-  Future<AccountModel?> registerAnonymousUserWithEmailAndPassword({
+  /// 
+  /// Throws [AuthErrorUserCredentialUserNotFound] if an anonymous registration process failed.
+  Future<AccountModel> registerAnonymousUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
       User? user = _firebaseAuth.currentUser;
 
-      if (user != null && user.isAnonymous) {
-        final AuthCredential credential = EmailAuthProvider.credential(
-          email: email,
-          password: password,
-        );
+      // Throws an error if an anonymous registration process in the Firebase failed.
+      if (user == null) throw const AuthErrorUserCredentialUserNotFound();
 
-        final UserCredential userCredential =
-            await user.linkWithCredential(credential);
+      final AuthCredential credential = EmailAuthProvider.credential(
+        email: email,
+        password: password,
+      );
 
-        user = userCredential.user;
+      final UserCredential userCredential =
+          await user.linkWithCredential(credential);
 
-        if (user != null) {
-          return await _accountDatasourceHelper.getAccountModel(uid: user.uid);
-        } else {
-          return null;
-        }
-      } else {
-        return null;
-      }
+      user = userCredential.user;
+
+      // Throws an error if an anonymous registration process in the Firebase failed.
+      if (user == null) throw const AuthErrorUserCredentialUserNotFound();
+
+      return await _accountDatasourceHelper.getAccountModel(uid: user.uid);
     } catch (exception) {
       _logger.e(exception);
       rethrow;
@@ -277,19 +276,15 @@ class FirebaseAuthDataSource {
       final User? user = _firebaseAuth.currentUser;
 
       if (user != null) {
-        final AccountModel? accountModel =
+        final AccountModel accountModel =
             await _accountDatasourceHelper.getAccountModel(uid: user.uid);
 
-        if (accountModel == null) throw const AuthErrorUnknown();
-
-        final Iterable<String> friendsUidList = accountModel.friendsUidList;
+        final List<String> friendsUidList = accountModel.friendsUidList;
 
         // removes current user uid from each friend's friends list
         for (String friendUid in friendsUidList) {
-          final AccountModel? friendAccountModel =
+          final AccountModel friendAccountModel =
               await _accountDatasourceHelper.getAccountModel(uid: friendUid);
-
-          if (friendAccountModel == null) continue;
 
           final List<String> newFriendsUidList =
               friendAccountModel.friendsUidList.toList();
