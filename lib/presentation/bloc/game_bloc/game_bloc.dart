@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,11 +29,53 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _accountRepository = accountRepository,
         super(InitialGameState(gameRoom: gameRoom)) {
     on<InitializeGameEvent>(_init);
-    on<StartGameEvent>(_startGame, transformer: sequential());
-    on<FinishGameEvent>(_finishGame, transformer: droppable());
-    on<RestartGameEvent>(_restartGame, transformer: droppable());
-    on<GiveUpGameEvent>(_giveUpGame, transformer: sequential());
-    on<MakeMoveGameEvent>(_makeMoveGame, transformer: sequential());
+    on<StartGameEvent>(_startGame);
+    on<FinishGameEvent>(_finishGame);
+    on<RestartGameEvent>(_restartGame);
+    on<GiveUpGameEvent>(_giveUpGame);
+    on<MakeMoveGameEvent>(_makeMoveGame);
+
+    init();
+  }
+
+  init() {
+    final Stream<GameRoom> gameRoomStream = _roomRepository.getGameRoomStream(
+      gameRoomId: state.gameRoom.uid,
+    );
+
+    // final StreamSubscription<GameRoom> gameRoomStreamSubscription =
+    gameRoomStream.listen((gameRoom) {
+      // log('listen game room from the stream in the gameBloc');
+
+      log('uid: ${gameRoom.uid}');
+      log('turnOfPlayerUid: ${gameRoom.turnOfPlayerUid}');
+      log('gameRoomState: ${gameRoom.gameRoomState}');
+      log('winnerUid: ${gameRoom.winnerUid}');
+      log('players: ${gameRoom.players}');
+      log('players: ${gameRoom.fieldWithChips}');
+
+      if (gameRoom.gameRoomState == GameRoomState.init) {
+        log('gameBoc: game state is an "init". why?');
+
+        add(const StartGameEvent());
+      }
+      // Continues game if the game state remains as in progress.
+      else if (gameRoom.gameRoomState == GameRoomState.inGame) {
+        log('gameBoc: game is an "inGame" ');
+
+        emit(InProgressGameState(gameRoom: gameRoom.copyWith()));
+      }
+      // Finishes the game if the game state was changed to the result.
+      else if (gameRoom.gameRoomState == GameRoomState.result) {
+        log('gameBoc: game state is a "result"');
+
+        emit(ResultGameState(gameRoom: gameRoom));
+        // add(FinishGameEvent(
+        //   gameRoom: gameRoom,
+        //   winnerUid: gameRoom.winnerUid,
+        // ));
+      }
+    });
   }
 
   /// add stream to catch user changes and change state
@@ -47,26 +90,42 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       //     await _accountRepository.getCurrentUserAccount();
 
       // Retrieves a stream of game room data changes.
-      final Stream<GameRoom> gameRoomStream = _roomRepository.getGameRoomStream(
-        gameRoomId: state.gameRoom.uid,
-      );
+      // final Stream<GameRoom> gameRoomStream = _roomRepository.getGameRoomStream(
+      //   gameRoomId: state.gameRoom.uid,
+      // );
 
-      // final StreamSubscription<GameRoom> gameRoomStreamSubscription =
-      gameRoomStream.listen((gameRoom) {
-        // Finishes the game if the game state was changed to the result.
-        if (gameRoom.gameRoomState == GameRoomState.result &&
-            state is ResultGameState) {
-          add(FinishGameEvent(
-            gameRoom: gameRoom,
-            winnerUid: gameRoom.winnerUid,
-          ));
-        }
-        // Continues game if the game state remains as in progress.
-        else if (gameRoom.gameRoomState == GameRoomState.inGame &&
-            state is InProgressGameState) {
-          emit(InProgressGameState(gameRoom: gameRoom));
-        }
-      });
+      // // final StreamSubscription<GameRoom> gameRoomStreamSubscription =
+      // gameRoomStream.listen((gameRoom) {
+      //   // log('listen game room from the stream in the gameBloc');
+
+      //   log('uid: ${gameRoom.uid}');
+      //   log('turnOfPlayerUid: ${gameRoom.turnOfPlayerUid}');
+      //   log('gameRoomState: ${gameRoom.gameRoomState}');
+      //   log('winnerUid: ${gameRoom.winnerUid}');
+      //   log('players: ${gameRoom.players}');
+      //   log('players: ${gameRoom.fieldWithChips}');
+
+      //   if (gameRoom.gameRoomState == GameRoomState.init) {
+      //     log('gameBoc: game state is an "init". why?');
+
+      //     add(const StartGameEvent());
+      //   }
+      //   // Continues game if the game state remains as in progress.
+      //   else if (gameRoom.gameRoomState == GameRoomState.inGame) {
+      //     log('gameBoc: game is an "inGame" ');
+
+      //       emit(InProgressGameState(gameRoom: gameRoom.copyWith()));
+      //   }
+      //   // Finishes the game if the game state was changed to the result.
+      //   else if (gameRoom.gameRoomState == GameRoomState.result) {
+      //     log('gameBoc: game state is a "result"');
+
+      //     add(FinishGameEvent(
+      //       gameRoom: gameRoom,
+      //       winnerUid: gameRoom.winnerUid,
+      //     ));
+      //   }
+      // });
     } catch (exception) {
       emit(ErrorGameState(
         errorText: exception.toString(),
@@ -86,7 +145,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   ) async {
     try {
       // Shows loading.
-      emit(LoadingGameState(gameRoom: state.gameRoom));
+      emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
 
       // Changes the game state
       GameRoom gameRoom = state.gameRoom.copyWith(
@@ -98,6 +157,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       if (gameRoom.players.length != 2) {
         throw const GameRoomErrorNotTwoPlayers();
       }
+
+      // await _roomRepository.updateGameRoom(gameRoom: gameRoom);
 
       // Indicates that the game started and players can play.
       emit(InProgressGameState(gameRoom: gameRoom));
@@ -125,7 +186,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     try {
       // Shows loading.
       // Probably not needed, but let it be here for a while.
-      emit(LoadingGameState(gameRoom: state.gameRoom));
+      emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
 
       final String winnerUid = event.winnerUid;
 
@@ -138,6 +199,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       await _roomRepository.updateGameRoom(gameRoom: gameRoom);
 
       // Indicates that the game has finished and shows game results.
+      // Probably not needed, but let it be here for a while.
       emit(ResultGameState(gameRoom: gameRoom));
 
       // Retrieves the current user data.
@@ -176,7 +238,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   ) async {
     try {
       // Shows loading.
-      emit(LoadingGameState(gameRoom: state.gameRoom));
+      emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
 
       GameRoom gameRoom = state.gameRoom;
 
@@ -224,7 +286,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   ) async {
     try {
       // Shows loading.
-      emit(LoadingGameState(gameRoom: state.gameRoom));
+      emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
 
       // Retrieves the current user data.
       UserAccount currentUserAccount =
@@ -263,7 +325,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   ) async {
     try {
       // Shows loading.
-      emit(LoadingGameState(gameRoom: state.gameRoom));
+      emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
 
       GameRoom gameRoom = state.gameRoom;
 
@@ -317,7 +379,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         player: currentPlayer,
       );
 
-      // Changes field with chips.
+      // Changes the field with chips.
       gameRoom = gameRoom.copyWith(fieldWithChips: fieldWithChips);
 
       // Changes the turn for a next player.

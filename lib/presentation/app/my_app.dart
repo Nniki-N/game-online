@@ -4,6 +4,8 @@ import 'package:game/common/di/locator.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
+import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
+import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -17,6 +19,12 @@ class MyApp extends StatelessWidget {
             authRepository: getIt(),
           )..add(const InitializeAuthEvent()),
         ),
+        BlocProvider(
+          create: (_) => RoomBloc(
+            roomRepository: getIt(),
+            accountRepository: getIt(),
+          )..add(const InitializeRoomEvent()),
+        )
       ],
       child: MaterialApp.router(
         title: 'Game',

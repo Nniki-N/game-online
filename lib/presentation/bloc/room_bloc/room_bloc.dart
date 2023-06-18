@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/errors/game_room_error.dart';
@@ -29,7 +32,54 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
   /// later implement leaving here when internet connection is down
   Future<void> _init(InitializeRoomEvent event, Emitter<RoomState> emit) async {
-    //
+    // A stream subscription for a game room is used when new room is created.
+    StreamSubscription<GameRoom>? gameRoomSubscription;
+
+    await emit.onEach(
+      stream,
+      onData: (roomState) async {
+        // Indicates that two players are in the room.
+        // Indicates that the room is empty.
+        if (roomState is InRoomState) {
+          // Retrieves a stream of game room data changes.
+          final Stream<GameRoom> gameRoomStream =
+              _roomRepository.getGameRoomStream(
+            gameRoomId: roomState.gameRoom.uid,
+          );
+
+          // Cancels previous subscription just in case.
+          await gameRoomSubscription?.cancel();
+
+          // Changes state base on the number of players
+          gameRoomSubscription = gameRoomStream.listen((gameRoom) {
+            if (gameRoom.players.length == 1) {
+              emit(InRoomState(gameRoom: gameRoom));
+            } else if (gameRoom.players.length == 2) {
+              emit(InFullRoomState(gameRoom: gameRoom));
+            } else if (gameRoom.players.isEmpty) {
+              emit(const OutsideRoomState());
+            }
+          });
+        }
+
+        if (roomState is OutsideRoomState) {
+          await gameRoomSubscription?.cancel();
+        }
+      },
+      onError: (error, stackTrace) {
+        log(error.toString());
+        emit(ErrorRoomState(errorText: error.toString()));
+      },
+    );
+
+    // // Changes state base on the number of players
+    // gameRoomSubscription?.onData((gameRoom) {
+    //   if (gameRoom.players.length == 2) {
+    //     emit(InFullRoomState(gameRoom: gameRoom));
+    //   } else if (gameRoom.players.isEmpty) {
+    //     emit(const OutsideRoomState());
+    //   }
+    // });
   }
 
   /// Searches for an available game room to join.
@@ -43,7 +93,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   ) async {
     try {
       // Shows loading.
-      emit(const LoadingRoomState());
+      emit(const SearchingRoomState());
 
       // Retrieves all game rooms.
       final List<GameRoom> gameRoomList =
@@ -206,11 +256,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       );
 
       // Updates the user data according to leaving the game room.
-      _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+      await _accountRepository.updateUserAccount(
+          userAccount: currentUserAccount);
 
       // Deletes the game room if there are no player anymore.
       if (gameRoom.players.isEmpty) {
-        _roomRepository.deleteGameRoom(gameRoomId: gameRoom.uid);
+        await _roomRepository.deleteGameRoom(gameRoomId: gameRoom.uid);
       }
 
       // Indicates that the user has leaved the game and no game screens needed to be shown.

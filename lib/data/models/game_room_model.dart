@@ -1,4 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+
+
+import 'package:game/common/utils/game_room_model_convertor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:game/common/typedefs.dart';
@@ -23,7 +26,11 @@ class GameRoomModel {
   final String winnerUid;
   @JsonKey(name: GameRoomSchema.turnOfPlayerUid)
   final String turnOfPlayerUid;
-  @JsonKey(name: GameRoomSchema.fieldWithChips)
+  @JsonKey(
+    name: GameRoomSchema.fieldWithChips,
+    toJson: fieldWithChipsToJson,
+    fromJson: fieldWithChipsFromJson,
+  )
   final List<List<ChipModel?>> fieldWithChips;
 
   const GameRoomModel({
@@ -41,19 +48,26 @@ class GameRoomModel {
   factory GameRoomModel.fromGameRoomEntity({required GameRoom gameRoom}) =>
       GameRoomModel(
         uid: gameRoom.uid,
-        players: gameRoom.players.map(
-          (playerEntity) => PlayerModel.fromPlayerEntity(player: playerEntity),
-        ).toList(),
+        players: gameRoom.players
+            .map(
+              (playerEntity) =>
+                  PlayerModel.fromPlayerEntity(player: playerEntity),
+            )
+            .toList(),
         gameRoomState: gameRoom.gameRoomState,
         winnerUid: gameRoom.winnerUid,
         turnOfPlayerUid: gameRoom.turnOfPlayerUid,
-        fieldWithChips: gameRoom.fieldWithChips.map(
-          (chipsList) => chipsList.map(
-            (chipEntity) => chipEntity != null
-                ? ChipModel.fromChipEntity(chip: chipEntity)
-                : null,
-          ).toList(),
-        ).toList(),
+        fieldWithChips: gameRoom.fieldWithChips
+            .map(
+              (chipsList) => chipsList
+                  .map(
+                    (chipEntity) => chipEntity != null
+                        ? ChipModel.fromChipEntity(chip: chipEntity)
+                        : null,
+                  )
+                  .toList(),
+            )
+            .toList(),
       );
 
   GameRoomModel copyWith({

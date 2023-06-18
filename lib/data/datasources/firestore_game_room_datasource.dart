@@ -1,13 +1,15 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:game/common/constants/firebase_constants.dart';
 import 'package:game/common/errors/game_room_error.dart';
 import 'package:game/common/typedefs.dart';
-import 'package:game/data/datasources/helpers/firebase_account_datasource_helper.dart';
 import 'package:game/data/models/game_room_model.dart';
 import 'package:game/domain/entities/game_room.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
+@lazySingleton
 class FirestoreGameRoomDatasource {
   final FirebaseFirestore _firebaseFirestore;
   final Logger _logger;
@@ -15,7 +17,7 @@ class FirestoreGameRoomDatasource {
   FirestoreGameRoomDatasource({
     required FirebaseFirestore firebaseFirestore,
     required Logger logger,
-    required FirebaseAccountDatasourceHelper accountDatasourceHelper,
+    // required FirebaseAccountDatasourceHelper accountDatasourceHelper,
   })  : _firebaseFirestore = firebaseFirestore,
         _logger = logger;
 
@@ -31,7 +33,11 @@ class FirestoreGameRoomDatasource {
         gameRoomState: GameRoomState.init,
         winnerUid: '',
         turnOfPlayerUid: '',
-        fieldWithChips: const [[]],
+        fieldWithChips: const [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null],
+        ],
       );
 
       // Creates a new game room document in the Firestore Database.
@@ -83,7 +89,7 @@ class FirestoreGameRoomDatasource {
   }
 
   /// Retrieves a [GameRoomModel] from the Firestore Database.
-  /// 
+  ///
   /// Throws [GameRoomErrorNotExistingRoom] if the request failed.
   Future<GameRoomModel> getGameRoom({required String gameRoomId}) async {
     try {
@@ -150,35 +156,4 @@ class FirestoreGameRoomDatasource {
       throw error;
     }
   }
-
-  // /// Retirieves a player data from the Firestore Database.
-  // Future<PlayerModel> getPlayerModel({
-  //   required String uid,
-  //   required String gameRoomId,
-  // }) async {
-  //   try {
-  //     final DocumentSnapshot<Map<String, dynamic>> snapshot =
-  //         await _firebaseFirestore
-  //             .collection(FirebaseConstants.gameRooms)
-  //             .doc(gameRoomId)
-  //             .get();
-//
-  //     Json? json = snapshot.data();
-//
-  //     if (json != null) {
-  //       return GameRoomModel.fromJson(json)
-  //           .players
-  //           .where((playerModel) => playerModel.uid == uid)
-  //           .first;
-  //     }
-//
-  //     throw const GameRoomErrorNotExistingPlayer();
-  //   } catch (exception) {
-  //     _logger.e(exception);
-//
-  //     const GameRoomError error = GameRoomErrorNotExistingPlayer();
-  //     _logger.e(error.errorText);
-  //     throw error;
-  //   }
-  // }
 }

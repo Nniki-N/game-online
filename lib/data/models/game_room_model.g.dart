@@ -15,13 +15,7 @@ GameRoomModel _$GameRoomModelFromJson(Map<String, dynamic> json) =>
       gameRoomState: $enumDecode(_$GameRoomStateEnumMap, json['gameRoomState']),
       winnerUid: json['winnerUid'] as String,
       turnOfPlayerUid: json['turnOfPlayerUid'] as String,
-      fieldWithChips: (json['fieldwithChips'] as List<dynamic>)
-          .map((e) => (e as List<dynamic>)
-              .map((e) => e == null
-                  ? null
-                  : ChipModel.fromJson(e as Map<String, dynamic>))
-              .toList())
-          .toList(),
+      fieldWithChips: fieldWithChipsFromJson(json['fieldwithChips'] as String),
     );
 
 Map<String, dynamic> _$GameRoomModelToJson(GameRoomModel instance) =>
@@ -31,9 +25,7 @@ Map<String, dynamic> _$GameRoomModelToJson(GameRoomModel instance) =>
       'gameRoomState': _$GameRoomStateEnumMap[instance.gameRoomState]!,
       'winnerUid': instance.winnerUid,
       'turnOfPlayerUid': instance.turnOfPlayerUid,
-      'fieldwithChips': instance.fieldWithChips
-          .map((e) => e.map((e) => e?.toJson()).toList())
-          .toList(),
+      'fieldwithChips': fieldWithChipsToJson(instance.fieldWithChips),
     };
 
 const _$GameRoomStateEnumMap = {

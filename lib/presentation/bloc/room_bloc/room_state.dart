@@ -21,24 +21,6 @@ class LoadingRoomState extends RoomState {
   const LoadingRoomState();
 }
 
-// @immutable
-// class WaitingRoomState extends RoomState {
-//   final GameRoom gameRoom;
-
-//   const WaitingRoomState({
-//     required this.gameRoom,
-//   });
-// }
-
-// @immutable
-// class CreatedRoomState extends RoomState {
-//   final GameRoom gameRoom;
-//
-//   const CreatedRoomState({
-//     required this.gameRoom,
-//   });
-// }
-
 @immutable
 class InRoomState extends RoomState {
   final GameRoom gameRoom;

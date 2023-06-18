@@ -5,10 +5,10 @@ import 'package:game/domain/entities/account.dart';
 import 'package:game/domain/repositories/account_repository.dart';
 
 @immutable
-class FirebaseAccountRepository implements AccountRepository {
+class FirestoreAccountRepository implements AccountRepository {
   final FirebaseAccountDatasource _firebaseAccountDatasource;
 
-  const FirebaseAccountRepository({
+  const FirestoreAccountRepository({
     required FirebaseAccountDatasource firebaseAccountDatasource,
   }) : _firebaseAccountDatasource = firebaseAccountDatasource;
 
@@ -66,7 +66,7 @@ class FirebaseAccountRepository implements AccountRepository {
     }
   }
 
-  /// Retrieves a stream of changes of a account data of the current user from 
+  /// Retrieves a stream of changes of a account data of the current user from
   /// the Firestore Database and returns a stream of [UserAccount] if the request was successful.
   @override
   Stream<UserAccount> getCurrentUserAccountStream() {

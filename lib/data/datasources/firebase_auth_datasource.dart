@@ -238,7 +238,7 @@ class FirebaseAuthDataSource {
   /// Links anonymous user with email and password.
   ///
   /// Returns [AccountModel] if register process is successful and null if not.
-  /// 
+  ///
   /// Throws [AuthErrorUserCredentialUserNotFound] if an anonymous registration process failed.
   Future<AccountModel> registerAnonymousUserWithEmailAndPassword({
     required String email,
@@ -283,20 +283,24 @@ class FirebaseAuthDataSource {
 
         // removes current user uid from each friend's friends list
         for (String friendUid in friendsUidList) {
-          final AccountModel friendAccountModel =
-              await _accountDatasourceHelper.getAccountModel(uid: friendUid);
+          try {
+            final AccountModel friendAccountModel =
+                await _accountDatasourceHelper.getAccountModel(uid: friendUid);
 
-          final List<String> newFriendsUidList =
-              friendAccountModel.friendsUidList.toList();
+            final List<String> newFriendsUidList =
+                friendAccountModel.friendsUidList.toList();
 
-          // removes current user uid from the list
-          newFriendsUidList.removeWhere((e) => e == accountModel.uid);
+            // removes current user uid from the list
+            newFriendsUidList.removeWhere((e) => e == accountModel.uid);
 
-          final AccountModel newAccountModel =
-              friendAccountModel.copyWith(friendsUidList: newFriendsUidList);
+            final AccountModel newAccountModel =
+                friendAccountModel.copyWith(friendsUidList: newFriendsUidList);
 
-          await _accountDatasourceHelper.updateAccount(
-              accountModel: newAccountModel);
+            await _accountDatasourceHelper.updateAccount(
+                accountModel: newAccountModel);
+          } catch (exeption) {
+            continue;
+          }
         }
 
         // deletes account data

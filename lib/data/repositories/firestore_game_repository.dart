@@ -96,22 +96,6 @@ class FirestoreGameRepository implements GameRepository {
           .first
           .uid;
 
-      // final GameRoom updatedGameRoom = gameRoom.copyWith(
-      //   turnOfPlayerUid: turnOfNextPlayerUid,
-      // );
-      //
-      // final GameRoomModel updatedGameRoomModel =
-      //     GameRoomModel.fromGameRoomEntity(
-      //   gameRoom: updatedGameRoom,
-      // );
-      //
-      // // Changes an uid of a player to play in the Firestore Database.
-      // await _firestoreGameRoomDatasource.updateGameRoom(
-      //   gameRoomModel: updatedGameRoomModel,
-      // );
-      //
-      // return updatedGameRoom;
-
       return gameRoom.copyWith(
         turnOfPlayerUid: turnOfNextPlayerUid,
       );
@@ -130,6 +114,62 @@ class FirestoreGameRepository implements GameRepository {
     try {
       String? winnerUid;
       const int numberOfChipsNeededForVictory = 3;
+
+      if (fieldWithChips[0][0]?.chipOfPlayerUid == fieldWithChips[0][1]?.chipOfPlayerUid &&
+          fieldWithChips[0][0]?.chipOfPlayerUid ==
+              fieldWithChips[0][2]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[0][0]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[1][0]?.chipOfPlayerUid ==
+              fieldWithChips[1][1]?.chipOfPlayerUid &&
+          fieldWithChips[1][0]?.chipOfPlayerUid ==
+              fieldWithChips[1][2]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[1][0]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[2][0]?.chipOfPlayerUid ==
+              fieldWithChips[2][1]?.chipOfPlayerUid &&
+          fieldWithChips[2][0]?.chipOfPlayerUid ==
+              fieldWithChips[2][2]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[2][0]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[0][0]?.chipOfPlayerUid ==
+              fieldWithChips[1][0]?.chipOfPlayerUid &&
+          fieldWithChips[0][0]?.chipOfPlayerUid ==
+              fieldWithChips[2][0]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[0][0]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[0][1]?.chipOfPlayerUid ==
+              fieldWithChips[1][1]?.chipOfPlayerUid &&
+          fieldWithChips[0][1]?.chipOfPlayerUid ==
+              fieldWithChips[2][1]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[0][1]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[0][2]?.chipOfPlayerUid ==
+              fieldWithChips[1][2]?.chipOfPlayerUid &&
+          fieldWithChips[0][2]?.chipOfPlayerUid ==
+              fieldWithChips[2][2]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[0][2]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[0][0]?.chipOfPlayerUid ==
+              fieldWithChips[1][1]?.chipOfPlayerUid &&
+          fieldWithChips[0][0]?.chipOfPlayerUid ==
+              fieldWithChips[2][2]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[0][0]?.chipOfPlayerUid;
+        //
+      } else if (fieldWithChips[0][2]?.chipOfPlayerUid ==
+              fieldWithChips[1][1]?.chipOfPlayerUid &&
+          fieldWithChips[0][2]?.chipOfPlayerUid == fieldWithChips[2][0]?.chipOfPlayerUid) {
+        //
+        return fieldWithChips[0][2]?.chipOfPlayerUid;
+        //
+      }
 
       // Checks all victory combinations.
       for (int i = 0; i < fieldWithChips.length; i++) {
