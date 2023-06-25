@@ -14,14 +14,13 @@ class InitialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return BlocConsumer<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (content, state) {
         // navigates to the login screen if an error accurs
         final authError = state.error;
         if (authError != null) {
-          log('error initial');
-          AutoRouter.of(context).replace(const LoginRouter());
+          log('error signin');
+          AutoRouter.of(context).replace(const SignInRouter());
         }
 
         // navigates to the main screen if the user is logged in
@@ -32,13 +31,11 @@ class InitialScreen extends StatelessWidget {
 
         // navigates to the login screen if the user is logged out
         if (state is LoggedOutAuthState) {
-          log('initial ------------------ go to login');
-          AutoRouter.of(context).replace(const LoginRouter());
+          log('initial ------------------ go to signin');
+          AutoRouter.of(context).replace(const SignInRouter());
         }
       },
-      builder: (content, state) {
-        return const LoadingScreen();
-      },
+      child: const LoadingScreen(),
     );
   }
 }

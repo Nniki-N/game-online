@@ -38,6 +38,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     init();
   }
 
+  // @override
+  // Future<void> close() async {
+  //   super.close();
+
+  //   // try to add this stream in the _roomRepository and retrieves it from there
+  //   await gameRoomStreamSubscription?.cancel();
+  // }
+
   init() {
     final Stream<GameRoom> gameRoomStream = _roomRepository.getGameRoomStream(
       gameRoomId: state.gameRoom.uid,
