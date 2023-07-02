@@ -16,12 +16,12 @@ import 'package:flutter/material.dart' as _i23;
 
 import '../../presentation/screens/add_friend_screen/add_friend_screen.dart'
     deferred as _i13;
-import '../../presentation/screens/choose_friend_for_game_screen/choose_friend_for_game_screen.dart'
-    deferred as _i14;
 import '../../presentation/screens/auth_screens/login_screen.dart'
     deferred as _i2;
 import '../../presentation/screens/auth_screens/registration_screen.dart'
     deferred as _i3;
+import '../../presentation/screens/choose_friend_for_game_screen/choose_friend_for_game_screen.dart'
+    deferred as _i14;
 import '../../presentation/screens/game_rules_screen/game_rules_screen.dart'
     deferred as _i12;
 import '../../presentation/screens/game_screens/offline_game_screen/offline_game_screen.dart'
@@ -72,8 +72,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -87,8 +87,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -102,8 +102,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -116,8 +116,8 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i4.MainScreen(),
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -131,8 +131,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -146,8 +146,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -161,8 +161,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -176,8 +176,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -191,8 +191,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -206,8 +206,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -221,8 +221,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -236,8 +236,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -251,8 +251,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -266,8 +266,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -281,8 +281,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -296,8 +296,8 @@ class AppRouter extends _i22.RootStackRouter {
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -310,8 +310,8 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i17.ConnectionPage(),
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -324,8 +324,8 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i18.HomePage(),
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -338,8 +338,8 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i19.SettingsPage(),
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -352,8 +352,8 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i20.FriendsTab(),
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );
@@ -366,8 +366,8 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i21.NotificationsTab(),
         ),
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 0,
-        reverseDurationInMilliseconds: 0,
+        durationInMilliseconds: 300,
+        reverseDurationInMilliseconds: 300,
         opaque: true,
         barrierDismissible: false,
       );

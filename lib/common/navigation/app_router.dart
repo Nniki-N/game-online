@@ -22,8 +22,8 @@ import 'package:game/presentation/screens/settings_screens/profile_settings_scre
 import 'package:game/presentation/screens/settings_screens/settings_register_screen/settings_register_screen.dart';
 
 @CustomAutoRouter(
-  durationInMilliseconds: 0,
-  reverseDurationInMilliseconds: 0,
+  durationInMilliseconds: 300,
+  reverseDurationInMilliseconds: 300,
   deferredLoading: true,
   transitionsBuilder: TransitionsBuilders.noTransition,
   // replaceInRouteName: 'Page,Route',

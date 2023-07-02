@@ -5,40 +5,6 @@ import 'package:game/presentation/screens/settings_screens/language_settings_scr
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 
-// class LanguageSettingsScreen extends StatelessWidget {
-//   const LanguageSettingsScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           IconButton(
-//             onPressed: () {
-//               AutoRouter.of(context).pop();
-//             },
-//             icon: const Icon(Icons.arrow_back),
-//           ),
-//           const SizedBox(height: 20),
-//           ListView(
-//             shrinkWrap: true,
-//             children: const [
-//               Row(
-//                 children: [
-//                   Text('English'),
-//                   Icon(Icons.arrow_downward),
-//                 ],
-//               ),
-//               Text('Ukrainian'),
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class LanguageSettingsScreen extends StatelessWidget {
   const LanguageSettingsScreen({super.key});
 

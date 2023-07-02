@@ -34,11 +34,11 @@ class JoinRoomEvent extends RoomEvent {
 @immutable
 class LeaveRoomEvent extends RoomEvent {
   final GameRoom gameRoom;
-  final bool leaveAfterResult;
+  final bool leaveWithLoose;
   // final String gameRoomId;
 
   const LeaveRoomEvent({
     required this.gameRoom,
-    required this.leaveAfterResult,
+    required this.leaveWithLoose,
   });
 }

@@ -1,339 +1,197 @@
+import 'dart:async';
+import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:game/common/di/locator.dart';
+import 'package:game/common/navigation/app_router.gr.dart';
+import 'package:game/domain/entities/chip.dart';
+import 'package:game/presentation/bloc/game_bloc/game_bloc.dart';
+import 'package:game/presentation/bloc/game_bloc/game_event.dart';
+import 'package:game/presentation/bloc/game_bloc/game_state.dart';
+import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
+import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/screens/game_screens/field.dart';
+import 'package:game/presentation/screens/game_screens/leave_game_room.dart';
 import 'package:game/presentation/screens/game_screens/online_footer.dart';
 import 'package:game/presentation/screens/game_screens/online_header.dart';
 import 'package:game/presentation/screens/game_screens/row_with_buttons.dart';
-
-// class OnlineGameScreen extends StatefulWidget {
-//   const OnlineGameScreen({super.key});
-//
-//   @override
-//   State<OnlineGameScreen> createState() => _OnlineGameScreenState();
-// }
-//
-// class _OnlineGameScreenState extends State<OnlineGameScreen> {
-//   Chips? chipSize;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final GameRoom gameRoom =
-//         (context.read<RoomBloc>().state as InFullRoomState).gameRoom;
-//
-//     return BlocProvider(
-//       create: (context) => GameBloc(
-//         gameRepository: getIt(),
-//         accountRepository: getIt(),
-//         roomRepository: getIt(),
-//         gameRoom: gameRoom.copyWith(),
-//       )..add(const InitializeGameEvent()),
-//       child: BlocConsumer<RoomBloc, RoomState>(
-//         listener: (context, roomState) {
-//           if (roomState is InRoomState) {
-//             log('online game room ------------------ go to waiting room');
-//             AutoRouter.of(context).replace(const WaitingRoomRouter());
-//           }
-//         },
-//         builder: (context, roomState) {
-//           return Scaffold(
-//             body: Column(
-//               children: [
-//                 // Header
-//                 Container(
-//                   color: Colors.grey,
-//                   child: Row(
-//                     children: [
-//                       const Icon(Icons.image),
-//                       const SizedBox(width: 10),
-//                       Row(
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           Container(
-//                             color: Colors.black12,
-//                             width: 30,
-//                             height: 30,
-//                           ),
-//                           const SizedBox(width: 5),
-//                           const Text('3x'),
-//                         ],
-//                       ),
-//                       const SizedBox(width: 10),
-//                       Row(
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           Container(
-//                             color: Colors.black12,
-//                             width: 30,
-//                             height: 30,
-//                           ),
-//                           const SizedBox(width: 5),
-//                           const Text('3x'),
-//                         ],
-//                       ),
-//                       const SizedBox(width: 10),
-//                       Row(
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           Container(
-//                             color: Colors.black12,
-//                             width: 30,
-//                             height: 30,
-//                           ),
-//                           const SizedBox(width: 5),
-//                           const Text('3x'),
-//                         ],
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 const SizedBox(height: 50),
-//                 // Field
-//                 BlocConsumer<GameBloc, GameState>(
-//                   listener: (context, gameState) {
-//                     // log('listen in gamestate -------------- ');
-//                   },
-//                   builder: (context, gameState) {
-//                     // log('build in gamestate -------------- ');
-//
-//                     return Expanded(
-//                       child: Center(
-//                         child: Container(
-//                           padding: const EdgeInsets.all(20),
-//                           child: GridView.builder(
-//                             gridDelegate:
-//                                 const SliverGridDelegateWithFixedCrossAxisCount(
-//                               crossAxisCount: 3,
-//                               crossAxisSpacing: 5,
-//                               mainAxisSpacing: 5,
-//                             ),
-//                             itemCount: 9,
-//                             shrinkWrap: true,
-//                             itemBuilder: (context, index) {
-//                               late final int indexI;
-//                               late final int indexJ;
-//
-//                               if (index == 0) {
-//                                 indexI = 0;
-//                                 indexJ = 0;
-//                               } else if (index == 1) {
-//                                 indexI = 0;
-//                                 indexJ = 1;
-//                               } else if (index == 2) {
-//                                 indexI = 0;
-//                                 indexJ = 2;
-//                               } else if (index == 3) {
-//                                 indexI = 1;
-//                                 indexJ = 0;
-//                               } else if (index == 4) {
-//                                 indexI = 1;
-//                                 indexJ = 1;
-//                               } else if (index == 5) {
-//                                 indexI = 1;
-//                                 indexJ = 2;
-//                               } else if (index == 6) {
-//                                 indexI = 2;
-//                                 indexJ = 0;
-//                               } else if (index == 7) {
-//                                 indexI = 2;
-//                                 indexJ = 1;
-//                               } else if (index == 8) {
-//                                 indexI = 2;
-//                                 indexJ = 2;
-//                               }
-//
-//                               return GestureDetector(
-//                                 onTap: () {
-//                                   if (chipSize == null) return;
-//
-//                                   final GameBloc gameBloc =
-//                                       context.read<GameBloc>();
-//
-//                                   gameBloc.add(
-//                                     MakeMoveGameEvent(
-//                                       chipSize: chipSize!,
-//                                       indexI: indexI,
-//                                       indexJ: indexJ,
-//                                     ),
-//                                   );
-//                                 },
-//                                 child: Container(
-//                                   alignment: Alignment.center,
-//                                   decoration: const BoxDecoration(
-//                                     color: Color.fromARGB(255, 206, 206, 206),
-//                                   ),
-//                                   child: gameState.gameRoom
-//                                               .fieldWithChips[indexI][indexJ] ==
-//                                           null
-//                                       ? Text(
-//                                           index.toString(),
-//                                         )
-//                                       : Container(
-//                                           color: Colors.blue,
-//                                           width: gameState
-//                                                       .gameRoom
-//                                                       .fieldWithChips[indexI]
-//                                                           [indexJ]!
-//                                                       .chipSize
-//                                                       .index *
-//                                                   20 +
-//                                               20,
-//                                           height: gameState
-//                                                       .gameRoom
-//                                                       .fieldWithChips[indexI]
-//                                                           [indexJ]!
-//                                                       .chipSize
-//                                                       .index *
-//                                                   20 +
-//                                               20,
-//                                         ),
-//                                 ),
-//                               );
-//                             },
-//                           ),
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                 ),
-//                 // Footer
-//                 const SizedBox(height: 50),
-//                 Padding(
-//                   padding: const EdgeInsets.all(15),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       ElevatedButton(
-//                         onPressed: () {
-//                           AutoRouter.of(context).pop();
-//                         },
-//                         child: const Text('Give up'),
-//                       ),
-//                       const SizedBox(width: 15),
-//                       ElevatedButton(
-//                         onPressed: () {
-//                           final RoomBloc roomBloc = context.read<RoomBloc>();
-//
-//                           // leaves room
-//                           roomBloc.add(
-//                             LeaveRoomEvent(
-//                               gameRoom: (roomState is InFullRoomState)
-//                                   ? roomState.gameRoom
-//                                   : (roomState as InRoomState).gameRoom,
-//                               leaveAfterResult: false,
-//                             ),
-//                           );
-//
-//                           AutoRouter.of(context).pop();
-//                         },
-//                         child: const Text('Leave'),
-//                       ),
-//                       const SizedBox(width: 15),
-//                       Container(
-//                         decoration: BoxDecoration(
-//                           border: Border.all(
-//                             color: Colors.grey,
-//                             width: 1,
-//                           ),
-//                         ),
-//                         child: const Text('56:00'),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 Container(
-//                   color: Colors.grey,
-//                   child: Row(
-//                     children: [
-//                       Expanded(
-//                         child: Row(
-//                           mainAxisSize: MainAxisSize.min,
-//                           children: [
-//                             GestureDetector(
-//                               onTap: () => chipSize = Chips.chipSize3,
-//                               child: Padding(
-//                                 padding: const EdgeInsets.all(15),
-//                                 child: Container(
-//                                   color: Colors.blue,
-//                                   width: 60,
-//                                   height: 60,
-//                                 ),
-//                               ),
-//                             ),
-//                             const SizedBox(width: 5),
-//                             const Text('3x'),
-//                           ],
-//                         ),
-//                       ),
-//                       Expanded(
-//                         child: Row(
-//                           mainAxisSize: MainAxisSize.min,
-//                           children: [
-//                             GestureDetector(
-//                               onTap: () => chipSize = Chips.chipSize2,
-//                               child: Padding(
-//                                 padding: const EdgeInsets.all(15),
-//                                 child: Container(
-//                                   color: Colors.blue,
-//                                   width: 50,
-//                                   height: 50,
-//                                 ),
-//                               ),
-//                             ),
-//                             const SizedBox(width: 5),
-//                             const Text('3x'),
-//                           ],
-//                         ),
-//                       ),
-//                       Expanded(
-//                         child: Row(
-//                           mainAxisSize: MainAxisSize.min,
-//                           children: [
-//                             GestureDetector(
-//                               onTap: () => chipSize = Chips.chipSize1,
-//                               child: Padding(
-//                                 padding: const EdgeInsets.all(15),
-//                                 child: Container(
-//                                   color: Colors.blue,
-//                                   width: 40,
-//                                   height: 40,
-//                                 ),
-//                               ),
-//                             ),
-//                             const SizedBox(width: 5),
-//                             const Text('3x'),
-//                           ],
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+import 'package:game/presentation/widgets/dialogs/show_accept_or_deny_dialog.dart';
+import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
 
 class OnlineGameScreen extends StatelessWidget {
   const OnlineGameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const OnlineHeader(),
-          const Field(),
-          const RowWithButtons(),
-          SizedBox(height: 20.h),
-          const OnlineFooter(),
-        ],
+    final StreamController<Chips?> chipStreamController =
+        StreamController<Chips?>();
+
+    final Stream<Chips?> chipStream =
+        chipStreamController.stream.asBroadcastStream();
+
+    return BlocProvider(
+      create: (context) => GameBloc(
+        gameRepository: getIt(),
+        roomRepository: getIt(),
+        accountRepository: getIt(),
+        gameRoom: (context.read<RoomBloc>().state as InFullRoomState).gameRoom,
+      )
+        ..add(const InitializeGameEvent())
+        ..add(const StartGameEvent()),
+      child: BlocListener<RoomBloc, RoomState>(
+        listener: (context, roomState) {
+          log('listener: ro0mState --- ${roomState.toString()}');
+
+          // Navigates user back to the main screen if the user is outside the room.
+          if (roomState is OutsideRoomState) {
+            log('online game room ------------------ go to the main room');
+            AutoRouter.of(context).replace(const MainRouter());
+          }
+
+          // Notifies that the game room is not full and offers to wait for a second player or leave the room.
+          else if (roomState is InRoomState) {
+            log('online game room ------------------ missing player dialog');
+            final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
+
+            if (!isPopUpShown) {
+              showAcceptOrDenyDialog(
+                context: context,
+                dialogTitle: 'Player left',
+                dialogContent: 'Do you want to wait for a new player?',
+                buttonAcceptText: 'Wait',
+                buttonDenyText: 'Leave',
+              ).then((wait) {
+                if (wait) {
+                  log('online game room ------------------ go to the waiting room');
+                  AutoRouter.of(context).replace(const WaitingRoomRouter());
+                } else {
+                  log('one in room ------------------- leave room');
+
+                  leaveGameRoom(
+                    context: context,
+                    leaveWithLoose: false,
+                  );
+                }
+              });
+            }
+          }
+
+          // Navigates user back to the main screen if an error accurs.
+          else if (roomState is ErrorRoomState) {
+            log('roomError in the online game room screen');
+            AutoRouter.of(context).replace(const MainRouter());
+          }
+        },
+        child: BlocConsumer<GameBloc, GameState>(
+          listener: (context, gameState) {
+            //
+            //
+            //
+            // add listener to set null as a chip in the chipStreamController after turn has changed
+            //
+            //
+            //
+            //
+            //
+            //
+
+            // Notifies that the game ended and offers to restart the game.
+            if (gameState is ResultGameState) {
+              log('online game room ------------------ show result of the game');
+
+              final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
+
+              if (!isPopUpShown) {
+                final String winnerUid = gameState.gameRoom.winnerUid;
+                final String winnerName = gameState.gameRoom.players
+                    .firstWhere((winner) => winner.uid == winnerUid)
+                    .username;
+
+                showAcceptOrDenyDialog(
+                  context: context,
+                  dialogTitle: 'Game finished',
+                  dialogContent:
+                      'Pleyer $winnerName won. Do you want to restart the game with the same player?',
+                  buttonAcceptText: 'Restart',
+                  buttonDenyText: 'Leave',
+                ).then((restartGame) {
+                  if (restartGame) {
+                    context.read<GameBloc>().add(const RestartGameEvent());
+                  } else {
+                    log('game finished ------------------- leave room');
+
+                    leaveGameRoom(
+                      context: context,
+                      leaveWithLoose: false,
+                    );
+                  }
+                });
+              }
+            }
+
+            // Shows an error massage and navigates user back to the main screen if an error accurs.
+            else if (gameState is ErrorGameState) {
+              log('gameError in the online game room screen');
+              log('errorText ${gameState.errorText}');
+              log('errorTitle ${gameState.errorTitle}');
+
+              showNotificationDialog(
+                context: context,
+                dialogTitle: 'Some error happened',
+                dialogContent:
+                    'Something happened during the game, therefore game is finished, but it won`t be considered as a loose.',
+                buttonText: 'Ok',
+              ).then((_) => AutoRouter.of(context).replace(const MainRouter()));
+            }
+          },
+          builder: (context, state) {
+            return Scaffold(
+              body: Column(
+                children: [
+                  const OnlineHeader(),
+                  StreamBuilder(
+                      stream: chipStream,
+                      builder: (context, snapshot) {
+                        return Field(
+                          chipSize: snapshot.data,
+                          setChipSizeAsZero: () {
+                            chipStreamController.add(null);
+                            log('chipSize: null was added to the stream');
+                          },
+                        );
+                      }),
+                  const RowWithButtons(),
+                  SizedBox(height: 20.h),
+                  OnlineFooter(
+                    onTap: ({required Chips chipSize}) {
+                      //
+                      //
+                      //
+                      //
+                      //
+                      //
+                      // update to not allow user to change chip
+                      //
+                      //
+                      //
+                      //
+                      //
+                      //
+                      //
+                      //
+                      chipStreamController.add(chipSize);
+                      log('chipSize: $chipSize was added to the stream');
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 }
-
-

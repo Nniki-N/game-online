@@ -54,3 +54,17 @@ class ErrorRoomState extends RoomState {
     required this.errorText,
   });
 }
+
+extension GetGameRoom on RoomState {
+  GameRoom? getGameRoom() {
+    final roomState = this;
+
+    if (roomState is InRoomState) {
+      return roomState.gameRoom;
+    } else if (roomState is InFullRoomState) {
+      return roomState.gameRoom;
+    } else {
+      return null;
+    }
+  }
+}
