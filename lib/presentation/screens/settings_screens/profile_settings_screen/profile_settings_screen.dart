@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
+import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
+import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
@@ -56,6 +58,7 @@ class ProfileSettingsScreen extends StatelessWidget {
         // Navigates to the sign in screen if the user is logged out.
         if (state is LoggedOutAuthState) {
           log('profile settings ------------------ log out and go to the sign in screen');
+          context.read<AccountBloc>().add(const LogOutAccountEvent());
           AutoRouter.of(context).replaceAll(const [SignInRouter()]);
         }
       },

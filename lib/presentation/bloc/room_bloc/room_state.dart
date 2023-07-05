@@ -57,7 +57,7 @@ class ErrorRoomState extends RoomState {
 
 extension GetGameRoom on RoomState {
   GameRoom? getGameRoom() {
-    final roomState = this;
+    final RoomState roomState = this;
 
     if (roomState is InRoomState) {
       return roomState.gameRoom;

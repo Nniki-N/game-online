@@ -180,15 +180,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             victoriesCount: currentUserAccount.victoriesCount + 1,
           );
           oponentUserAccount = oponentUserAccount.copyWith(
-            gamesCount: currentUserAccount.gamesCount + 1,
+            gamesCount: oponentUserAccount.gamesCount + 1,
           );
         } else {
           currentUserAccount = currentUserAccount.copyWith(
             gamesCount: currentUserAccount.gamesCount + 1,
           );
           oponentUserAccount = oponentUserAccount.copyWith(
-            gamesCount: currentUserAccount.gamesCount + 1,
-            victoriesCount: currentUserAccount.victoriesCount + 1,
+            gamesCount: oponentUserAccount.gamesCount + 1,
+            victoriesCount: oponentUserAccount.victoriesCount + 1,
           );
         }
 
@@ -331,6 +331,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     try {
       // Shows loading.
       emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
+      log('start making move');
 
       GameRoom gameRoom = state.gameRoom;
 
@@ -346,9 +347,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         throw const GameRoomErrorInvalidPlayerMove();
       }
 
+      log('1');
+      
+
       // Retrieves the current user data.
       UserAccount currentUserAccount =
           await _accountRepository.getCurrentUserAccount();
+
+      log('2');
 
       // Creates chip.
       final Chip chipToPutOnPositionIJ = Chip(
@@ -356,11 +362,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         chipOfPlayerUid: currentUserAccount.uid,
       );
 
+      log('3');
+
       // Insers the chip in the position [i] [j] of the field.
       fieldWithChips[event.indexI][event.indexJ] = chipToPutOnPositionIJ;
 
+      log('4');
+
       Player currentPlayer = gameRoom.players
           .firstWhere((player) => player.uid == currentUserAccount.uid);
+
+      log('5');
 
       // Removes one chip from the current player.
       currentPlayer = currentPlayer.copyWith(chipsCount: {
@@ -378,11 +390,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
                 : currentPlayer.chipsCount[Chips.chipSize3]!,
       });
 
+      log('6');
+
       // Changes a chips count of the current user.
       gameRoom = _gameRepository.changePlayerDataInGameRoom(
         gameRoom: gameRoom,
         player: currentPlayer,
       );
+
+      log('7');
 
       // Changes the field with chips.
       gameRoom = gameRoom.copyWith(fieldWithChips: fieldWithChips);
@@ -390,9 +406,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       // Changes the turn for a next player.
       gameRoom = _gameRepository.changeTurnForNextPlayer(gameRoom: gameRoom);
 
+      log('8');
+
       // Checks the field for a victory combination.
       final String? winnerUid = _gameRepository
           .checkCombinationsAndSelectWinner(fieldWithChips: fieldWithChips);
+
+      log('9');
 
       // Finishes the game if there is a winner.
       if (winnerUid != null) {
@@ -400,11 +420,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           gameRoom: gameRoom,
           winnerUid: winnerUid,
         ));
+        log('10 - winner');
       } else {
         // A next player to make a move.
         final Player playerToMakeMove = gameRoom.players.firstWhere(
           (player) => player.uid == gameRoom.turnOfPlayerUid,
         );
+
+        log('10');
 
         // Checks if a next move is possible.
         final bool moveIsPossible = _gameRepository.moveIsPossible(
@@ -412,11 +435,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           player: playerToMakeMove,
         );
 
+        log('11');
+
         // Continues the game if a next move is possible.
         // Finishes the game if a next move is impossible.
         if (moveIsPossible) {
           // Saves all changes.
           await _roomRepository.updateGameRoom(gameRoom: gameRoom);
+
+          log('12');
 
           // Indicates that the game can continue.
           emit(InProgressGameState(gameRoom: gameRoom));
@@ -425,8 +452,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             gameRoom: gameRoom,
             winnerUid: '',
           ));
+
+          log('12 - winner');
         }
       }
+
+      log('end making move');
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorGameState(
         errorTitle: gameRoomError.errorTitle,

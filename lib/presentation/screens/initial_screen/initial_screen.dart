@@ -4,10 +4,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
+import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
+import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
-
 
 class InitialScreen extends StatelessWidget {
   const InitialScreen({super.key});
@@ -26,6 +27,7 @@ class InitialScreen extends StatelessWidget {
         // navigates to the main screen if the user is logged in
         if (state is LoggedInAuthState) {
           log('initial ------------------ go to main');
+          context.read<AccountBloc>().add(const InitializeAccountEvent());
           AutoRouter.of(context).replace(const MainRouter());
         }
 

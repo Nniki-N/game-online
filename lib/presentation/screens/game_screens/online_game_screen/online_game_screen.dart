@@ -8,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/di/locator.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/domain/entities/chip.dart';
+import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
+import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/bloc/game_bloc/game_bloc.dart';
 import 'package:game/presentation/bloc/game_bloc/game_event.dart';
 import 'package:game/presentation/bloc/game_bloc/game_state.dart';
@@ -19,7 +21,6 @@ import 'package:game/presentation/screens/game_screens/online_footer.dart';
 import 'package:game/presentation/screens/game_screens/online_header.dart';
 import 'package:game/presentation/screens/game_screens/row_with_buttons.dart';
 import 'package:game/presentation/widgets/dialogs/show_accept_or_deny_dialog.dart';
-import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
 
 class OnlineGameScreen extends StatelessWidget {
   const OnlineGameScreen({super.key});
@@ -31,6 +32,8 @@ class OnlineGameScreen extends StatelessWidget {
 
     final Stream<Chips?> chipStream =
         chipStreamController.stream.asBroadcastStream();
+
+    final AccountBloc accountBloc = context.watch<AccountBloc>();
 
     return BlocProvider(
       create: (context) => GameBloc(
@@ -87,16 +90,14 @@ class OnlineGameScreen extends StatelessWidget {
         },
         child: BlocConsumer<GameBloc, GameState>(
           listener: (context, gameState) {
-            //
-            //
-            //
-            // add listener to set null as a chip in the chipStreamController after turn has changed
-            //
-            //
-            //
-            //
-            //
-            //
+            // Sets the chip size as null if it is a turn of a second player.
+            final bool turnOfSecondPlayer =
+                accountBloc.state.getUserAccount()!.uid !=
+                    gameState.gameRoom.turnOfPlayerUid;
+
+            if (turnOfSecondPlayer) {
+              chipStreamController.add(null);
+            }
 
             // Notifies that the game ended and offers to restart the game.
             if (gameState is ResultGameState) {
@@ -138,52 +139,47 @@ class OnlineGameScreen extends StatelessWidget {
               log('errorText ${gameState.errorText}');
               log('errorTitle ${gameState.errorTitle}');
 
-              showNotificationDialog(
-                context: context,
-                dialogTitle: 'Some error happened',
-                dialogContent:
-                    'Something happened during the game, therefore game is finished, but it won`t be considered as a loose.',
-                buttonText: 'Ok',
-              ).then((_) => AutoRouter.of(context).replace(const MainRouter()));
+              // showNotificationDialog(
+              //   context: context,
+              //   dialogTitle: 'Some error happened',
+              //   dialogContent:
+              //       'Something happened during the game, therefore game is finished, but it won`t be considered as a loose.',
+              //   buttonText: 'Ok',
+              // ).then((_) => AutoRouter.of(context).replace(const MainRouter()));
             }
           },
-          builder: (context, state) {
+          builder: (context, gameState) {
+            // Layout of a sceen.
             return Scaffold(
               body: Column(
                 children: [
                   const OnlineHeader(),
                   StreamBuilder(
-                      stream: chipStream,
-                      builder: (context, snapshot) {
-                        return Field(
-                          chipSize: snapshot.data,
-                          setChipSizeAsZero: () {
-                            chipStreamController.add(null);
-                            log('chipSize: null was added to the stream');
-                          },
-                        );
-                      }),
+                    stream: chipStream,
+                    builder: (context, snapshot) {
+                      return Field(
+                        chipSize: snapshot.data,
+                        // Sets the chip size to make a move as null in case it was not changed.
+                        setChipSizeAsZero: () {
+                          chipStreamController.add(null);
+                          log('chipSize: null was added to the stream');
+                        },
+                      );
+                    },
+                  ),
                   const RowWithButtons(),
                   SizedBox(height: 20.h),
                   OnlineFooter(
+                    // Selects the chip size to make a move if it is the turn of the current user.
                     onTap: ({required Chips chipSize}) {
-                      //
-                      //
-                      //
-                      //
-                      //
-                      //
-                      // update to not allow user to change chip
-                      //
-                      //
-                      //
-                      //
-                      //
-                      //
-                      //
-                      //
-                      chipStreamController.add(chipSize);
-                      log('chipSize: $chipSize was added to the stream');
+                      final bool chipSelectingIsAllowed =
+                          accountBloc.state.getUserAccount()!.uid ==
+                              gameState.gameRoom.turnOfPlayerUid;
+
+                      if (chipSelectingIsAllowed) {
+                        chipStreamController.add(chipSize);
+                        log('chipSize: $chipSize was added to the stream');
+                      }
                     },
                   ),
                 ],

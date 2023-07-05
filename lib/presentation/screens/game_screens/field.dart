@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/domain/entities/chip.dart';
+import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
+import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/bloc/game_bloc/game_bloc.dart';
 import 'package:game/presentation/bloc/game_bloc/game_event.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
@@ -22,6 +24,9 @@ class Field extends StatelessWidget {
   Widget build(BuildContext context) {
     final double fieldSize = 315.w;
     final double fieldSpacing = 2.w;
+
+    final GameBloc gameBloc = context.read<GameBloc>();
+    final AccountBloc accountBloc = context.read<AccountBloc>();
 
     return Expanded(
       child: Center(
@@ -83,7 +88,8 @@ class Field extends StatelessWidget {
                       indexJ = 2;
                     }
 
-                    final GameBloc gameBloc = context.read<GameBloc>();
+                    final fieldChip =
+                        gameBloc.state.gameRoom.fieldWithChips[indexI][indexJ];
 
                     return GestureDetector(
                       onTap: () {
@@ -103,20 +109,14 @@ class Field extends StatelessWidget {
                       // Chip or just empty field.
                       child: Container(
                         alignment: Alignment.center,
-                        child: gameBloc.state.gameRoom.fieldWithChips[indexI]
-                                    [indexJ] ==
-                                null
+                        child: fieldChip == null
                             ? const SizedBox.shrink()
                             : SvgPicture.asset(
-                                Svgs.chipCyan,
-                                width: gameBloc
-                                            .state
-                                            .gameRoom
-                                            .fieldWithChips[indexI][indexJ]!
-                                            .chipSize
-                                            .index *
-                                        15 +
-                                    30,
+                                fieldChip.chipOfPlayerUid ==
+                                        accountBloc.state.getUserAccount()!.uid
+                                    ? Svgs.chipCyan
+                                    : Svgs.chipRed,
+                                width: fieldChip.chipSize.index * 15 + 30,
                               ),
                       ),
                     );
