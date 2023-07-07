@@ -1,15 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/errors/auth_error.dart';
 import 'package:game/domain/entities/account.dart';
+import 'package:game/domain/repositories/account_repository.dart';
 import 'package:game/domain/repositories/auth_repository.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
+  final AccountRepository _accountRepository;
 
-  AuthBloc({required AuthRepository authRepository})
-      : _authRepository = authRepository,
+  AuthBloc({
+    required AuthRepository authRepository,
+    required AccountRepository accountRepository,
+  })  : _authRepository = authRepository,
+        _accountRepository = accountRepository,
         super(const LoadingAuthState()) {
     on<InitializeAuthEvent>(_init);
     on<LogInAuthEvent>(_logIn);
@@ -53,6 +58,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       if (account != null) {
+        // Retrieves the current user account data.
+        UserAccount currentUserAccount =
+            await _accountRepository.getCurrentUserAccount();
+
+        // Changes the current user online status.
+        currentUserAccount = currentUserAccount.copyWith(isActiv: true);
+
+        // Saves changes.
+        _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+
         emit(const LoggedInAuthState());
       } else {
         emit(const LoggedOutAuthState());
@@ -75,6 +90,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final Account? account = await _authRepository.logInWithGoogle();
 
       if (account != null) {
+        // Retrieves the current user account data.
+        UserAccount currentUserAccount =
+            await _accountRepository.getCurrentUserAccount();
+
+        // Changes the current user online status.
+        currentUserAccount = currentUserAccount.copyWith(isActiv: true);
+
+        // Saves changes.
+        _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+
         emit(const LoggedInAuthState());
       } else {
         emit(const LoggedOutAuthState());
@@ -113,6 +138,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const LoadingAuthState());
 
+      // Retrieves the current user account data.
+      UserAccount currentUserAccount =
+          await _accountRepository.getCurrentUserAccount();
+
+      // Changes the current user online status.
+      currentUserAccount = currentUserAccount.copyWith(isActiv: false);
+
+      // Saves changes.
+      _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+
+      // Logs out.
       await _authRepository.logOut();
 
       emit(const LoggedOutAuthState());

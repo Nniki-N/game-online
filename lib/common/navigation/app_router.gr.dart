@@ -16,7 +16,7 @@ import 'package:flutter/material.dart' as _i23;
 
 import '../../presentation/screens/add_friend_screen/add_friend_screen.dart'
     deferred as _i13;
-import '../../presentation/screens/auth_screens/login_screen.dart'
+import '../../presentation/screens/auth_screens/signin_screen.dart'
     deferred as _i2;
 import '../../presentation/screens/auth_screens/registration_screen.dart'
     deferred as _i3;

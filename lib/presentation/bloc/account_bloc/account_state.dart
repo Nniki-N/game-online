@@ -12,15 +12,6 @@ class InitialAccountState extends AccountState {
 }
 
 @immutable
-class LoadingAccountState extends AccountState {
-  final UserAccount userAccount;
-
-  const LoadingAccountState({
-    required this.userAccount,
-  });
-}
-
-@immutable
 class LoadedAccountState extends AccountState {
   final UserAccount userAccount;
 
@@ -49,9 +40,7 @@ extension GetUserAccount on AccountState {
   UserAccount? getUserAccount() {
     final AccountState accountState = this;
 
-    if (accountState is LoadingAccountState) {
-      return accountState.userAccount;
-    } else if (accountState is LoadedAccountState) {
+    if (accountState is LoadedAccountState) {
       return accountState.userAccount;
     } else if (accountState is ErrorAccountState) {
       return accountState.userAccount;

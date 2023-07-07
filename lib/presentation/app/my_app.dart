@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
               BlocProvider(
                 create: (_) => AuthBloc(
                   authRepository: getIt(),
+                  accountRepository: getIt()
                 )..add(const InitializeAuthEvent()),
               ),
               BlocProvider(

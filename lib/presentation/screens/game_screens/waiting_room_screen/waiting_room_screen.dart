@@ -31,7 +31,7 @@ class WaitingRoomScreen extends StatelessWidget {
           AutoRouter.of(context).replace(const OnlineGameRouter());
         }
 
-        // Navigates user back to the main screen if an error accurs.
+        // Navigates user back to the main screen if an error occurs.
         else if (roomState is ErrorRoomState) {
           log('roomError in the waiting room screen');
           AutoRouter.of(context).replace(const MainRouter());

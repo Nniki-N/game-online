@@ -29,6 +29,15 @@ class ChangeLoginAccountEvent extends AccountEvent {
 }
 
 @immutable
+class ChangeOnlineStateAccountEvent extends AccountEvent {
+  final bool isOnline;
+
+  const ChangeOnlineStateAccountEvent({
+    required this.isOnline,
+  });
+}
+
+@immutable
 class LogOutAccountEvent extends AccountEvent {
   const LogOutAccountEvent();
 }

@@ -82,7 +82,7 @@ class OnlineGameScreen extends StatelessWidget {
             }
           }
 
-          // Navigates user back to the main screen if an error accurs.
+          // Navigates user back to the main screen if an error occurs.
           else if (roomState is ErrorRoomState) {
             log('roomError in the online game room screen');
             AutoRouter.of(context).replace(const MainRouter());
@@ -133,7 +133,7 @@ class OnlineGameScreen extends StatelessWidget {
               }
             }
 
-            // Shows an error massage and navigates user back to the main screen if an error accurs.
+            // Shows an error massage and navigates user back to the main screen if an error occurs.
             else if (gameState is ErrorGameState) {
               log('gameError in the online game room screen');
               log('errorText ${gameState.errorText}');

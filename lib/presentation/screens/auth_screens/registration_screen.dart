@@ -32,7 +32,7 @@ class RegistrationScreen extends StatelessWidget {
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // Displays an error message if an error accurs.
+        // Displays an error message if an error occurs.
         final authError = state.error;
         if (authError != null) {
           log('error signin');
@@ -58,6 +58,7 @@ class RegistrationScreen extends StatelessWidget {
             loadingText: 'Loading...',
           );
         }
+        
         // Register screen.
         else {
           return Scaffold(

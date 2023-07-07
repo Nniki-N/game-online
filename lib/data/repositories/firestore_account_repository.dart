@@ -99,4 +99,30 @@ class FirestoreAccountRepository implements AccountRepository {
       rethrow;
     }
   }
+
+  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the Firestore Database
+  /// and returns a list of [UserAccount] if the request was successful.
+  @override
+  Future<List<UserAccount>> getAccountModelsWhere({
+    required String fieldName,
+    required dynamic fieldValue,
+  }) async {
+    try {
+      final List<AccountModel> accountModelsList =
+          await _firebaseAccountDatasource.getAccountModelsWhere(
+        fieldName: fieldName,
+        fieldValue: fieldValue,
+      );
+
+      final List<UserAccount> userAccountsList = accountModelsList.map(
+        (accountModel) {
+          return UserAccount.fromAccountModel(accountModel: accountModel);
+        },
+      ).toList();
+
+      return userAccountsList;
+    } catch (exception) {
+      rethrow;
+    }
+  }
 }

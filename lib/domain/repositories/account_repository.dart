@@ -20,4 +20,11 @@ abstract class AccountRepository {
 
   /// Updates a user account data.
   Future<void> updateUserAccount({required UserAccount userAccount});
+
+  /// Retrieves a list of users where [fieldName] equals [fieldValue] 
+  /// and returns a list of [UserAccount] if the request was successful.
+  Future<List<UserAccount>> getAccountModelsWhere({
+    required String fieldName,
+    required dynamic fieldValue,
+  });
 }

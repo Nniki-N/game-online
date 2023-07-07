@@ -12,13 +12,14 @@ class FirebaseAccountDatasource {
   final FirebaseAuth _firebaseAuth;
   final Logger _logger;
 
-   FirebaseAccountDatasource({
+  FirebaseAccountDatasource({
     required FirebaseFirestore firebaseFirestore,
     required FirebaseAuth firebaseAuth,
     required Logger logger,
   })  : _firebaseAuth = firebaseAuth,
         _logger = logger,
-        _firebaseAccountDatasourceHelper = FirebaseAccountDatasourceHelper.instance(
+        _firebaseAccountDatasourceHelper =
+            FirebaseAccountDatasourceHelper.instance(
           firebaseFirestore: firebaseFirestore,
           logger: logger,
         );
@@ -88,6 +89,25 @@ class FirebaseAccountDatasource {
       await _firebaseAccountDatasourceHelper.updateAccount(
         accountModel: accountModel,
       );
+    } catch (exception) {
+      rethrow;
+    }
+  }
+
+  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the 
+  /// Firestore Database and returns a list of [AccountModel] if the request was successful.
+  Future<List<AccountModel>> getAccountModelsWhere({
+    required String fieldName,
+    required dynamic fieldValue,
+  }) async {
+    try {
+      final List<AccountModel> accountModelsList =
+          await _firebaseAccountDatasourceHelper.getAccountModelsWhere(
+        fieldName: fieldName,
+        fieldValue: fieldValue,
+      );
+
+      return accountModelsList;
     } catch (exception) {
       rethrow;
     }

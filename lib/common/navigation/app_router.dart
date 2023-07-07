@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:game/presentation/screens/add_friend_screen/add_friend_screen.dart';
 import 'package:game/presentation/screens/choose_friend_for_game_screen/choose_friend_for_game_screen.dart';
-import 'package:game/presentation/screens/auth_screens/login_screen.dart';
+import 'package:game/presentation/screens/auth_screens/signin_screen.dart';
 import 'package:game/presentation/screens/auth_screens/registration_screen.dart';
 import 'package:game/presentation/screens/game_rules_screen/game_rules_screen.dart';
 import 'package:game/presentation/screens/game_screens/offline_game_screen/offline_game_screen.dart';

@@ -12,7 +12,7 @@ import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
-import 'package:game/presentation/screens/auth_screens/login_form_separator.dart';
+import 'package:game/presentation/screens/auth_screens/signin_form_separator.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_icon_outlined_button.dart';
@@ -35,20 +35,7 @@ class SignInScreen extends StatelessWidget {
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // Shows loading.
-        // if (state is LoadingAuthState) {
-        //   log('signin ------------------ show loading');
-        //   LoadingOverlay.instance().show(
-        //     title: null,
-        //     context: context,
-        //     text: 'Loading...',
-        //   );
-        // } else {
-        //   // log('signin ------------------ hide loading');
-        //   // LoadingOverlay.instance().hide();
-        // }
-
-        // Displays an error message if an error accurs.
+        // Displays an error message if an error occurs.
         final authError = state.error;
         if (authError != null) {
           log('error signin');
@@ -66,6 +53,11 @@ class SignInScreen extends StatelessWidget {
           context.read<AccountBloc>().add(const InitializeAccountEvent());
           AutoRouter.of(context).replace(const MainRouter());
         }
+
+        // Indicates that the current user is logged out.
+        else if (state is LoggedOutAuthState) {
+          context.read<AccountBloc>().add(const LogOutAccountEvent());
+        }
       },
       builder: (context, state) {
         // Loading screen.
@@ -74,6 +66,7 @@ class SignInScreen extends StatelessWidget {
             loadingText: 'Loading...',
           );
         } 
+        
         // Sign in screen.    
         else {
           return Scaffold(

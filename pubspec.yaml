@@ -42,6 +42,7 @@ dependencies:
   json_serializable: ^6.6.1
   json_annotation: ^4.8.0
   uuid: ^3.0.7
+  connectivity_plus: ^4.0.1
 
 
   #Utils
@@ -51,6 +52,7 @@ dependencies:
   #Bloc
   flutter_bloc: ^8.1.2
   bloc_concurrency: ^0.2.2
+  
   
 
 dev_dependencies:

@@ -109,4 +109,31 @@ class FirebaseAccountDatasourceHelper {
       rethrow;
     }
   }
+
+  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the 
+  /// Firestore Database and returns a list of [AccountModel] if the request was successful.
+  Future<List<AccountModel>> getAccountModelsWhere({
+    required String fieldName,
+    required dynamic fieldValue,
+  }) async {
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot =
+          await _firebaseFirestore
+              .collection(FirebaseConstants.accounts)
+              .where(fieldName, isEqualTo: fieldValue)
+              .get();
+
+      final List<AccountModel> accountModelsList = snapshot.docs.map(
+        (queryDocumentSnapshot) {
+          final Json json = queryDocumentSnapshot.data();
+
+          return AccountModel.fromJson(json);
+        },
+      ).toList();
+
+      return accountModelsList;
+    } catch (exception) {
+      rethrow;
+    }
+  }
 }
