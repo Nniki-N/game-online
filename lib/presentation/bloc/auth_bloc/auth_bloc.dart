@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await _accountRepository.getCurrentUserAccount();
 
         // Changes the current user online status.
-        currentUserAccount = currentUserAccount.copyWith(isActiv: true);
+        currentUserAccount = currentUserAccount.copyWith(isOnline: true);
 
         // Saves changes.
         _accountRepository.updateUserAccount(userAccount: currentUserAccount);
@@ -74,6 +74,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
+    } catch (exception) {
+      emit(const LoggedOutAuthState(error: AuthErrorUnknown()));
     }
   }
 
@@ -95,7 +97,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await _accountRepository.getCurrentUserAccount();
 
         // Changes the current user online status.
-        currentUserAccount = currentUserAccount.copyWith(isActiv: true);
+        currentUserAccount = currentUserAccount.copyWith(isOnline: true);
 
         // Saves changes.
         _accountRepository.updateUserAccount(userAccount: currentUserAccount);
@@ -106,6 +108,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
+    } catch (exception) {
+      emit(const LoggedOutAuthState(error: AuthErrorUnknown()));
     }
   }
 
@@ -143,7 +147,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           await _accountRepository.getCurrentUserAccount();
 
       // Changes the current user online status.
-      currentUserAccount = currentUserAccount.copyWith(isActiv: false);
+      currentUserAccount = currentUserAccount.copyWith(isOnline: false);
 
       // Saves changes.
       _accountRepository.updateUserAccount(userAccount: currentUserAccount);
@@ -158,6 +162,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   /// Registers the user with email, password, username and login.
+  ///
+  /// Throws [AuthErrorLoginIsAlreadyUsed] if a specified login in not already used.
   ///
   /// Sets the error to the state if [AuthError] occurs.
   Future<void> _register(

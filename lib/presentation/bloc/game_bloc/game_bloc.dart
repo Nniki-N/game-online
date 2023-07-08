@@ -70,9 +70,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           log('RoomBloc ------------------ stream error: ${error.toString()}');
         },
       );
-    } catch (exception) {
+    } on GameRoomError catch (gameRoomError) {
       emit(ErrorGameState(
-        errorText: exception.toString(),
+        gameRoomError: gameRoomError,
         gameRoom: state.gameRoom,
       ));
     }
@@ -122,13 +122,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(InProgressGameState(gameRoom: gameRoom));
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorGameState(
-        errorTitle: gameRoomError.errorTitle,
-        errorText: gameRoomError.errorText,
-        gameRoom: state.gameRoom,
-      ));
-    } catch (exception) {
-      emit(ErrorGameState(
-        errorText: exception.toString(),
+        gameRoomError: gameRoomError,
         gameRoom: state.gameRoom,
       ));
     }
@@ -209,9 +203,14 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         // Updates current user total and victory counts.
         _accountRepository.updateUserAccount(userAccount: currentUserAccount);
       }
+    } on GameRoomError catch (gameRoomError) {
+      emit(ErrorGameState(
+        gameRoomError: gameRoomError,
+        gameRoom: state.gameRoom,
+      ));
     } catch (exception) {
       emit(ErrorGameState(
-        errorText: exception.toString(),
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
         gameRoom: state.gameRoom,
       ));
     }
@@ -269,9 +268,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
       // Indicates that the game started and players can play.
       emit(InProgressGameState(gameRoom: gameRoom));
-    } catch (exception) {
+    } on GameRoomError catch (gameRoomError) {
       emit(ErrorGameState(
-        errorText: exception.toString(),
+        gameRoomError: gameRoomError,
         gameRoom: state.gameRoom,
       ));
     }
@@ -308,7 +307,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       ));
     } catch (exception) {
       emit(ErrorGameState(
-        errorText: exception.toString(),
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
         gameRoom: state.gameRoom,
       ));
     }
@@ -348,7 +347,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
 
       log('1');
-      
 
       // Retrieves the current user data.
       UserAccount currentUserAccount =
@@ -460,13 +458,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       log('end making move');
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorGameState(
-        errorTitle: gameRoomError.errorTitle,
-        errorText: gameRoomError.errorText,
+        gameRoomError: gameRoomError,
         gameRoom: state.gameRoom,
       ));
     } catch (exception) {
       emit(ErrorGameState(
-        errorText: exception.toString(),
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
         gameRoom: state.gameRoom,
       ));
     }

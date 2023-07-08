@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:game/common/errors/auth_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
@@ -32,14 +33,34 @@ class RegistrationScreen extends StatelessWidget {
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // Displays an error message if an error occurs.
-        final authError = state.error;
-        if (authError != null) {
-          log('error signin');
+        // Checks if an error occurs and if error message has to be shown.
+        final AuthError? authError = state.error;
+        final bool showPopupWithError =
+            authError is AuthErrorLoginIsAlreadyUsed ||
+                authError is AuthErrorEmailAlreadyInUse ||
+                authError is AuthErrorCredentialAlreadyInUse ||
+                authError is AuthErrorWeakPassword ||
+                authError is AuthErrorOperationNotAllowed ||
+                authError is AuthErrorAccountExistsWithDifferentCredential ||
+                authError is AuthErrorInvalidPassword ||
+                authError is AuthErrorInvalidEmail;
+        final bool showPopupWithBasicSentences =
+            authError is! AuthErrorGoogleSignInWasAborted &&
+                authError is! AuthErrorUnknown;
+
+        // Displays an error message if needed.
+        if (authError != null && showPopupWithError) {
           showNotificationDialog(
             context: context,
             dialogTitle: authError.errorTitle,
             dialogContent: authError.errorText,
+            buttonText: 'Ok',
+          );
+        } else if (authError != null && showPopupWithBasicSentences) {
+          showNotificationDialog(
+            context: context,
+            dialogTitle: 'Registration error',
+            dialogContent: 'Something went wrong while registration, please try again',
             buttonText: 'Ok',
           );
         }
@@ -58,8 +79,8 @@ class RegistrationScreen extends StatelessWidget {
             loadingText: 'Loading...',
           );
         }
-        
-        // Register screen.
+
+        // Registration screen.
         else {
           return Scaffold(
             body: Center(

@@ -15,10 +15,10 @@ Future<void> showNotificationDialog({
   required String dialogContent,
   required String buttonText,
 }) async {
-  showGenericDialog(
+  return showGenericDialog(
     context: context,
     dialogTitle: dialogTitle,
     dialogContent: dialogContent,
     dialogOptionsBuilder: () => {buttonText: null},
-  );
+  ).then((value) => null);
 }

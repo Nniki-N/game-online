@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:game/common/errors/account_error.dart';
 import 'package:game/domain/entities/account.dart';
 
 @immutable
@@ -28,11 +29,11 @@ class EmptyAccountState extends AccountState {
 @immutable
 class ErrorAccountState extends AccountState {
   final UserAccount userAccount;
-  final String errorText;
+  final AccountError accountError;
 
   const ErrorAccountState({
-    required this.errorText,
     required this.userAccount,
+    required this.accountError,
   });
 }
 

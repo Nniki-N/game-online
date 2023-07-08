@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:game/common/errors/auth_error.dart';
+import 'package:game/common/errors/account_error.dart';
 import 'package:game/data/datasources/helpers/firebase_account_datasource_helper.dart';
 import 'package:game/data/models/account_model.dart';
 import 'package:injectable/injectable.dart';
@@ -27,13 +27,15 @@ class FirebaseAccountDatasource {
   /// Retrieves an account data of the current user from the Firestore Database and returns
   /// [AccountModel] if the request was successful.
   ///
-  /// Throws [AuthErrorLocalCurrentUserNotFound] if a [User] retrieving from local
+  /// Throws [AccountErrorRetrievingAccount] if a [User] retrieving from local
   /// Firebase Database failed.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   Future<AccountModel> getCurrentAccountModel() async {
     try {
       final User? user = _firebaseAuth.currentUser;
 
-      if (user == null) throw const AuthErrorLocalCurrentUserNotFound();
+      if (user == null) throw const AccountErrorRetrievingAccount();
 
       final AccountModel accountModel =
           await _firebaseAccountDatasourceHelper.getAccountModel(
@@ -42,13 +44,14 @@ class FirebaseAccountDatasource {
 
       return accountModel;
     } catch (exception) {
-      _logger.e(exception);
       rethrow;
     }
   }
 
   /// Retrieves a user account data from the Firestore Database and returns
   /// [AccountModel] if the request was successful.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   Future<AccountModel> getAccountModel({required String uid}) async {
     try {
       final AccountModel accountModel =
@@ -65,25 +68,28 @@ class FirebaseAccountDatasource {
   /// Retrieves a stream of changes of an account data of a current user from
   /// the Firestore Database and returns a stream of [AccountModel] if the request was successful.
   ///
-  /// Throws [AuthErrorLocalCurrentUserNotFound] if a [User] retrieving from local
+  /// Throws [AccountErrorRetrievingAccount] if a [User] retrieving from local
   /// Firebase Database failed.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   Stream<AccountModel> getCurrentAccountModelStream() {
     try {
       final User? user = _firebaseAuth.currentUser;
 
-      if (user == null) throw const AuthErrorLocalCurrentUserNotFound();
+      if (user == null) throw const AccountErrorRetrievingAccount();
 
       final Stream<AccountModel> accountModelStream =
           _firebaseAccountDatasourceHelper.getAccountModelStream(uid: user.uid);
 
       return accountModelStream;
     } catch (exception) {
-      _logger.e(exception);
       rethrow;
     }
   }
 
-  /// Updates a user account data in the Firestore Database..
+  /// Updates a user account data in the Firestore Database.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
       await _firebaseAccountDatasourceHelper.updateAccount(
@@ -96,13 +102,15 @@ class FirebaseAccountDatasource {
 
   /// Retrieves a list of users where [fieldName] equals [fieldValue] from the 
   /// Firestore Database and returns a list of [AccountModel] if the request was successful.
-  Future<List<AccountModel>> getAccountModelsWhere({
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
+  Future<List<AccountModel>> getAccountModelListWhere({
     required String fieldName,
     required dynamic fieldValue,
   }) async {
     try {
       final List<AccountModel> accountModelsList =
-          await _firebaseAccountDatasourceHelper.getAccountModelsWhere(
+          await _firebaseAccountDatasourceHelper.getAccountModelListWhere(
         fieldName: fieldName,
         fieldValue: fieldValue,
       );

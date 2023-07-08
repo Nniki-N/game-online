@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/di/locator.dart';
+import 'package:game/common/errors/game_room_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/domain/entities/chip.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:game/presentation/screens/game_screens/online_footer.dart';
 import 'package:game/presentation/screens/game_screens/online_header.dart';
 import 'package:game/presentation/screens/game_screens/row_with_buttons.dart';
 import 'package:game/presentation/widgets/dialogs/show_accept_or_deny_dialog.dart';
+import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
 
 class OnlineGameScreen extends StatelessWidget {
   const OnlineGameScreen({super.key});
@@ -46,23 +48,23 @@ class OnlineGameScreen extends StatelessWidget {
         ..add(const StartGameEvent()),
       child: BlocListener<RoomBloc, RoomState>(
         listener: (context, roomState) {
-          log('listener: ro0mState --- ${roomState.toString()}');
-
           // Navigates user back to the main screen if the user is outside the room.
           if (roomState is OutsideRoomState) {
             log('online game room ------------------ go to the main room');
             AutoRouter.of(context).replace(const MainRouter());
           }
 
-          // Notifies that the game room is not full and offers to wait for a second player or leave the room.
+          // Notifies that the game room is not full and offers to wait for a second player
+          // or leave the room.
           else if (roomState is InRoomState) {
             log('online game room ------------------ missing player dialog');
             final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
 
+            // Shows a popup if another popup is not opened.
             if (!isPopUpShown) {
               showAcceptOrDenyDialog(
                 context: context,
-                dialogTitle: 'Player left',
+                dialogTitle: 'Second player left',
                 dialogContent: 'Do you want to wait for a new player?',
                 buttonAcceptText: 'Wait',
                 buttonDenyText: 'Leave',
@@ -71,8 +73,6 @@ class OnlineGameScreen extends StatelessWidget {
                   log('online game room ------------------ go to the waiting room');
                   AutoRouter.of(context).replace(const WaitingRoomRouter());
                 } else {
-                  log('one in room ------------------- leave room');
-
                   leaveGameRoom(
                     context: context,
                     leaveWithLoose: false,
@@ -82,10 +82,21 @@ class OnlineGameScreen extends StatelessWidget {
             }
           }
 
-          // Navigates user back to the main screen if an error occurs.
+          // Navigates user back to the main screen if an error of specified type occurs.
           else if (roomState is ErrorRoomState) {
-            log('roomError in the online game room screen');
-            AutoRouter.of(context).replace(const MainRouter());
+            // Checks if it is an error when user has to be navigated back to the main screen.
+            final GameRoomError gameRoomError = roomState.gameRoomError;
+            final bool notWrongMoveError =
+                gameRoomError is! GameRoomErrorInvalidPlayerMove;
+
+            // Navigates user back to the main screen.
+            if (notWrongMoveError) {
+              log('roomError in the online game room screen');
+              leaveGameRoom(
+                context: context,
+                leaveWithLoose: false,
+              );
+            }
           }
         },
         child: BlocConsumer<GameBloc, GameState>(
@@ -95,9 +106,7 @@ class OnlineGameScreen extends StatelessWidget {
                 accountBloc.state.getUserAccount()!.uid !=
                     gameState.gameRoom.turnOfPlayerUid;
 
-            if (turnOfSecondPlayer) {
-              chipStreamController.add(null);
-            }
+            if (turnOfSecondPlayer) chipStreamController.add(null);
 
             // Notifies that the game ended and offers to restart the game.
             if (gameState is ResultGameState) {
@@ -105,6 +114,7 @@ class OnlineGameScreen extends StatelessWidget {
 
               final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
 
+              // Shows a popup if another popup is not opened.
               if (!isPopUpShown) {
                 final String winnerUid = gameState.gameRoom.winnerUid;
                 final String winnerName = gameState.gameRoom.players
@@ -115,15 +125,13 @@ class OnlineGameScreen extends StatelessWidget {
                   context: context,
                   dialogTitle: 'Game finished',
                   dialogContent:
-                      'Pleyer $winnerName won. Do you want to restart the game with the same player?',
+                      '$winnerName won. Do you want to restart the game with the same player?',
                   buttonAcceptText: 'Restart',
                   buttonDenyText: 'Leave',
                 ).then((restartGame) {
                   if (restartGame) {
                     context.read<GameBloc>().add(const RestartGameEvent());
                   } else {
-                    log('game finished ------------------- leave room');
-
                     leaveGameRoom(
                       context: context,
                       leaveWithLoose: false,
@@ -136,20 +144,43 @@ class OnlineGameScreen extends StatelessWidget {
             // Shows an error massage and navigates user back to the main screen if an error occurs.
             else if (gameState is ErrorGameState) {
               log('gameError in the online game room screen');
-              log('errorText ${gameState.errorText}');
-              log('errorTitle ${gameState.errorTitle}');
 
-              // showNotificationDialog(
-              //   context: context,
-              //   dialogTitle: 'Some error happened',
-              //   dialogContent:
-              //       'Something happened during the game, therefore game is finished, but it won`t be considered as a loose.',
-              //   buttonText: 'Ok',
-              // ).then((_) => AutoRouter.of(context).replace(const MainRouter()));
+              // Checks if it is an error when user has to be navigated back to the main screen.
+              final GameRoomError gameRoomError = gameState.gameRoomError;
+              final bool wrongMoveError =
+                  gameRoomError is GameRoomErrorInvalidPlayerMove;
+
+              // Shows a popup if another popup is not opened.
+              if (wrongMoveError) {
+                showNotificationDialog(
+                  context: context,
+                  dialogTitle: gameRoomError.errorTitle,
+                  dialogContent: gameRoomError.errorText,
+                  buttonText: 'Ok',
+                );
+              }
+
+              // Navigates user back to the main screen.
+              else {
+                log('roomError in the online game room screen');
+
+                showNotificationDialog(
+                  context: context,
+                  dialogTitle: 'Game error',
+                  dialogContent:
+                      'Some kind of a game error has occured. You will be sent back to the main screen',
+                  buttonText: 'Ok',
+                ).then((_) {
+                  leaveGameRoom(
+                    context: context,
+                    leaveWithLoose: false,
+                  );
+                });
+              }
             }
           },
           builder: (context, gameState) {
-            // Layout of a sceen.
+            // Layout of the game sceen.
             return Scaffold(
               body: Column(
                 children: [

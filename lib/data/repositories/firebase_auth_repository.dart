@@ -37,6 +37,8 @@ class FirebaseAuthRepository implements AuthRepository {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
       );
+    } catch (exception) {
+      rethrow;
     }
   }
 
@@ -49,8 +51,7 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<Account> logInWithGoogle() async {
     try {
-      final AccountModel accountModel =
-          await _authDatasource.logInWithGoogle();
+      final AccountModel accountModel = await _authDatasource.logInWithGoogle();
 
       return Account.fromAccountModel(accountModel: accountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
@@ -59,6 +60,8 @@ class FirebaseAuthRepository implements AuthRepository {
       );
     } on PlatformException {
       throw const AuthErrorUnknown();
+    } catch (exception) {
+      rethrow;
     }
   }
 
@@ -78,6 +81,8 @@ class FirebaseAuthRepository implements AuthRepository {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
       );
+    } catch (exception) {
+      rethrow;
     }
   }
 
@@ -109,7 +114,7 @@ class FirebaseAuthRepository implements AuthRepository {
     required String login,
   }) async {
     try {
-      // checks if specific login is already used by someone
+      // Checks if a specific login is already used by someone.
       if (await _authDatasource.loginIsAlreadyUsed(login: login)) {
         throw const AuthErrorLoginIsAlreadyUsed();
       }
@@ -127,7 +132,7 @@ class FirebaseAuthRepository implements AuthRepository {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
       );
-    } on AuthError {
+    } catch (exception) {
       rethrow;
     }
   }
@@ -154,6 +159,8 @@ class FirebaseAuthRepository implements AuthRepository {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
       );
+    } catch (exception) {
+      rethrow;
     }
   }
 
@@ -168,7 +175,7 @@ class FirebaseAuthRepository implements AuthRepository {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
       );
-    } on AuthError {
+    } catch (exception) {
       rethrow;
     }
   }
@@ -180,5 +187,4 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Checks if the user is logged in anonymously.
   @override
   Future<void> isAnonymousUser() async => _authDatasource.isAnonymousUser();
-
 }

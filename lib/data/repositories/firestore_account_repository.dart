@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/data/datasources/firebase_account_datasource.dart';
 import 'package:game/data/models/account_model.dart';
 import 'package:game/domain/entities/account.dart';
+import 'package:game/common/errors/account_error.dart';
 import 'package:game/domain/repositories/account_repository.dart';
 
 @immutable
@@ -14,6 +15,8 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves an account data of the current user from the Firestore Database
   /// and returns [Account] if request was successful.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   @override
   Future<Account> getCurrentAccount() async {
     try {
@@ -32,6 +35,8 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves an account data of the current user from the Firestore Database
   /// and returns [UserAccount] if request was successful.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   @override
   Future<UserAccount> getCurrentUserAccount() async {
     try {
@@ -50,6 +55,8 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves an user account data from the Firestore Database
   /// and returns [UserAccount] if request was successful.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   @override
   Future<UserAccount> getUserAccount({required String uid}) async {
     try {
@@ -68,6 +75,8 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves a stream of changes of a account data of the current user from
   /// the Firestore Database and returns a stream of [UserAccount] if the request was successful.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   @override
   Stream<UserAccount> getCurrentUserAccountStream() {
     try {
@@ -86,6 +95,8 @@ class FirestoreAccountRepository implements AccountRepository {
   }
 
   /// Updates a user account data in the Firestore Database.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   @override
   Future<void> updateUserAccount({required UserAccount userAccount}) async {
     try {
@@ -102,14 +113,16 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves a list of users where [fieldName] equals [fieldValue] from the Firestore Database
   /// and returns a list of [UserAccount] if the request was successful.
+  /// 
+  /// Rethrows [AccountError] when the error occurs.
   @override
-  Future<List<UserAccount>> getAccountModelsWhere({
+  Future<List<UserAccount>> getAccountModelListWhere({
     required String fieldName,
     required dynamic fieldValue,
   }) async {
     try {
       final List<AccountModel> accountModelsList =
-          await _firebaseAccountDatasource.getAccountModelsWhere(
+          await _firebaseAccountDatasource.getAccountModelListWhere(
         fieldName: fieldName,
         fieldValue: fieldValue,
       );

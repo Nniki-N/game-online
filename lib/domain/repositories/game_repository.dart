@@ -11,6 +11,8 @@ abstract class GameRepository {
   /// Checks if a player can make a move.
   ///
   /// Returns true if the move is possible and false if not.
+  /// 
+  /// Throws [GameRoomErrorUnknown] when any error occurs.
   bool moveIsPossible({
     required List<List<Chip?>> fieldWithChips,
     required Player player,
@@ -21,6 +23,7 @@ abstract class GameRepository {
   /// Returns [GameRoom] with replaced player.
   ///
   /// Throws [GameRoomErrorNotFoundPlayer] if the player is not found in the room.
+  /// Throws [GameRoomErrorUnknown] when any other error occurs.
   GameRoom changePlayerDataInGameRoom({
     required GameRoom gameRoom,
     required Player player,
@@ -30,6 +33,8 @@ abstract class GameRepository {
   /// Changes the turn of a player to the next one.
   ///
   /// Return [GameRoom] with the changed turn of a player.
+  /// 
+  /// Throws [GameRoomErrorUnknown] when any error occurs.
   GameRoom changeTurnForNextPlayer({
     required GameRoom gameRoom,
   });
@@ -37,6 +42,8 @@ abstract class GameRepository {
   /// Returns a uid of a winner if there is a victory combination.
   ///
   /// Returns null if there is no winner.
+  /// 
+  /// Throws [GameRoomErrorUnknown] when any error occurs.
   String? checkCombinationsAndSelectWinner({
     required List<List<Chip?>> fieldWithChips,
   });

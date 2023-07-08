@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/common/errors/auth_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
@@ -28,6 +29,7 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     final TextEditingController emailController =
         TextEditingController(text: 'user1@gmail.com');
     final TextEditingController passwordController =
@@ -35,14 +37,32 @@ class SignInScreen extends StatelessWidget {
 
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // Displays an error message if an error occurs.
-        final authError = state.error;
-        if (authError != null) {
-          log('error signin');
+        // Checks if an error occurs and if error message has to be shown.
+        final AuthError? authError = state.error;
+        final bool showPopupWithError = authError is AuthErrorInvalidEmail ||
+            authError is AuthErrorInvalidPassword ||
+            authError is AuthErrorWrongPassword ||
+            authError is AuthErrorCredentialAlreadyInUse ||
+            authError is AuthErrorUserNotFound ||
+            authError is AuthErrorOperationNotAllowed;
+        final bool showPopupWithBasicSentences =
+            authError is! AuthErrorGoogleSignInWasAborted &&
+                authError is! AuthErrorUnknown;
+
+        // Displays an error message if needed.
+        if (authError != null && showPopupWithError) {
           showNotificationDialog(
             context: context,
             dialogTitle: authError.errorTitle,
             dialogContent: authError.errorText,
+            buttonText: 'Ok',
+          );
+        } else if (authError != null && showPopupWithBasicSentences) {
+          showNotificationDialog(
+            context: context,
+            dialogTitle: 'Authentication error',
+            dialogContent:
+                'Something went wrong while signing, please try again',
             buttonText: 'Ok',
           );
         }
@@ -65,9 +85,9 @@ class SignInScreen extends StatelessWidget {
           return const LoadingScreen(
             loadingText: 'Loading...',
           );
-        } 
-        
-        // Sign in screen.    
+        }
+
+        // Sign in screen.
         else {
           return Scaffold(
             body: Center(
@@ -112,18 +132,19 @@ class SignInScreen extends StatelessWidget {
                         text: 'Sign in',
                         onTap: () {
                           log('signin ------------------ sign in button pressed');
+                          // final form = formKey.currentState;
+                          // if (!form!.validate()) return;
+
                           final email = emailController.text.trim();
                           final password = passwordController.text.trim();
 
                           if (email.isNotEmpty && password.isNotEmpty) {
-                            context.read<AuthBloc>().add(
-                                  LogInAuthEvent(
-                                    email: email,
-                                    password: password,
-                                  ),
-                                );
+                            context.read<AuthBloc>().add(LogInAuthEvent(
+                                  email: email,
+                                  password: password,
+                                ));
                           }
-                        },
+                        },Updated all e
                       ),
                       SizedBox(height: 35.h),
                       const LogInFormSeparator(),

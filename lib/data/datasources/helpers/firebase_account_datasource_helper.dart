@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/common/constants/firebase_constants.dart';
-import 'package:game/common/errors/auth_error.dart';
+import 'package:game/common/errors/account_error.dart';
 import 'package:game/common/typedefs.dart';
 import 'package:game/data/models/account_model.dart';
 import 'package:logger/logger.dart';
@@ -29,6 +29,8 @@ class FirebaseAccountDatasourceHelper {
       );
 
   /// Creates a new account document in the Firestore Database.
+  ///
+  /// Throws [AccountErrorCreatingAccount] when the error occurs.
   Future<void> createAccount({required AccountModel accountModel}) async {
     try {
       await _firebaseFirestore
@@ -37,14 +39,15 @@ class FirebaseAccountDatasourceHelper {
           .set(accountModel.toJson());
     } catch (exception) {
       _logger.e(exception);
-      rethrow;
+      throw const AccountErrorCreatingAccount();
     }
   }
 
   /// Retrieves a user account data from the Firestore Database and returns
   /// [AccountModel] if the request was successful.
   ///
-  /// Throws [AuthErrorLocalCurrentUserNotFound] if an account data was not retrieved.
+  /// Throws [AccountErrorRetrievingAccount] if an account data was not retrieved.
+  /// Throws [AccountErrorCreatingAccount] when other error occurs.
   Future<AccountModel> getAccountModel({required String uid}) async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
@@ -55,17 +58,19 @@ class FirebaseAccountDatasourceHelper {
 
       final Json? json = snapshot.data();
 
-      if (json == null) throw const AuthErrorUserNotFound();
+      if (json == null) throw const AccountErrorRetrievingAccount();
 
       return AccountModel.fromJson(json);
     } catch (exception) {
       _logger.e(exception);
-      rethrow;
+      throw const AccountErrorRetrievingAccount();
     }
   }
 
   /// Retrieves a stream of changes of an account data from the Firestore Database
   /// and returns a stream of[AccountModel] if the request was successful.
+  /// 
+  /// Throws [AccountErrorRetrievingAccountStream] when the error occurs.
   Stream<AccountModel> getAccountModelStream({required String uid}) {
     try {
       final Stream<AccountModel> accountModelStream = _firebaseFirestore
@@ -77,11 +82,13 @@ class FirebaseAccountDatasourceHelper {
       return accountModelStream;
     } catch (exception) {
       _logger.e(exception);
-      rethrow;
+      throw const AccountErrorRetrievingAccountStream();
     }
   }
 
   /// Updates a user account data in the Firestore Database.
+  /// 
+  /// Throws [AccountErrorUpdatingAccount] when the error occurs.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
       await _firebaseFirestore
@@ -90,11 +97,13 @@ class FirebaseAccountDatasourceHelper {
           .update(accountModel.toJson());
     } catch (exception) {
       _logger.e(exception);
-      rethrow;
+      throw const AccountErrorUpdatingAccount();
     }
   }
 
   /// Checks if a user account already exists in the Firestore Database.
+  /// 
+  /// hrows [AccountErrorCreatingAccount] when the error occurs.
   Future<bool> accountExists({required String uid}) async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
@@ -106,13 +115,15 @@ class FirebaseAccountDatasourceHelper {
       return snapshot.exists;
     } catch (exception) {
       _logger.e(exception);
-      rethrow;
+      throw const AccountErrorRetrievingAccount();
     }
   }
 
-  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the 
+  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the
   /// Firestore Database and returns a list of [AccountModel] if the request was successful.
-  Future<List<AccountModel>> getAccountModelsWhere({
+  /// 
+  /// hrows [AccountErrorRetrievingAccountList] when the error occurs.
+  Future<List<AccountModel>> getAccountModelListWhere({
     required String fieldName,
     required dynamic fieldValue,
   }) async {
@@ -133,7 +144,7 @@ class FirebaseAccountDatasourceHelper {
 
       return accountModelsList;
     } catch (exception) {
-      rethrow;
+      throw const AccountErrorRetrievingAccountList();
     }
   }
 }

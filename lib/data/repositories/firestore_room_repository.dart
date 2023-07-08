@@ -17,6 +17,8 @@ class FirestoreRoomRepository implements RoomRepository {
   /// Creates a new game room document in the Firestore Database.
   ///
   /// Returns [GameRoom] if a creating process is successful.
+  ///
+  /// Rethrows [GameRoomError] when the error occurs.
   @override
   Future<GameRoom> createGameRoom() async {
     try {
@@ -35,6 +37,8 @@ class FirestoreRoomRepository implements RoomRepository {
   }
 
   /// Updates a game room data in the Firestore Database.
+  ///
+  /// Rethrows [GameRoomError] when the error occurs.
   @override
   Future<void> updateGameRoom({required GameRoom gameRoom}) async {
     try {
@@ -48,6 +52,8 @@ class FirestoreRoomRepository implements RoomRepository {
   }
 
   /// Deletes a game room document from the Firestore Database.
+  ///
+  /// Rethrows [GameRoomError] when the error occurs.
   @override
   Future<void> deleteGameRoom({required String gameRoomId}) async {
     try {
@@ -63,6 +69,8 @@ class FirestoreRoomRepository implements RoomRepository {
   /// Retrieves a game room data from the Firestore Database.
   ///
   /// Returns [GameRoom] if the request was successful.
+  ///
+  /// Rethrows [GameRoomError] when the error occurs.
   @override
   Future<GameRoom> getGameRoom({required String gameRoomId}) async {
     try {
@@ -85,6 +93,9 @@ class FirestoreRoomRepository implements RoomRepository {
   /// Retrieves a list of data of all game rooms from the Firestore Database.
   ///
   /// Returns a list of [GameRoom] if the request was successful.
+  ///
+  /// Rethrows [GameRoomError] when the error occurs.
+  /// Throws [GameRoomErrorUnknown] when any other error occurs.
   @override
   Future<List<GameRoom>> getGameRoomList() async {
     try {
@@ -103,16 +114,19 @@ class FirestoreRoomRepository implements RoomRepository {
       }).toList();
 
       return gameRoomList;
-    } catch (exception) {
+    } on GameRoomError {
       rethrow;
+    } catch (exception) {
+      throw const GameRoomErrorUnknown();
     }
   }
 
   /// Checks if a game room with specified id exists in the Firestore Database.
   ///
-  /// Returns true if the game room exists and false if not.
+  /// Returns true if the game room exists.
   ///
-  /// Throws [GameRoomErrorEmptyRoom] if the game room is empty.
+  /// Deletes the game room if [GameRoomErrorEmptyRoom] occurs.
+  /// Returns false if any error occurs.
   @override
   Future<bool> gameRoomExists({required String gameRoomId}) async {
     try {
@@ -125,14 +139,20 @@ class FirestoreRoomRepository implements RoomRepository {
       if (gameRoomModel.players.isEmpty) throw const GameRoomErrorEmptyRoom();
 
       return true;
+    } on GameRoomErrorEmptyRoom {
+      await deleteGameRoom(gameRoomId: gameRoomId);
+      return false;
     } catch (exception) {
       return false;
     }
   }
 
   /// Retrieves a stream of game room data changes from the Firestore Dtabase.
-  /// 
+  ///
   /// Returns a stream of [GameRoom] if request was successful.
+  /// 
+  /// Rethrows [GameRoomError] when the error occurs.
+  /// Throws [GameRoomErrorUnknown] when any other error occurs.
   @override
   Stream<GameRoom> getGameRoomStream({required String gameRoomId}) {
     try {
@@ -146,18 +166,22 @@ class FirestoreRoomRepository implements RoomRepository {
       );
 
       return gameRoomStream;
-    } catch (exception) {
+    } on GameRoomError {
       rethrow;
+    } catch (exception) {
+      throw const GameRoomErrorUnknown();
     }
   }
 
-  /// Adds a player to the game room, sets a turn of which player is first and 
+  /// Adds a player to the game room, sets a turn of which player is first and
   /// saves changes in the Firestore Database.
-  /// 
+  ///
   /// Returns [GameRoom] with added player and the first turn of player set.
-  /// 
+  ///
+  /// Rethrows [GameRoomError] when the error occurs.
   /// Throws [GameRoomErrorNotAllowedNumberOfPlayers] if there are 2 or more players
   /// in the game room.
+  /// Throws [GameRoomErrorUnknown] when any other error occurs.
   @override
   Future<GameRoom> addPlayerToGameRoom({
     required Player playerToJoin,
@@ -192,15 +216,20 @@ class FirestoreRoomRepository implements RoomRepository {
       );
 
       return gameRoomWithNewPlayer;
-    } catch (exception) {
+    } on GameRoomError {
       rethrow;
+    } catch (exception) {
+      throw const GameRoomErrorUnknown();
     }
   }
 
-  /// Removes a player from the game room, sets a player's turn and saves 
+  /// Removes a player from the game room, sets a player's turn and saves
   /// changes in the Firestore database.
-  /// 
+  ///
   /// Returns [GameRoom] with removed player and a player's turn set.
+  /// 
+  /// Rethrows [GameRoomError] when the error occurs.
+  /// Throws [GameRoomErrorUnknown] when any other error occurs.
   @override
   Future<GameRoom> removePlayerFromGameRoom({
     required String uid,
@@ -227,9 +256,10 @@ class FirestoreRoomRepository implements RoomRepository {
       );
 
       return gameRoomWithoutPlayer;
-    } catch (exception) {
+    } on GameRoomError {
       rethrow;
+    } catch (exception) {
+      throw const GameRoomErrorUnknown();
     }
   }
-
 }

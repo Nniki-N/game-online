@@ -38,7 +38,6 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     InitializeRoomEvent event,
     Emitter<RoomState> emit,
   ) async {
-    
     // Responds to the state changes and changes states base on the number of players.
     await emit.onEach(
       stream,
@@ -86,78 +85,12 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
             },
           );
         }
-
-        // // Indicates that two players are in the room.
-        // // Indicates that only one player is in the room.
-        // else if (roomState is InRoomState) {
-        //   if (gameRoomStreamSubscription == null && gameRoomStream == null) {
-        //     log('RoomBloc ------------------ state InRoomState -> new subscription');
-        //
-        //     // Retrieves a stream of game room data changes.
-        //     gameRoomStream = _roomRepository
-        //         .getGameRoomStream(gameRoomId: roomState.gameRoom.uid)
-        //         .asBroadcastStream();
-        //
-        //     // Changes state base on the number of players.
-        //     gameRoomStreamSubscription = gameRoomStream?.listen(
-        //       (gameRoom) async {
-        //         if (gameRoom.players.length == 1) {
-        //           log('RoomBloc ------------------ state InRoomState -> 1 player');
-        //           emit(InRoomState(gameRoom: gameRoom));
-        //         } else if (gameRoom.players.length == 2) {
-        //           log('RoomBloc ------------------ state InRoomState -> 2 player');
-        //           await gameRoomStreamSubscription?.cancel();
-        //           gameRoomStreamSubscription = null;
-        //           gameRoomStream = null;
-        //           emit(InFullRoomState(gameRoom: gameRoom));
-        //         }
-        //       },
-        //       // Closes the stream listening if any arror occurs.
-        //       onError: (error) {
-        //         log('RoomBloc ------------------ stream error: ${error.toString()}');
-        //         gameRoomStreamSubscription?.cancel();
-        //         gameRoomStreamSubscription = null;
-        //         gameRoomStream = null;
-        //       },
-        //     );
-        //   }
-        // }
-        //
-        // // Indicates that only one players is in the room.
-        // else if (roomState is InFullRoomState) {
-        //   if (gameRoomStreamSubscription == null && gameRoomStream == null) {
-        //     log('RoomBloc ------------------ state InFullRoomState -> new subscription');
-        //
-        //     // Retrieves a stream of game room data changes.
-        //     gameRoomStream = _roomRepository.getGameRoomStream(
-        //       gameRoomId: roomState.gameRoom.uid,
-        //     );
-        //
-        //     // Changes state base on the number of players
-        //     gameRoomStreamSubscription = gameRoomStream?.listen(
-        //       (gameRoom) async {
-        //         if (gameRoom.players.length == 1) {
-        //           log('RoomBloc ------------------ state InFullRoomState -> 1 playyer');
-        //           await gameRoomStreamSubscription?.cancel();
-        //           gameRoomStreamSubscription = null;
-        //           gameRoomStream = null;
-        //           emit(InRoomState(gameRoom: gameRoom));
-        //         }
-        //       },
-        //       // Closes the stream listening if any arror occurs.
-        //       onError: (error) {
-        //         log('RoomBloc ------------------ stream error: ${error.toString()}');
-        //         gameRoomStreamSubscription?.cancel();
-        //         gameRoomStreamSubscription = null;
-        //         gameRoomStream = null;
-        //       },
-        //     );
-        //   }
-        // }
       },
       onError: (error, stackTrace) {
         log(error.toString());
-        emit(ErrorRoomState(errorText: error.toString()));
+        emit(ErrorRoomState(
+          gameRoomError: GameRoomErrorUnknown(errorText: error.toString()),
+        ));
       },
     );
   }
@@ -193,12 +126,11 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       }
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorRoomState(
-        errorTitle: gameRoomError.errorTitle,
-        errorText: gameRoomError.errorText,
+        gameRoomError: gameRoomError,
       ));
     } catch (exception) {
       emit(ErrorRoomState(
-        errorText: exception.toString(),
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
       ));
     }
   }
@@ -219,12 +151,11 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       add(JoinRoomEvent(gameRoom: gameRoom));
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorRoomState(
-        errorTitle: gameRoomError.errorTitle,
-        errorText: gameRoomError.errorText,
+        gameRoomError: gameRoomError,
       ));
     } catch (exception) {
       emit(ErrorRoomState(
-        errorText: exception.toString(),
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
       ));
     }
   }
@@ -292,12 +223,11 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       }
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorRoomState(
-        errorTitle: gameRoomError.errorTitle,
-        errorText: gameRoomError.errorText,
+        gameRoomError: gameRoomError,
       ));
     } catch (exception) {
       emit(ErrorRoomState(
-        errorText: exception.toString(),
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
       ));
     }
   }

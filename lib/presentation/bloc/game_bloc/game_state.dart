@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:game/common/errors/game_room_error.dart';
 import 'package:game/domain/entities/game_room.dart';
 
 @immutable
@@ -40,12 +41,10 @@ class ResultGameState extends GameState {
 
 @immutable
 class ErrorGameState extends GameState {
-  final String errorTitle;
-  final String errorText;
+  final GameRoomError gameRoomError;
 
   const ErrorGameState({
-    this.errorTitle = '',
-    required this.errorText,
+    required this.gameRoomError,
     required GameRoom gameRoom,
   }) : super(gameRoom: gameRoom);
 }

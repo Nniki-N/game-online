@@ -16,10 +16,10 @@ import 'package:flutter/material.dart' as _i23;
 
 import '../../presentation/screens/add_friend_screen/add_friend_screen.dart'
     deferred as _i13;
-import '../../presentation/screens/auth_screens/signin_screen.dart'
-    deferred as _i2;
 import '../../presentation/screens/auth_screens/registration_screen.dart'
     deferred as _i3;
+import '../../presentation/screens/auth_screens/signin_screen.dart'
+    deferred as _i2;
 import '../../presentation/screens/choose_friend_for_game_screen/choose_friend_for_game_screen.dart'
     deferred as _i14;
 import '../../presentation/screens/game_rules_screen/game_rules_screen.dart'
@@ -288,11 +288,17 @@ class AppRouter extends _i22.RootStackRouter {
       );
     },
     LoadingRouter.name: (routeData) {
+      final args = routeData.argsAs<LoadingRouterArgs>(
+          orElse: () => const LoadingRouterArgs());
       return _i22.CustomPage<dynamic>(
         routeData: routeData,
         child: _i22.DeferredWidget(
           _i16.loadLibrary,
-          () => _i16.LoadingScreen(),
+          () => _i16.LoadingScreen(
+            key: args.key,
+            loadingTitle: args.loadingTitle,
+            loadingText: args.loadingText,
+          ),
         ),
         maintainState: false,
         transitionsBuilder: _i22.TransitionsBuilders.noTransition,
@@ -690,14 +696,41 @@ class NotExistingRouter extends _i22.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i16.LoadingScreen]
-class LoadingRouter extends _i22.PageRouteInfo<void> {
-  const LoadingRouter()
-      : super(
+class LoadingRouter extends _i22.PageRouteInfo<LoadingRouterArgs> {
+  LoadingRouter({
+    _i23.Key? key,
+    String? loadingTitle,
+    String? loadingText,
+  }) : super(
           LoadingRouter.name,
           path: '/loading',
+          args: LoadingRouterArgs(
+            key: key,
+            loadingTitle: loadingTitle,
+            loadingText: loadingText,
+          ),
         );
 
   static const String name = 'LoadingRouter';
+}
+
+class LoadingRouterArgs {
+  const LoadingRouterArgs({
+    this.key,
+    this.loadingTitle,
+    this.loadingText,
+  });
+
+  final _i23.Key? key;
+
+  final String? loadingTitle;
+
+  final String? loadingText;
+
+  @override
+  String toString() {
+    return 'LoadingRouterArgs{key: $key, loadingTitle: $loadingTitle, loadingText: $loadingText}';
+  }
 }
 
 /// generated route for

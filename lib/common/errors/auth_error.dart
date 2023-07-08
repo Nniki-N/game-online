@@ -19,6 +19,7 @@ const Map<String, AuthError> firebaseAuthErrorsMapping = {
 };
 
 /// The abstract error for the firebase auth exeption.
+///
 /// Factory constructor implements conversion of [FirebaseAuthException]
 /// in [AuthError]
 @immutable
@@ -36,29 +37,36 @@ abstract class AuthError {
   }) =>
       firebaseAuthErrorsMapping[exception.code.toLowerCase().trim()] ??
       const AuthErrorUnknown();
+
+  @override
+  String toString() {
+    return 'ErrorTitle: $errorTitle \nErrorText: $errorText';
+  }
 }
 
-/// The [AuthError] child for unknown error
+/// The [AuthError] child for an unknown error.
 @immutable
 class AuthErrorUnknown extends AuthError {
-  const AuthErrorUnknown()
-      : super(
-          errorTitle: 'Error',
-          errorText: 'Unknown error happend',
+  const AuthErrorUnknown({
+    String? errorTitle,
+    String? errorText,
+  }) : super(
+          errorTitle: errorTitle ?? 'Error',
+          errorText: errorText ?? 'Unknown auth error happened',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/user-not-found"
+/// The [AuthError] child for a firebase error "auth/user-not-found".
 @immutable
 class AuthErrorUserNotFound extends AuthError {
   const AuthErrorUserNotFound()
       : super(
           errorTitle: 'User not found',
-          errorText: 'The given user was not found on the server!',
+          errorText: 'The user with given credentials was not found',
         );
 }
 
-/// The [AuthError] child error due to absence of a user in received credentials
+/// The [AuthError] child for an absence of a user in received credentials error.
 @immutable
 class AuthErrorUserCredentialUserNotFound extends AuthError {
   const AuthErrorUserCredentialUserNotFound()
@@ -68,37 +76,27 @@ class AuthErrorUserCredentialUserNotFound extends AuthError {
         );
 }
 
-/// The [AuthError] child error due to googl sign in aborting
+/// The [AuthError] child for a google signin abort error.
 @immutable
 class AuthErrorGoogleSignInWasAborted extends AuthError {
   const AuthErrorGoogleSignInWasAborted()
       : super(
-          errorTitle: 'Google sign in was aborted',
+          errorTitle: 'Sign in was aborted',
           errorText: 'Google sign in was aborted',
         );
 }
 
-/// The [AuthError] child for local firebase database
-@immutable
-class AuthErrorLocalCurrentUserNotFound extends AuthError {
-  const AuthErrorLocalCurrentUserNotFound()
-      : super(
-          errorTitle: 'User not found',
-          errorText: 'The given user was not found in the local database!',
-        );
-}
-
-/// The [AuthError] child for firebase error "auth/no-current-user"
+/// The [AuthError] child for a firebase error "auth/no-current-user".
 @immutable
 class AuthErrorNoCurrentUser extends AuthError {
   const AuthErrorNoCurrentUser()
       : super(
-          errorTitle: 'No current user!',
-          errorText: 'No current user with this information was found!',
+          errorTitle: 'No current user',
+          errorText: 'No current user with this information was found',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/requires-recent-login"
+/// The [AuthError] child for a firebase error "auth/requires-recent-login".
 @immutable
 class AuthErrorRequiresRecentLogin extends AuthError {
   const AuthErrorRequiresRecentLogin()
@@ -109,7 +107,7 @@ class AuthErrorRequiresRecentLogin extends AuthError {
         );
 }
 
-/// The [AuthError] child for firebase error "auth/operation-not-allowed"
+/// The [AuthError] child for a firebase error "auth/operation-not-allowed".
 @immutable
 class AuthErrorOperationNotAllowed extends AuthError {
   const AuthErrorOperationNotAllowed()
@@ -119,93 +117,93 @@ class AuthErrorOperationNotAllowed extends AuthError {
         );
 }
 
-/// The [AuthError] child for firebase error "auth/invalid-email"
+/// The [AuthError] child for a firebase error "auth/invalid-email".
 @immutable
 class AuthErrorInvalidEmail extends AuthError {
   const AuthErrorInvalidEmail()
       : super(
           errorTitle: 'Invalid email',
-          errorText: 'Please double check your email and try again!',
+          errorText: 'Please double check your email and try again',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/invalid-password"
+/// The [AuthError] child for a firebase error "auth/invalid-password".
 @immutable
 class AuthErrorInvalidPassword extends AuthError {
   const AuthErrorInvalidPassword()
       : super(
           errorTitle: 'Invalid password',
-          errorText: 'Please try again!',
+          errorText: 'Please try again',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/weak-password"
+/// The [AuthError] child for a firebase error "auth/weak-password".
 @immutable
 class AuthErrorWeakPassword extends AuthError {
   const AuthErrorWeakPassword()
       : super(
           errorTitle: 'Weak password',
           errorText:
-              'Please choose a stronger password consisting of more characters!',
+              'Please choose a stronger password consisting of more characters',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/wrong-password"
+/// The [AuthError] child for a firebase error "auth/wrong-password".
 @immutable
 class AuthErrorWrongPassword extends AuthError {
   const AuthErrorWrongPassword()
       : super(
           errorTitle: 'Wrong password',
-          errorText: 'The password is invalid for the given email!',
+          errorText: 'The password is invalid for the given email',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/email-already-in-use"
+/// The [AuthError] child for a firebase error "auth/email-already-in-use".
 @immutable
 class AuthErrorEmailAlreadyInUse extends AuthError {
   const AuthErrorEmailAlreadyInUse()
       : super(
           errorTitle: 'Email already in use',
-          errorText: 'Please choose another email to register with!',
+          errorText: 'Please choose another email to register with',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/account-exists-with-different-credential"
+/// The [AuthError] child for a firebase error "auth/account-exists-with-different-credential".
 @immutable
 class AuthErrorAccountExistsWithDifferentCredential extends AuthError {
   const AuthErrorAccountExistsWithDifferentCredential()
       : super(
           errorTitle: 'Invalid email',
-          errorText: 'An account with this email address already exists!',
+          errorText: 'An account with this email address already exists',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/invalid-credential"
+/// The [AuthError] child for a firebase error "auth/invalid-credential".
 @immutable
 class AuthErrorInvalidCredential extends AuthError {
   const AuthErrorInvalidCredential()
       : super(
           errorTitle: 'Invalid credential',
-          errorText: 'The credential is malformed or has expired!',
+          errorText: 'The credential is malformed or has expired',
         );
 }
 
-/// The [AuthError] child for firebase error "auth/credential-already-in-use"
+/// The [AuthError] child for a firebase error "auth/credential-already-in-use".
 @immutable
 class AuthErrorCredentialAlreadyInUse extends AuthError {
   const AuthErrorCredentialAlreadyInUse()
       : super(
           errorTitle: 'Invalid credential',
-          errorText: 'The credential is already in use!',
+          errorText: 'The credential is already in use',
         );
 }
 
-/// The [AuthError] child for error "specific login is already used"
+/// The [AuthError] child for an already used login error.
 @immutable
 class AuthErrorLoginIsAlreadyUsed extends AuthError {
   const AuthErrorLoginIsAlreadyUsed()
       : super(
           errorTitle: 'Login is already used',
-          errorText: 'This login is already used, try another one!',
+          errorText: 'This login is already used, please try another one',
         );
 }

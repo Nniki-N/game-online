@@ -3,7 +3,7 @@ class AccountSchema {
   static const String login = 'login';
   static const String uid = 'uid';
   static const String avatarLink = 'avatarLink';
-  static const String isActiv = 'isActiv';
+  static const String isOnline = 'isOnline';
   static const String isInGame = 'isInGame';
   static const String inGameRoomId = 'inGameRoomId';
   static const String gamesCount = 'gamesCount';

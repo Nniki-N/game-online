@@ -5,16 +5,13 @@ import 'package:game/domain/entities/player.dart';
 import 'package:game/domain/repositories/game_repository.dart';
 
 class FirestoreGameRepository implements GameRepository {
-  // final FirestoreGameRoomDatasource _firestoreGameRoomDatasource;
-
-  const FirestoreGameRepository(
-      // {required FirestoreGameRoomDatasource firestoreGameRoomDatasource,}
-      );
-  // : _firestoreGameRoomDatasource = firestoreGameRoomDatasource;
+  const FirestoreGameRepository();
 
   /// Checks if a player can make a move.
   ///
   /// Returns true if the move is possible and false if not.
+  /// 
+  /// Throws [GameRoomErrorUnknown] when any error occurs.
   @override
   bool moveIsPossible({
     required List<List<Chip?>> fieldWithChips,
@@ -49,7 +46,7 @@ class FirestoreGameRepository implements GameRepository {
 
       return false;
     } catch (exception) {
-      rethrow;
+      throw GameRoomErrorUnknown(errorText: exception.toString());
     }
   }
 
@@ -58,6 +55,7 @@ class FirestoreGameRepository implements GameRepository {
   /// Returns [GameRoom] with replaced player.
   ///
   /// Throws [GameRoomErrorNotFoundPlayer] if the player is not found in the room.
+  /// Throws [GameRoomErrorUnknown] when any other error occurs.
   @override
   GameRoom changePlayerDataInGameRoom({
     required GameRoom gameRoom,
@@ -76,14 +74,18 @@ class FirestoreGameRepository implements GameRepository {
       players[indexOfPlayerInlist] = player;
 
       return gameRoom.copyWith(players: players);
-    } catch (exception) {
+    } on GameRoomError {
       rethrow;
+    } catch (exception) {
+      throw GameRoomErrorUnknown(errorText: exception.toString());
     }
   }
 
   /// Changes the turn of a player to the next one.
   ///
   /// Return [GameRoom] with the changed turn of a player.
+  /// 
+  /// Throws [GameRoomErrorUnknown] when any error occurs.
   @override
   GameRoom changeTurnForNextPlayer({
     required GameRoom gameRoom,
@@ -100,20 +102,22 @@ class FirestoreGameRepository implements GameRepository {
         turnOfPlayerUid: turnOfNextPlayerUid,
       );
     } catch (exception) {
-      rethrow;
+      throw GameRoomErrorUnknown(errorText: exception.toString());
     }
   }
 
   /// Returns a uid of a winner if there is a victory combination.
   ///
   /// Returns null if there is no winner.
+  /// 
+  /// Throws [GameRoomErrorUnknown] when any error occurs.
   @override
   String? checkCombinationsAndSelectWinner({
     required List<List<Chip?>> fieldWithChips,
   }) {
     try {
       String? winnerUid;
-      const int numberOfChipsNeededForVictory = 3;
+      // const int numberOfChipsNeededForVictory = 3;
 
       if (fieldWithChips[0][0]?.chipOfPlayerUid == fieldWithChips[0][1]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
@@ -328,7 +332,7 @@ class FirestoreGameRepository implements GameRepository {
 
       return winnerUid;
     } catch (exception) {
-      rethrow;
+      throw GameRoomErrorUnknown(errorText: exception.toString());
     }
   }
 }

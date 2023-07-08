@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/common/errors/account_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
@@ -27,140 +28,139 @@ class ProfileSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, authState) {
-        // Displays an error message if an error occurs.
-        final authError = authState.error;
-        if (authError != null) {
-          log('auth error profile settings');
-          showNotificationDialog(
-            context: context,
-            dialogTitle: authError.errorTitle,
-            dialogContent: authError.errorText,
-            buttonText: 'Ok',
-          );
-        }
-      },
-      child: BlocConsumer<AccountBloc, AccountState>(
-        listener: (context, accountState) {
-          // Displays an acoount error message if an error occurs.
-          if (accountState is ErrorAccountState) {
-            log('account error profile settings');
+    return BlocConsumer<AccountBloc, AccountState>(
+      listener: (context, accountState) {
+        // Displays an acoount error message if an error occurs.
+        if (accountState is ErrorAccountState) {
+          log('account error profile settings');
+          final AccountError accountError = accountState.accountError;
+          final bool showPopupWithError =
+              accountError is AccountErrorLoginIsUsed;
+
+          // Displays an error message.
+          if (showPopupWithError) {
             showNotificationDialog(
               context: context,
-              dialogTitle: 'Account error happened',
-              dialogContent: accountState.errorText,
+              dialogTitle: accountError.errorTitle,
+              dialogContent: accountError.errorText,
+              buttonText: 'Ok',
+            );
+          } else {
+            showNotificationDialog(
+              context: context,
+              dialogTitle: 'Error',
+              dialogContent: 'Something went wrong, please try again',
               buttonText: 'Ok',
             );
           }
-        },
-        builder: (context, accountState) {
-          final UserAccount userAccount = accountState.getUserAccount()!;
+        }
+      },
+      builder: (context, accountState) {
+        final UserAccount userAccount = accountState.getUserAccount()!;
 
-          final TextEditingController usernameController =
-              TextEditingController(
-            text: userAccount.username,
-          );
-          final TextEditingController loginController = TextEditingController(
-            text: userAccount.login,
-          );
+        final TextEditingController usernameController =
+            TextEditingController(
+          text: userAccount.username,
+        );
+        final TextEditingController loginController = TextEditingController(
+          text: userAccount.login,
+        );
 
-          return Scaffold(
-            body: Padding(
-              padding: EdgeInsets.only(
-                top: 45.h,
-                bottom: 30.h,
-                left: 30.w,
-                right: 30.w,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      CustomButtonBack(
-                        onTap: () {
-                          AutoRouter.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 35.h),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.w),
-                    ),
-                    clipBehavior: Clip.hardEdge,
-                    child: SvgPicture.asset(
-                      Svgs.avatarCyan,
-                      width: 100.w,
-                      height: 100.w,
-                    ),
-                  ),
-                  SizedBox(height: 12.h),
-                  CustomTextButton(
-                    text: 'Set new photo',
-                    onTap: () {
-                      //
-                      //
-                      //
-                      //
-                      //
-                      //
-                    },
-                  ),
-                  SizedBox(height: 35.h),
-                  CustomField(
-                    controller: usernameController,
-                    hintText: 'Usrename',
-                  ),
-                  SizedBox(height: 20.h),
-                  CustomField(
-                    controller: loginController,
-                    hintText: 'Login',
-                  ),
-                  SizedBox(height: 20.h),
-                  CustomButton(
-                    text: 'Save changes',
-                    onTap: () {
-                      final String newUsername = usernameController.text;
-                      final String newLogin = loginController.text;
-
-                      if (newUsername != userAccount.username) {
-                        log('start updating username in layout');
-
-                        context.read<AccountBloc>().add(
-                              ChangeUsernameAccountEvent(
-                                newUsername: newUsername,
-                              ),
-                            );
-                      }
-
-                      if (newLogin != userAccount.login) {
-                        log('start updating login in layout');
-
-                        context.read<AccountBloc>().add(
-                              ChangeLoginAccountEvent(
-                                newLogin: newLogin,
-                              ),
-                            );
-                      }
-                    },
-                  ),
-                  const Spacer(),
-                  CustomOutlinedButton(
-                    text: 'Log out',
-                    color: CustomColors.darkRedColor,
-                    onTap: () {
-                      log('profile settings ------------------ log out button pressed');
-                      context.read<AuthBloc>().add(const LogOutAuthEvent());
-                    },
-                  ),
-                ],
-              ),
+        return Scaffold(
+          body: Padding(
+            padding: EdgeInsets.only(
+              top: 45.h,
+              bottom: 30.h,
+              left: 30.w,
+              right: 30.w,
             ),
-          );
-        },
-      ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CustomButtonBack(
+                      onTap: () {
+                        AutoRouter.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(height: 35.h),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.w),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: SvgPicture.asset(
+                    Svgs.avatarCyan,
+                    width: 100.w,
+                    height: 100.w,
+                  ),
+                ),
+                SizedBox(height: 12.h),
+                CustomTextButton(
+                  text: 'Set new photo',
+                  onTap: () {
+                    //
+                    //
+                    //
+                    //
+                    //
+                    //
+                  },
+                ),
+                SizedBox(height: 35.h),
+                CustomField(
+                  controller: usernameController,
+                  hintText: 'Usrename',
+                ),
+                SizedBox(height: 20.h),
+                CustomField(
+                  controller: loginController,
+                  hintText: 'Login',
+                ),
+                SizedBox(height: 20.h),
+                CustomButton(
+                  text: 'Save changes',
+                  onTap: () {
+                    final String newUsername = usernameController.text;
+                    final String newLogin = loginController.text;
+
+                    if (newUsername != userAccount.username) {
+                      log('start updating username in layout');
+
+                      context.read<AccountBloc>().add(
+                            ChangeUsernameAccountEvent(
+                              newUsername: newUsername,
+                            ),
+                          );
+                    }
+
+                    if (newLogin != userAccount.login) {
+                      log('start updating login in layout');
+
+                      context.read<AccountBloc>().add(
+                            ChangeLoginAccountEvent(
+                              newLogin: newLogin,
+                            ),
+                          );
+                    }
+                  },
+                ),
+                const Spacer(),
+                CustomOutlinedButton(
+                  text: 'Log out',
+                  color: CustomColors.darkRedColor,
+                  onTap: () {
+                    log('profile settings ------------------ log out button pressed');
+                    context.read<AuthBloc>().add(const LogOutAuthEvent());
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

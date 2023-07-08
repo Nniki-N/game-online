@@ -20,8 +20,8 @@ class AccountModel {
   final String uid;
   @JsonKey(name: AccountSchema.avatarLink)
   final String? avatarLink;
-  @JsonKey(name: AccountSchema.isActiv)
-  final bool isActiv;
+  @JsonKey(name: AccountSchema.isOnline)
+  final bool isOnline;
   @JsonKey(name: AccountSchema.isInGame)
   final bool isInGame;
   @JsonKey(name: AccountSchema.inGameRoomId)
@@ -40,7 +40,7 @@ class AccountModel {
     required this.login,
     required this.uid,
     required this.avatarLink,
-    required this.isActiv,
+    required this.isOnline,
     required this.isInGame,
     required this.inGameRoomId,
     required this.gamesCount,
@@ -60,7 +60,7 @@ class AccountModel {
         uid: userAccount.uid,
         login: userAccount.login,
         avatarLink: userAccount.avatarLink,
-        isActiv: userAccount.isActiv,
+        isOnline: userAccount.isOnline,
         isInGame: userAccount.isInGame,
         inGameRoomId: userAccount.inGameRoomId,
         gamesCount: userAccount.gamesCount,
@@ -74,7 +74,7 @@ class AccountModel {
     String? login,
     String? uid,
     String? avatarLink,
-    bool? isActiv,
+    bool? isOnline,
     bool? isInGame,
     String? inGameRoomId,
     int? gamesCount,
@@ -87,7 +87,7 @@ class AccountModel {
       login: login ?? this.login,
       uid: uid ?? this.uid,
       avatarLink: avatarLink ?? this.avatarLink,
-      isActiv: isActiv ?? this.isActiv,
+      isOnline: isOnline ?? this.isOnline,
       isInGame: isInGame ?? this.isInGame,
       inGameRoomId: inGameRoomId ?? this.inGameRoomId,
       gamesCount: gamesCount ?? this.gamesCount,

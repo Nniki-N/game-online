@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game/common/errors/account_error.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/domain/repositories/account_repository.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
@@ -76,9 +77,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       _accountRepository.updateUserAccount(userAccount: userAccount);
 
       emit(LoadedAccountState(userAccount: userAccount));
-    } catch (exception) {
+    } on AccountError catch (accountError) {
       emit(ErrorAccountState(
-        errorText: exception.toString(),
+        accountError: accountError,
         userAccount: state.getUserAccount()!,
       ));
     }
@@ -96,17 +97,14 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
       // Retrieves a list of all users with specified login.
       final List<UserAccount> userAccountsList =
-          await _accountRepository.getAccountModelsWhere(
+          await _accountRepository.getAccountModelListWhere(
         fieldName: 'login',
         fieldValue: event.newLogin,
       );
 
       if (userAccountsList.isNotEmpty) {
         // Indicates that this login is already used.
-        emit(ErrorAccountState(
-          errorText: 'This login is alreaady used',
-          userAccount: userAccount,
-        ));
+        throw const AccountErrorLoginIsUsed();
       } else {
         // Changes the login to a new one.
         userAccount = userAccount.copyWith(
@@ -118,9 +116,9 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
         emit(LoadedAccountState(userAccount: userAccount));
       }
-    } catch (exception) {
+    } on AccountError catch (accountError) {
       emit(ErrorAccountState(
-        errorText: exception.toString(),
+        accountError: accountError,
         userAccount: state.getUserAccount()!,
       ));
     }
@@ -136,16 +134,16 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
       // Changes the username to a new one.
       userAccount = userAccount.copyWith(
-        isActiv: event.isOnline,
+        isOnline: event.isOnline,
       );
 
       // Updates the username.
       _accountRepository.updateUserAccount(userAccount: userAccount);
 
       emit(LoadedAccountState(userAccount: userAccount));
-    } catch (exception) {
+    } on AccountError catch (accountError) {
       emit(ErrorAccountState(
-        errorText: exception.toString(),
+        accountError: accountError,
         userAccount: state.getUserAccount()!,
       ));
     }

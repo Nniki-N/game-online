@@ -22,6 +22,7 @@ class WaitingRoomScreen extends StatelessWidget {
       listener: (context, roomState) {
         // Navigates user back to the main screen if the user is outside the room.
         if (roomState is OutsideRoomState) {
+          log('waiting room ------------------ go to the main screen');
           AutoRouter.of(context).replace(const MainRouter());
         }
 

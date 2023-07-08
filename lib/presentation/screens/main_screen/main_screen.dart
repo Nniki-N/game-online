@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game/common/errors/game_room_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
@@ -26,11 +27,36 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Displays an error message if needed after loading the page.
+      if (context.read<RoomBloc>().state is ErrorRoomState) {
+        final roomState = context.read<RoomBloc>().state as ErrorRoomState;
+        log('roomError in the main screen');
+
+        // Checks if error message has to be shown.
+        final GameRoomError gameRoomError = roomState.gameRoomError;
+        final bool showPopupWithBasicSentences =
+            gameRoomError is! GameRoomErrorDeletingRoom &&
+                gameRoomError is! GameRoomErrorNotTwoPlayers;
+
+        // Displays an error message if needed.
+        if (showPopupWithBasicSentences) {
+          showNotificationDialog(
+            context: context,
+            dialogTitle: 'Room error',
+            dialogContent: 'Some kind of a room error has occured',
+            buttonText: 'Ok',
+          );
+        }
+      }
+    });
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Changes the current user account online state base on the app activiness observing.
+
     // Online.
     if (state == AppLifecycleState.resumed) {
       context
@@ -52,7 +78,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         // Closes the app activiness observing and navigates to the sign in screen
         // if the user is logged out.
         if (authState is LoggedOutAuthState) {
-          log('main screen------------------ go to the sign in screen');
+          log('main screen ------------------ go to the sign in screen');
           log('Close activiness observing');
           WidgetsBinding.instance.removeObserver(this);
           AutoRouter.of(context).replaceAll(const [SignInRouter()]);
@@ -60,20 +86,33 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       },
       child: BlocListener<RoomBloc, RoomState>(
         listener: (context, roomState) {
+          log('main screen --------- state $roomState');
+
           // Navigates user to the waiting room screen.
           if (roomState is SearchingRoomState) {
+            log('main screen ------------------ go to the waiting room screen');
             AutoRouter.of(context).replace(const WaitingRoomRouter());
           }
 
-          // Displays an error message if an error occurs.
+          // Displays an error message if needed.
           else if (roomState is ErrorRoomState) {
             log('roomError in the main screen');
-            showNotificationDialog(
-              context: context,
-              dialogTitle: roomState.errorTitle,
-              dialogContent: roomState.errorText,
-              buttonText: 'Ok',
-            );
+
+            // Checks if error message has to be shown.
+            final GameRoomError gameRoomError = roomState.gameRoomError;
+            final bool showPopupWithBasicSentences =
+                gameRoomError is! GameRoomErrorDeletingRoom &&
+                    gameRoomError is! GameRoomErrorNotTwoPlayers;
+
+            // Displays an error message if needed.
+            if (showPopupWithBasicSentences) {
+              showNotificationDialog(
+                context: context,
+                dialogTitle: 'Room error',
+                dialogContent: 'Some kind of a room error has occured',
+                buttonText: 'Ok',
+              );
+            }
           }
         },
         child: Scaffold(

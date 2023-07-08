@@ -8,7 +8,7 @@ class Account {
   final String username;
   final String uid;
   final String? avatarLink;
-  final bool isActiv;
+  final bool isOnline;
   final bool isInGame;
   final String inGameRoomId;
   final int gamesCount;
@@ -18,7 +18,7 @@ class Account {
     required this.username,
     required this.uid,
     required this.avatarLink,
-    required this.isActiv,
+    required this.isOnline,
     required this.isInGame,
     required this.inGameRoomId,
     required this.gamesCount,
@@ -30,7 +30,7 @@ class Account {
         username: accountModel.username,
         uid: accountModel.uid,
         avatarLink: accountModel.avatarLink,
-        isActiv: accountModel.isActiv,
+        isOnline: accountModel.isOnline,
         isInGame: accountModel.isInGame,
         inGameRoomId: accountModel.inGameRoomId,
         gamesCount: accountModel.gamesCount,
@@ -41,7 +41,7 @@ class Account {
     String? username,
     String? uid,
     String? avatarLink,
-    bool? isActiv,
+    bool? isOnline,
     bool? isInGame,
     String? inGameRoomId,
     int? gamesCount,
@@ -51,7 +51,7 @@ class Account {
       username: username ?? this.username,
       uid: uid ?? this.uid,
       avatarLink: avatarLink ?? this.avatarLink,
-      isActiv: isActiv ?? this.isActiv,
+      isOnline: isOnline ?? this.isOnline,
       isInGame: isInGame ?? this.isInGame,
       inGameRoomId: inGameRoomId ?? this.inGameRoomId,
       gamesCount: gamesCount ?? this.gamesCount,
@@ -71,7 +71,7 @@ class UserAccount extends Account {
     required String username,
     required String uid,
     required String? avatarLink,
-    required bool isActiv,
+    required bool isOnline,
     required bool isInGame,
     required String inGameRoomId,
     required int gamesCount,
@@ -83,7 +83,7 @@ class UserAccount extends Account {
           username: username,
           uid: uid,
           avatarLink: avatarLink,
-          isActiv: isActiv,
+          isOnline: isOnline,
           isInGame: isInGame,
           inGameRoomId: inGameRoomId,
           gamesCount: gamesCount,
@@ -96,7 +96,7 @@ class UserAccount extends Account {
         login: accountModel.login,
         uid: accountModel.uid,
         avatarLink: accountModel.avatarLink,
-        isActiv: accountModel.isActiv,
+        isOnline: accountModel.isOnline,
         isInGame: accountModel.isInGame,
         inGameRoomId: accountModel.inGameRoomId,
         gamesCount: accountModel.gamesCount,
@@ -110,7 +110,7 @@ class UserAccount extends Account {
     String? username,
     String? uid,
     String? avatarLink,
-    bool? isActiv,
+    bool? isOnline,
     bool? isInGame,
     String? inGameRoomId,
     int? gamesCount,
@@ -123,7 +123,7 @@ class UserAccount extends Account {
       username: username ?? this.username,
       uid: uid ?? this.uid,
       avatarLink: avatarLink ?? this.avatarLink,
-      isActiv: isActiv ?? this.isActiv,
+      isOnline: isOnline ?? this.isOnline,
       isInGame: isInGame ?? this.isInGame,
       inGameRoomId: inGameRoomId ?? this.inGameRoomId,
       gamesCount: gamesCount ?? this.gamesCount,
