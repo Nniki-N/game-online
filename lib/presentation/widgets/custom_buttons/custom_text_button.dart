@@ -41,6 +41,7 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: padding ?? EdgeInsets.zero,
         child: CustomText(

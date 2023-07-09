@@ -21,7 +21,7 @@ class FirebaseAuthRepository implements AuthRepository {
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
-  Future<Account?> logInWithEmailAndPassword({
+  Future<Account> logInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -143,7 +143,7 @@ class FirebaseAuthRepository implements AuthRepository {
   ///
   /// Throws [AuthError] when the error of type [FirebaseAuthException] occurs.
   @override
-  Future<Account> registerAnonymousUserWithEmailAndPassword({
+  Future<UserAccount> registerAnonymousUserWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
@@ -154,7 +154,7 @@ class FirebaseAuthRepository implements AuthRepository {
         password: password,
       );
 
-      return Account.fromAccountModel(accountModel: newAccountModel);
+      return UserAccount.fromAccountModel(accountModel: newAccountModel);
     } on FirebaseAuthException catch (firebaseAuthException) {
       throw AuthError.fromFirebaseAuthExeption(
         exception: firebaseAuthException,
@@ -186,5 +186,5 @@ class FirebaseAuthRepository implements AuthRepository {
 
   /// Checks if the user is logged in anonymously.
   @override
-  Future<void> isAnonymousUser() async => _authDatasource.isAnonymousUser();
+  Future<bool> isAnonymousUser() async => _authDatasource.isAnonymousUser();
 }

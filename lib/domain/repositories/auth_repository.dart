@@ -11,7 +11,7 @@ abstract class AuthRepository {
   /// Returns [Account] if a login process is successful.
   /// 
   /// Throws [AuthError] when the error occurs.
-  Future<Account?> logInWithEmailAndPassword({
+  Future<Account> logInWithEmailAndPassword({
     required String email,
     required String password,
   });
@@ -21,14 +21,14 @@ abstract class AuthRepository {
   /// Returns [Account] if a login process is successful.
   /// 
   /// Throws [AuthError] when the error occurs.
-  Future<Account?> logInWithGoogle();
+  Future<Account> logInWithGoogle();
 
   /// Logs the user in the app anonymously.
   ///
   /// Returns [Account] if a login process is successful.
   /// 
   /// Throws [AuthError] when the error occurs.
-  Future<Account?> logInAnonymously();
+  Future<Account> logInAnonymously();
 
   /// Logs the user out from the app.
   /// 
@@ -40,7 +40,7 @@ abstract class AuthRepository {
   /// Returns [Account] if a register process is successful.
   /// 
   /// Throws [AuthError] when the error occurs.
-  Future<Account?> registerWithEmailAndPassword({
+  Future<Account> registerWithEmailAndPassword({
     required String email,
     required String password,
     required String username,
@@ -49,10 +49,10 @@ abstract class AuthRepository {
 
   /// Registers an anonymous user with email and password.
   ///
-  /// Returns [Account] if a register process is successful.
+  /// Returns [UserAccount] if a register process is successful.
   /// 
   /// Throws [AuthError] when the error occurs.
-  Future<Account?> registerAnonymousUserWithEmailAndPassword({
+  Future<UserAccount> registerAnonymousUserWithEmailAndPassword({
     required String email,
     required String password,
   });
@@ -66,5 +66,5 @@ abstract class AuthRepository {
   Future<bool> isLoggedIn();
 
   /// Checks if the user is logged in anonymously.
-  Future<void> isAnonymousUser();
+  Future<bool> isAnonymousUser();
 }

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/errors/auth_error.dart';
 import 'package:game/domain/entities/account.dart';
@@ -16,7 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   })  : _authRepository = authRepository,
         _accountRepository = accountRepository,
         super(const LoadingAuthState()) {
-    on<InitializeAuthEvent>(_init);
+    on<InitializeAuthEvent>(_init, transformer: droppable());
     on<LogInAuthEvent>(_logIn);
     on<LogInWithGoogleAuthEvent>(_logInWithGoogle);
     on<LogInAnonymouslyAuthEvent>(_logInAnonymously);
@@ -36,7 +39,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final bool isLoggedIn = await _authRepository.isLoggedIn();
 
       if (isLoggedIn) {
-        emit(const LoggedInAuthState());
+        final bool isAnonymousUser = await _authRepository.isAnonymousUser();
+        emit(LoggedInAuthState(isAnonymousUser: isAnonymousUser));
       } else {
         emit(const LoggedOutAuthState());
       }
@@ -52,26 +56,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const LoadingAuthState());
 
-      final Account? account = await _authRepository.logInWithEmailAndPassword(
+      await _authRepository.logInWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
 
-      if (account != null) {
-        // Retrieves the current user account data.
-        UserAccount currentUserAccount =
-            await _accountRepository.getCurrentUserAccount();
+      // Retrieves the current user account data.
+      UserAccount currentUserAccount =
+          await _accountRepository.getCurrentUserAccount();
 
-        // Changes the current user online status.
-        currentUserAccount = currentUserAccount.copyWith(isOnline: true);
+      // Changes the current user online status.
+      currentUserAccount = currentUserAccount.copyWith(isOnline: true);
 
-        // Saves changes.
-        _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+      // Saves changes.
+      _accountRepository.updateUserAccount(userAccount: currentUserAccount);
 
-        emit(const LoggedInAuthState());
-      } else {
-        emit(const LoggedOutAuthState());
-      }
+      emit(const LoggedInAuthState());
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
     } catch (exception) {
@@ -89,23 +89,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const LoadingAuthState());
 
-      final Account? account = await _authRepository.logInWithGoogle();
+      await _authRepository.logInWithGoogle();
 
-      if (account != null) {
-        // Retrieves the current user account data.
-        UserAccount currentUserAccount =
-            await _accountRepository.getCurrentUserAccount();
+      // Retrieves the current user account data.
+      UserAccount currentUserAccount =
+          await _accountRepository.getCurrentUserAccount();
 
-        // Changes the current user online status.
-        currentUserAccount = currentUserAccount.copyWith(isOnline: true);
+      // Changes the current user online status.
+      currentUserAccount = currentUserAccount.copyWith(isOnline: true);
 
-        // Saves changes.
-        _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+      // Saves changes.
+      _accountRepository.updateUserAccount(userAccount: currentUserAccount);
 
-        emit(const LoggedInAuthState());
-      } else {
-        emit(const LoggedOutAuthState());
-      }
+      emit(const LoggedInAuthState());
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
     } catch (exception) {
@@ -123,13 +119,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const LoadingAuthState());
 
-      final Account? account = await _authRepository.logInAnonymously();
+      await _authRepository.logInAnonymously();
 
-      if (account != null) {
-        emit(const LoggedInAuthState(isAnonymousUser: true));
-      } else {
-        emit(const LoggedOutAuthState());
-      }
+      emit(const LoggedInAuthState(isAnonymousUser: true));
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
     }
@@ -173,19 +165,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       emit(const LoadingAuthState());
 
-      final Account? account =
-          await _authRepository.registerWithEmailAndPassword(
+      await _authRepository.registerWithEmailAndPassword(
         email: event.email,
         password: event.password,
         username: event.username,
         login: event.login,
       );
 
-      if (account != null) {
-        emit(const LoggedInAuthState());
-      } else {
-        emit(const LoggedOutAuthState());
-      }
+      emit(const LoggedInAuthState());
     } on AuthError catch (authError) {
       emit(LoggedOutAuthState(error: authError));
     }
@@ -199,12 +186,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
+      log('register anon user');
       emit(const LoadingAuthState());
 
-      await _authRepository.registerAnonymousUserWithEmailAndPassword(
+      UserAccount userAccount =
+          await _authRepository.registerAnonymousUserWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
+
+      userAccount = userAccount.copyWith(
+        username: event.username,
+        login: event.login,
+      );
+
+      await _accountRepository.updateUserAccount(userAccount: userAccount);
 
       emit(const LoggedInAuthState());
     } on AuthError catch (authError) {

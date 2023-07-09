@@ -28,9 +28,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
         super(const InitialRoomState()) {
     on<InitializeRoomEvent>(_init, transformer: droppable());
     on<SearchRoomEvent>(_searchGameRoom, transformer: droppable());
-    on<CreateRoomEvent>(_createGameRoom, transformer: sequential());
-    on<JoinRoomEvent>(_joinGameRoom, transformer: sequential());
-    on<LeaveRoomEvent>(_leaveGameRoom, transformer: sequential());
+    on<CreateRoomEvent>(_createGameRoom);
+    on<JoinRoomEvent>(_joinGameRoom);
+    on<LeaveRoomEvent>(_leaveGameRoom);
   }
 
   /// later implement leaving here when internet connection is down

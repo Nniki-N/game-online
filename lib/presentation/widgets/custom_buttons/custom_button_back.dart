@@ -42,6 +42,7 @@ class CustomButtonBack extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      behavior: HitTestBehavior.opaque,
       child: Container(
         width: width ?? 40.w,
         height: height ?? 40.w,

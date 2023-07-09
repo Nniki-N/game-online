@@ -28,12 +28,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         _roomRepository = roomRepository,
         _accountRepository = accountRepository,
         super(InitialGameState(gameRoom: gameRoom)) {
-    on<InitializeGameEvent>(_init, transformer: restartable());
-    on<StartGameEvent>(_startGame, transformer: sequential());
-    on<FinishGameEvent>(_finishGame, transformer: sequential());
+    on<InitializeGameEvent>(_init, transformer: droppable());
+    on<StartGameEvent>(_startGame);
+    on<FinishGameEvent>(_finishGame);
     on<RestartGameEvent>(_restartGame, transformer: droppable());
-    on<GiveUpGameEvent>(_giveUp, transformer: sequential());
-    on<MakeMoveGameEvent>(_makeMove, transformer: sequential());
+    on<GiveUpGameEvent>(_giveUp);
+    on<MakeMoveGameEvent>(_makeMove);
   }
 
   /// Initializes the game.
