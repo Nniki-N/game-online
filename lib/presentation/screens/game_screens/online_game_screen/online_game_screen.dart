@@ -35,7 +35,8 @@ class OnlineGameScreen extends StatelessWidget {
     final Stream<Chips?> chipStream =
         chipStreamController.stream.asBroadcastStream();
 
-    final AccountBloc accountBloc = context.watch<AccountBloc>();
+    // final AccountBloc accountBloc = context.watch<AccountBloc>();
+    final AccountBloc accountBloc = context.read<AccountBloc>();
 
     return BlocProvider(
       create: (context) => GameBloc(

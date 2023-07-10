@@ -21,12 +21,59 @@ class ProfileDetailsContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (context, accountState) {
-        final UserAccount userAccount = accountState.getUserAccount()!;
+        // Settings profile container layout.
+        if (accountState is LoadedAccountState) {
+          final UserAccount userAccount = accountState.getUserAccount()!;
 
-        return GestureDetector(
-          onTap: onTap,
-          behavior: HitTestBehavior.opaque,
-          child: Container(
+          return GestureDetector(
+            onTap: onTap,
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(12.w),
+              decoration: BoxDecoration(
+                color: CustomColors.backgroundLightGrayColor,
+                borderRadius: BorderRadius.circular(10.w),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.w),
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: SvgPicture.asset(
+                      Svgs.avatarCyan,
+                      width: 61.w,
+                      height: 61.w,
+                    ),
+                  ),
+                  SizedBox(width: 17.w),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        text: userAccount.username,
+                        fontSize: 20.sp,
+                      ),
+                      SizedBox(height: 5.h),
+                      CustomText(
+                        text: '@${userAccount.login}',
+                        fontSize: 15.sp,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+
+        // Shows tha an account data was not loaded.
+        else {
+          return Container(
             width: double.infinity,
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
@@ -52,21 +99,23 @@ class ProfileDetailsContainer extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomText(
-                      text: userAccount.username,
-                      fontSize: 20.sp,
+                    Container(
+                      width: 80.w,
+                      height: 20.h,
+                      color: Colors.grey,
                     ),
                     SizedBox(height: 5.h),
-                    CustomText(
-                      text: '@${userAccount.login}',
-                      fontSize: 15.sp,
-                    )
+                    Container(
+                      width: 100.w,
+                      height: 15.h,
+                      color: Colors.grey[300],
+                    ),
                   ],
                 )
               ],
             ),
-          ),
-        );
+          );
+        }
       },
     );
   }

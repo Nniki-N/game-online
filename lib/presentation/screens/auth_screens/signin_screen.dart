@@ -91,18 +91,24 @@ class SignInScreen extends StatelessWidget {
               AutoRouter.of(context).replace(const MainRouter());
             }
 
-            // Indicates that the current user is logged out.
-            else if (state is LoggedOutAuthState) {
-              context.read<AccountBloc>().add(const LogOutAccountEvent());
-            }
+            // // Indicates that the current user is logged out.
+            // else if (state is LoggedOutAuthState) {
+            //   context.read<AccountBloc>().add(const LogOutAccountEvent());
+            // }
           },
           builder: (context, state) {
+            // // Indicates that the current user is logged out.
+            // if (state is LoggedOutAuthState) {
+            //   context.read<AccountBloc>().add(const LogOutAccountEvent());
+            // }
+
             // Loading screen.
             if (state is LoadingAuthState || state is LoggedInAuthState) {
               return const LoadingScreen(
                 loadingText: 'Loading...',
               );
             }
+
 
             // Sign in screen layout.
             else {

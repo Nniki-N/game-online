@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,17 +10,17 @@ import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
   final AccountRepository _accountRepository;
+  late StreamSubscription streamSubscription;
 
   AccountBloc({
     required AccountRepository accountRepository,
   })  : _accountRepository = accountRepository,
         super(const InitialAccountState()) {
-    on<InitializeAccountEvent>(_init, transformer: droppable());
-    on<ChangeUsernameAccountEvent>(_changeUsername, transformer: sequential());
-    on<ChangeLoginAccountEvent>(_changeLogin, transformer: sequential());
-    on<ChangeOnlineStateAccountEvent>(_changeOnlineState,
-        transformer: sequential());
-    on<LogOutAccountEvent>(_logOut, transformer: droppable());
+    on<InitializeAccountEvent>(_init);
+    on<ChangeUsernameAccountEvent>(_changeUsername);
+    on<ChangeLoginAccountEvent>(_changeLogin);
+    on<ChangeOnlineStateAccountEvent>(_changeOnlineState);
+    on<LogOutAccountEvent>(_logOut, transformer: restartable());
   }
 
   /// Initializes the first state.
@@ -41,23 +40,42 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
       // Retrieves a stream of the current user account data changes.
       final Stream<UserAccount> currentUserAccountStream =
-          _accountRepository.getCurrentUserAccountStream();
+          _accountRepository.getCurrentUserAccountStream().asBroadcastStream();
 
       // Responds to the current user account data changes.
-      await emit.onEach(
+      await _listenStream(
         currentUserAccountStream,
         onData: (userAccount) {
           // Updates the current user account.
           emit(LoadedAccountState(userAccount: userAccount));
         },
         onError: (error, stackTrace) {
-          // emit(const EmptyAccountState());
-          log('AccountBloc: account stream error');
+          emit(const EmptyAccountState());
+          // log('AccountBloc: account stream error');
         },
       );
     } catch (exception) {
       emit(const EmptyAccountState());
     }
+  }
+
+  Future<void> _listenStream<T>(
+    Stream<T> stream, {
+    required void Function(T data) onData,
+    required void Function(Object error, StackTrace stackTrace) onError,
+  }) {
+    final completer = Completer<void>();
+
+    streamSubscription = stream.listen(
+      onData,
+      onDone: completer.complete,
+      onError: onError,
+      cancelOnError: false,
+    );
+
+    return completer.future.whenComplete(() {
+      streamSubscription.cancel();
+    });
   }
 
   /// Changes the username of the current user.
@@ -154,6 +172,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     LogOutAccountEvent event,
     Emitter<AccountState> emit,
   ) async {
+    await streamSubscription.cancel();
     emit(const EmptyAccountState());
   }
 }
