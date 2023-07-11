@@ -8,6 +8,7 @@ import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_event.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -24,9 +25,8 @@ class MyApp extends StatelessWidget {
             providers: [
               BlocProvider(
                 create: (_) => AuthBloc(
-                  authRepository: getIt(),
-                  accountRepository: getIt()
-                )..add(const InitializeAuthEvent()),
+                    authRepository: getIt(), accountRepository: getIt())
+                  ..add(const InitializeAuthEvent()),
               ),
               BlocProvider(
                 create: (_) => RoomBloc(
@@ -41,8 +41,10 @@ class MyApp extends StatelessWidget {
               ),
             ],
             child: MaterialApp.router(
-              title: 'Game',
+              title: 'Tic Tac Toe',
               debugShowCheckedModeBanner: false,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               routerDelegate: getIt<AppRouter>().delegate(),
               routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
               builder: (context, router) => router!,

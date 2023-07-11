@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/errors/auth_error.dart';
+import 'package:game/common/utils/string_extension.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart'
 import 'package:game/presentation/widgets/fields/custom_field.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/presentation/widgets/validation_messages_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsRegisterScreen extends StatelessWidget {
   const SettingsRegisterScreen({super.key});
@@ -74,15 +76,15 @@ class SettingsRegisterScreen extends StatelessWidget {
                 context: context,
                 dialogTitle: authError.errorTitle,
                 dialogContent: authError.errorText,
-                buttonText: 'Ok',
+                buttonText: AppLocalizations.of(context)!.ok,
               );
             } else if (authError != null && showPopupWithBasicSentences) {
               showNotificationDialog(
                 context: context,
-                dialogTitle: 'Registration error',
-                dialogContent:
-                    'Something went wrong while registration, please try again',
-                buttonText: 'Ok',
+                dialogTitle: AppLocalizations.of(context)!.registrationError,
+                dialogContent: AppLocalizations.of(context)!
+                    .somethingWentWrongRegistration,
+                buttonText: AppLocalizations.of(context)!.ok,
               );
             }
 
@@ -96,8 +98,8 @@ class SettingsRegisterScreen extends StatelessWidget {
           builder: (context, state) {
             // Loading screen.
             if (state is LoadingAuthState) {
-              return const LoadingScreen(
-                loadingText: 'Loading...',
+              return LoadingScreen(
+                loadingText: AppLocalizations.of(context)!.loading,
               );
             }
 
@@ -128,12 +130,14 @@ class SettingsRegisterScreen extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CustomText(
-                              text: 'Register your account',
+                              text: AppLocalizations.of(context)!
+                                  .registerYourAccount,
                               fontSize: 26.sp,
                             ),
                             SizedBox(height: 5.h),
                             CustomText(
-                              text: 'All your score will be saved',
+                              text: AppLocalizations.of(context)!
+                                  .allYourScoreWillBeSaved,
                               color: CustomColors.secondTextColor,
                               textAlign: TextAlign.center,
                               maxLines: 3,
@@ -141,33 +145,34 @@ class SettingsRegisterScreen extends StatelessWidget {
                             const ValidationMessagesList(),
                             CustomField(
                               controller: usernameController,
-                              hintText: 'Username',
+                              hintText: AppLocalizations.of(context)!.username,
                             ),
                             SizedBox(height: 20.h),
                             CustomField(
                               controller: loginController,
-                              hintText: 'Login',
+                              hintText: AppLocalizations.of(context)!.login,
                             ),
                             SizedBox(height: 20.h),
                             CustomField(
                               controller: emailController,
-                              hintText: 'Email',
+                              hintText: AppLocalizations.of(context)!.email,
                             ),
                             SizedBox(height: 20.h),
                             CustomField(
                               controller: passwordController,
-                              hintText: 'Password',
+                              hintText: AppLocalizations.of(context)!.password,
                               obscureText: true,
                             ),
                             SizedBox(height: 20.h),
                             CustomField(
                               controller: repeatPasswordController,
-                              hintText: 'Repeat password',
+                              hintText:
+                                  AppLocalizations.of(context)!.repeatPassword,
                               obscureText: true,
                             ),
                             SizedBox(height: 20.h),
                             CustomButton(
-                              text: 'Register',
+                              text: AppLocalizations.of(context)!.register,
                               onTap: () {
                                 log('registration ------------------ register button is pressed');
                                 final String username = usernameController.text;
@@ -177,20 +182,26 @@ class SettingsRegisterScreen extends StatelessWidget {
                                 final String repeatPassword =
                                     repeatPasswordController.text;
 
+                                const int minSymbols = 3;
+                                const int maxSymbols = 15;
+                                const int minSymbolsForPassword = 6;
+                                const int maxSymbolsForPasswor = 55;
+
                                 // Validates a username.
                                 context
                                     .read<FormValidationBloc>()
                                     .add(TextFormValidationEvent(
                                       text: username,
-                                      maxSymbols: 15,
+                                      maxSymbols: maxSymbols,
+                                      minSymbols: minSymbols,
                                       validationForbiddenSymbolsText:
-                                          'Symbols [] are forbidden to use in the username',
+                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.username.toLowerCase()}',
                                       validationEmptyText:
-                                          'Please enter the username',
+                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.username}',
                                       validationToManySymbolsText:
-                                          'Maximal length of the username is 15 symbols',
+                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.username} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
                                       validationNotEnoughtSymbolsText:
-                                          'Minimal lenght of the username is 3 symbols',
+                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.username} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
                                     ));
 
                                 // Validates a login.
@@ -198,15 +209,16 @@ class SettingsRegisterScreen extends StatelessWidget {
                                     .read<FormValidationBloc>()
                                     .add(TextFormValidationEvent(
                                       text: login,
-                                      maxSymbols: 15,
+                                      maxSymbols: maxSymbols,
+                                      minSymbols: minSymbols,
                                       validationForbiddenSymbolsText:
-                                          'Symbols [] are forbidden to use in the login',
+                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.login.toLowerCase()}',
                                       validationEmptyText:
-                                          'Please enter the login',
+                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.login}',
                                       validationToManySymbolsText:
-                                          'Maximal length of the login is 15 symbols',
+                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
                                       validationNotEnoughtSymbolsText:
-                                          'Minimal lenght of the login is 3 symbols',
+                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
                                     ));
 
                                 // Validates an email.
@@ -214,7 +226,12 @@ class SettingsRegisterScreen extends StatelessWidget {
                                     .read<FormValidationBloc>()
                                     .add(EmailFormValidationEvent(
                                       email: email,
-                                      // lastValidation: true,
+                                      validationEmptyEmail:
+                                          AppLocalizations.of(context)!
+                                              .pleaseEnterYourEmailAddress,
+                                      validationIncorrectEmail:
+                                          AppLocalizations.of(context)!
+                                              .emailAddressIsIncorrect,
                                     ));
 
                                 // Validates a password.
@@ -222,16 +239,16 @@ class SettingsRegisterScreen extends StatelessWidget {
                                     .read<FormValidationBloc>()
                                     .add(TextFormValidationEvent(
                                       text: password,
-                                      minSymbols: 6,
-                                      // lastValidation: true,
+                                      minSymbols: minSymbolsForPassword,
+                                      maxSymbols: maxSymbolsForPasswor,
                                       validationForbiddenSymbolsText:
-                                          'Symbols [] are forbidden to use in the password',
+                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.password.toLowerCase()}',
                                       validationEmptyText:
-                                          'Please enter the password',
+                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.password}',
                                       validationToManySymbolsText:
-                                          'Maximal length of a password is 55 symbols',
+                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $maxSymbolsForPasswor ${AppLocalizations.of(context)!.symbols}',
                                       validationNotEnoughtSymbolsText:
-                                          'Minimal lenght of a password is 6 symbols',
+                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $minSymbolsForPassword ${AppLocalizations.of(context)!.symbols}',
                                     ));
 
                                 // Validates a repeated password.
@@ -241,7 +258,8 @@ class SettingsRegisterScreen extends StatelessWidget {
                                       texts: [password, repeatPassword],
                                       lastValidation: true,
                                       validationFailureText:
-                                          'Passords are not equal',
+                                          AppLocalizations.of(context)!
+                                              .passordsAreNotEqual,
                                     ));
                               },
                             ),

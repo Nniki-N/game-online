@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/errors/account_error.dart';
+import 'package:game/data/models/schemas/account_schema.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/domain/repositories/account_repository.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
@@ -116,7 +117,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
       // Retrieves a list of all users with specified login.
       final List<UserAccount> userAccountsList =
           await _accountRepository.getAccountModelListWhere(
-        fieldName: 'login',
+        fieldName: AccountSchema.login,
         fieldValue: event.newLogin,
       );
 

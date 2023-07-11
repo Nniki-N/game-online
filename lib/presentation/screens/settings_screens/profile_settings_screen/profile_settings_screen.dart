@@ -21,6 +21,7 @@ import 'package:game/presentation/widgets/custom_buttons/custom_text_button.dart
 import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
 import 'package:game/presentation/widgets/fields/custom_field.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfileSettingsScreen extends StatelessWidget {
   const ProfileSettingsScreen({super.key});
@@ -42,14 +43,14 @@ class ProfileSettingsScreen extends StatelessWidget {
               context: context,
               dialogTitle: accountError.errorTitle,
               dialogContent: accountError.errorText,
-              buttonText: 'Ok',
+              buttonText: AppLocalizations.of(context)!.ok,
             );
           } else {
             showNotificationDialog(
               context: context,
-              dialogTitle: 'Error',
-              dialogContent: 'Something went wrong, please try again',
-              buttonText: 'Ok',
+              dialogTitle: AppLocalizations.of(context)!.error,
+              dialogContent: AppLocalizations.of(context)!.somethingWentWrongPleaseTryAgain,
+              buttonText: AppLocalizations.of(context)!.ok,
             );
           }
         }
@@ -57,8 +58,8 @@ class ProfileSettingsScreen extends StatelessWidget {
       builder: (context, accountState) {
         // Shows loading if an account data was not loaded.
         if (accountState is! LoadedAccountState) {
-          return const LoadingScreen(
-            loadingText: 'Loading...',
+          return LoadingScreen(
+            loadingText: AppLocalizations.of(context)!.loading,
           );
         } 
         
@@ -107,7 +108,7 @@ class ProfileSettingsScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 12.h),
                   CustomTextButton(
-                    text: 'Set new photo',
+                    text: AppLocalizations.of(context)!.setNewPhoto,
                     onTap: () {
                       //
                       //
@@ -120,16 +121,16 @@ class ProfileSettingsScreen extends StatelessWidget {
                   SizedBox(height: 35.h),
                   CustomField(
                     controller: usernameController,
-                    hintText: 'Usrename',
+                    hintText: AppLocalizations.of(context)!.username,
                   ),
                   SizedBox(height: 20.h),
                   CustomField(
                     controller: loginController,
-                    hintText: 'Login',
+                    hintText: AppLocalizations.of(context)!.login,
                   ),
                   SizedBox(height: 20.h),
                   CustomButton(
-                    text: 'Save changes',
+                    text: AppLocalizations.of(context)!.saveChanges,
                     onTap: () {
                       final String newUsername = usernameController.text;
                       final String newLogin = loginController.text;
@@ -157,7 +158,7 @@ class ProfileSettingsScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   CustomOutlinedButton(
-                    text: 'Log out',
+                    text: AppLocalizations.of(context)!.logOut,
                     color: CustomColors.darkRedColor,
                     onTap: () {
                       log('profile settings ------------------ log out button pressed');

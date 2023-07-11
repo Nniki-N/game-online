@@ -23,6 +23,7 @@ import 'package:game/presentation/screens/game_screens/online_header.dart';
 import 'package:game/presentation/screens/game_screens/row_with_buttons.dart';
 import 'package:game/presentation/widgets/dialogs/show_accept_or_deny_dialog.dart';
 import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnlineGameScreen extends StatelessWidget {
   const OnlineGameScreen({super.key});
@@ -65,10 +66,11 @@ class OnlineGameScreen extends StatelessWidget {
             if (!isPopUpShown) {
               showAcceptOrDenyDialog(
                 context: context,
-                dialogTitle: 'Second player left',
-                dialogContent: 'Do you want to wait for a new player?',
-                buttonAcceptText: 'Wait',
-                buttonDenyText: 'Leave',
+                dialogTitle: AppLocalizations.of(context)!.secondPlayerLeft,
+                dialogContent:
+                    AppLocalizations.of(context)!.doYouWantToWaitForNewPlayer,
+                buttonAcceptText: AppLocalizations.of(context)!.wait,
+                buttonDenyText: AppLocalizations.of(context)!.leave,
               ).then((wait) {
                 if (wait) {
                   log('online game room ------------------ go to the waiting room');
@@ -118,17 +120,21 @@ class OnlineGameScreen extends StatelessWidget {
               // Shows a popup if another popup is not opened.
               if (!isPopUpShown) {
                 final String winnerUid = gameState.gameRoom.winnerUid;
-                final String winnerName = gameState.gameRoom.players
-                    .firstWhere((winner) => winner.uid == winnerUid)
-                    .username;
+                final String currentUid =
+                    context.read<AccountBloc>().state.getUserAccount()!.uid;
+                final String winnerUsername = currentUid == winnerUid
+                    ? AppLocalizations.of(context)!.you
+                    : gameState.gameRoom.players
+                        .firstWhere((winner) => winner.uid == winnerUid)
+                        .username;
 
                 showAcceptOrDenyDialog(
                   context: context,
-                  dialogTitle: 'Game finished',
+                  dialogTitle: AppLocalizations.of(context)!.gameFinished,
                   dialogContent:
-                      '$winnerName won. Do you want to restart the game with the same player?',
-                  buttonAcceptText: 'Restart',
-                  buttonDenyText: 'Leave',
+                      '$winnerUsername won. Do you want to restart the game with the same player?',
+                  buttonAcceptText: AppLocalizations.of(context)!.restart,
+                  buttonDenyText: AppLocalizations.of(context)!.leave,
                 ).then((restartGame) {
                   if (restartGame) {
                     context.read<GameBloc>().add(const RestartGameEvent());
@@ -157,7 +163,7 @@ class OnlineGameScreen extends StatelessWidget {
                   context: context,
                   dialogTitle: gameRoomError.errorTitle,
                   dialogContent: gameRoomError.errorText,
-                  buttonText: 'Ok',
+                  buttonText: AppLocalizations.of(context)!.ok,
                 );
               }
 
@@ -167,10 +173,10 @@ class OnlineGameScreen extends StatelessWidget {
 
                 showNotificationDialog(
                   context: context,
-                  dialogTitle: 'Game error',
-                  dialogContent:
-                      'Some kind of a game error has occured. You will be sent back to the main screen',
-                  buttonText: 'Ok',
+                  dialogTitle: AppLocalizations.of(context)!.gameError,
+                  dialogContent: AppLocalizations.of(context)!
+                      .someKindOfGameErrorHasOccured,
+                  buttonText: AppLocalizations.of(context)!.ok,
                 ).then((_) {
                   leaveGameRoom(
                     context: context,

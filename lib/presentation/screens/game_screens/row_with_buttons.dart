@@ -8,6 +8,7 @@ import 'package:game/presentation/screens/game_screens/leave_game_room.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/dialogs/show_accept_or_deny_dialog.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RowWithButtons extends StatelessWidget {
   const RowWithButtons({
@@ -22,14 +23,14 @@ class RowWithButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CustomButton(
-            text: 'Give up',
+            text: AppLocalizations.of(context)!.giveUp,
             onTap: () {
               showAcceptOrDenyDialog(
                 context: context,
-                dialogTitle: "Give up",
-                dialogContent: 'Are you sure?',
-                buttonAcceptText: 'Give up',
-                buttonDenyText: 'Cancel',
+                dialogTitle: AppLocalizations.of(context)!.giveUp,
+                dialogContent: AppLocalizations.of(context)!.areYouSure,
+                buttonAcceptText: AppLocalizations.of(context)!.giveUp,
+                buttonDenyText: AppLocalizations.of(context)!.cancel,
               ).then((giveUp) {
                 if (giveUp) {
                   context.read<GameBloc>().add(const GiveUpGameEvent());
@@ -41,14 +42,14 @@ class RowWithButtons extends StatelessWidget {
           ),
           SizedBox(width: 10.w),
           CustomButton(
-            text: 'Leave',
+            text: AppLocalizations.of(context)!.leave,
             onTap: () {
               showAcceptOrDenyDialog(
                 context: context,
-                dialogTitle: 'Leave the game',
-                dialogContent: 'Are you sure?',
-                buttonAcceptText: 'Leave',
-                buttonDenyText: 'Cancel',
+                dialogTitle: AppLocalizations.of(context)!.leaveTheGame,
+                dialogContent: AppLocalizations.of(context)!.areYouSure,
+                buttonAcceptText: AppLocalizations.of(context)!.leave,
+                buttonDenyText: AppLocalizations.of(context)!.cancel,
               ).then((leave) {
                 if (leave) {
                   leaveGameRoom(

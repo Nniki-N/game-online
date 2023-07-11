@@ -5,6 +5,7 @@ import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationItem extends StatelessWidget {
   final String username;
@@ -59,7 +60,7 @@ class NotificationItem extends StatelessWidget {
           ),
           SizedBox(height: 15.h),
           CustomText(
-            text: 'Player $username asks to be your friend. Accept?',
+            text: '${AppLocalizations.of(context)!.player} $username ${AppLocalizations.of(context)!.asksToBeYourFriend}',
             fontSize: 14.sp,
             color: CustomColors.secondTextColor,
             maxLines: 4,
@@ -69,14 +70,14 @@ class NotificationItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomButton(
-                text: 'Deny',
+                text: AppLocalizations.of(context)!.deny,
                 backgroundColor: CustomColors.brightRedColor,
                 height: 40.h,
                 width: 106.w,
                 onTap: onTapDeny,
               ),
               CustomButton(
-                text: 'Accept',
+                text: AppLocalizations.of(context)!.accept,
                 height: 40.h,
                 width: 106.w,
                 onTap: onTapAccept,

@@ -11,6 +11,7 @@ import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_icon_text_button.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -31,20 +32,20 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 10.h),
               CustomText(
-                text: 'Tic Tac Toe',
+                text: AppLocalizations.of(context)!.gameName,
                 fontSize: 25.sp,
                 fontWeight: FontWeight.w600,
               ),
               SizedBox(height: 45.h),
               CustomButton(
-                text: 'Play on one device',
+                text: AppLocalizations.of(context)!.playOnOneDevice,
                 onTap: () {
                   AutoRouter.of(context).replace(const OfflineGameRouter());
                 },
               ),
               SizedBox(height: 25.h),
               CustomButton(
-                text: 'Play with random player',
+                text: AppLocalizations.of(context)!.playWithRandomPlayer,
                 onTap: () {
                   // Searching for a room.
                   // Creates a room if there are no rooms.
@@ -54,7 +55,7 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 25.h),
               CustomButton(
-                text: 'Play with friend',
+                text: AppLocalizations.of(context)!.playWithFriend,
                 onTap: () {
                   AutoRouter.of(context)
                       .replace(const ChoosefriendForGameRouter());
@@ -62,7 +63,7 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 35.h),
               CustomIconTextButton(
-                text: 'Game rules',
+                text: AppLocalizations.of(context)!.gameRules,
                 onTap: () {
                   AutoRouter.of(context).push(const GameRulesRouter());
                 },

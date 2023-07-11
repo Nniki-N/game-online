@@ -6,6 +6,7 @@ import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotExistingScreen extends StatelessWidget {
   const NotExistingScreen({super.key});
@@ -31,7 +32,7 @@ class NotExistingScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 25.h),
                   CustomText(
-                    text: 'This page does not exist',
+                    text: AppLocalizations.of(context)!.thisPageDoesNotExist,
                     fontSize: 26.sp,
                   ),
                 ],

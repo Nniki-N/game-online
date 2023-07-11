@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/screens/main_screen/connections_page/notifications_tab/notification_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationsTab extends StatelessWidget {
   const NotificationsTab({super.key});
@@ -15,7 +16,7 @@ class NotificationsTab extends StatelessWidget {
         itemCount: 3,
         itemBuilder: (context, index) {
           return NotificationItem(
-            username: 'Username',
+            username: AppLocalizations.of(context)!.username,
             onTapDeny: () {
               //
             },

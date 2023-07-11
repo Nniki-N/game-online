@@ -10,14 +10,12 @@ import 'package:logger/logger.dart';
 class FirebaseAccountDatasource {
   final FirebaseAccountDatasourceHelper _firebaseAccountDatasourceHelper;
   final FirebaseAuth _firebaseAuth;
-  final Logger _logger;
 
   FirebaseAccountDatasource({
     required FirebaseFirestore firebaseFirestore,
     required FirebaseAuth firebaseAuth,
     required Logger logger,
   })  : _firebaseAuth = firebaseAuth,
-        _logger = logger,
         _firebaseAccountDatasourceHelper =
             FirebaseAccountDatasourceHelper.instance(
           firebaseFirestore: firebaseFirestore,

@@ -9,6 +9,7 @@ import 'package:game/presentation/screens/main_screen/settings_page/settinds_det
 import 'package:game/presentation/screens/main_screen/settings_page/settings_profile_container.dart';
 import 'package:game/presentation/screens/main_screen/settings_page/settings_slider.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_outlined_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -32,21 +33,21 @@ class SettingsPage extends StatelessWidget {
           ),
           SizedBox(height: 35.h),
           SettingsDetatilsButton(
-            text: 'Appearance',
+            text: AppLocalizations.of(context)!.appearance,
             onTap: () {
               AutoRouter.of(context).push(const AppearanceSettingsRouter());
             },
           ),
           SizedBox(height: 15.h),
           SettingsDetatilsButton(
-            text: 'Language',
+            text: AppLocalizations.of(context)!.language,
             onTap: () {
               AutoRouter.of(context).push(const LanguageSettingsRouter());
             },
           ),
           SizedBox(height: 25.h),
           SettingsSlider(
-            text: 'Background music',
+            text: AppLocalizations.of(context)!.backgroundMusic,
             currentValue: 70,
             onCanged: (value) {
               //
@@ -54,7 +55,7 @@ class SettingsPage extends StatelessWidget {
           ),
           SizedBox(height: 15.h),
           SettingsSlider(
-            text: 'Sound effects',
+            text: AppLocalizations.of(context)!.soundEffects,
             currentValue: 30,
             onCanged: (value) {
               //
@@ -68,7 +69,7 @@ class SettingsPage extends StatelessWidget {
               return !isAnonymousUser
                   ? const SizedBox.shrink()
                   : CustomOutlinedButton(
-                      text: 'Register',
+                      text: AppLocalizations.of(context)!.register,
                       onTap: () {
                         AutoRouter.of(context).push(
                           const SettingsRegisterRouter(),

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
   const CustomBottomNavigationBar({
@@ -49,7 +50,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 Expanded(
                   child: CustomBottomNavigationBarItem(
                     index: 0,
-                    itemText: 'Connections',
+                    itemText: AppLocalizations.of(context)!.connections,
                     svgPicturePath: Svgs.connectionIcon,
                     onTap: onTap,
                   ),
@@ -57,7 +58,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 Expanded(
                   child: CustomBottomNavigationBarItem(
                     index: 1,
-                    itemText: 'Game',
+                    itemText: AppLocalizations.of(context)!.game,
                     svgPicturePath: Svgs.gameIcon,
                     onTap: onTap,
                   ),
@@ -65,7 +66,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 Expanded(
                   child: CustomBottomNavigationBarItem(
                     index: 2,
-                    itemText: 'Settings',
+                    itemText: AppLocalizations.of(context)!.settings,
                     svgPicturePath: Svgs.gearIcon,
                     onTap: onTap,
                   ),

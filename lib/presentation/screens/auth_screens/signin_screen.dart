@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/errors/auth_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
+import 'package:game/common/utils/string_extension.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
@@ -27,6 +28,7 @@ import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart'
 import 'package:game/presentation/widgets/fields/custom_field.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -72,15 +74,15 @@ class SignInScreen extends StatelessWidget {
                 context: context,
                 dialogTitle: authError.errorTitle,
                 dialogContent: authError.errorText,
-                buttonText: 'Ok',
+                buttonText: AppLocalizations.of(context)!.ok,
               );
             } else if (authError != null && showPopupWithBasicSentences) {
               showNotificationDialog(
                 context: context,
-                dialogTitle: 'Authentication error',
+                dialogTitle: AppLocalizations.of(context)!.authenticationError,
                 dialogContent:
-                    'Something went wrong while signing, please try again',
-                buttonText: 'Ok',
+                    AppLocalizations.of(context)!.somethingWentWrongSignIn,
+                buttonText: AppLocalizations.of(context)!.ok,
               );
             }
 
@@ -90,25 +92,14 @@ class SignInScreen extends StatelessWidget {
               context.read<AccountBloc>().add(const InitializeAccountEvent());
               AutoRouter.of(context).replace(const MainRouter());
             }
-
-            // // Indicates that the current user is logged out.
-            // else if (state is LoggedOutAuthState) {
-            //   context.read<AccountBloc>().add(const LogOutAccountEvent());
-            // }
           },
           builder: (context, state) {
-            // // Indicates that the current user is logged out.
-            // if (state is LoggedOutAuthState) {
-            //   context.read<AccountBloc>().add(const LogOutAccountEvent());
-            // }
-
             // Loading screen.
             if (state is LoadingAuthState || state is LoggedInAuthState) {
-              return const LoadingScreen(
-                loadingText: 'Loading...',
+              return LoadingScreen(
+                loadingText: AppLocalizations.of(context)!.loading,
               );
             }
-
 
             // Sign in screen layout.
             else {
@@ -125,12 +116,12 @@ class SignInScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CustomText(
-                                text: 'Sign in',
+                                text: AppLocalizations.of(context)!.signIn,
                                 fontSize: 27.sp,
                                 color: CustomColors.mainTextColor,
                               ),
                               CustomTextButton(
-                                text: 'Register',
+                                text: AppLocalizations.of(context)!.register,
                                 onTap: () {
                                   log('signin ------------------ go to the registration screen');
                                   AutoRouter.of(context)
@@ -142,27 +133,38 @@ class SignInScreen extends StatelessWidget {
                           const ValidationMessagesList(),
                           CustomField(
                             controller: emailController,
-                            hintText: 'Email',
+                            hintText: AppLocalizations.of(context)!.email,
                           ),
                           SizedBox(height: 20.h),
                           CustomField(
                             controller: passwordController,
-                            hintText: 'Password',
+                            hintText: AppLocalizations.of(context)!.password,
                             obscureText: true,
                           ),
                           SizedBox(height: 20.h),
                           CustomButton(
-                            text: 'Sign in',
+                            text: AppLocalizations.of(context)!.signIn,
                             onTap: () {
                               log('signin ------------------ sign in button pressed');
 
                               final String email = emailController.text;
                               final String password = passwordController.text;
 
+                              const int minSymbols = 6;
+                              const int maxSymbols = 55;
+
                               // Validates an email.
                               context
                                   .read<FormValidationBloc>()
-                                  .add(EmailFormValidationEvent(email: email));
+                                  .add(EmailFormValidationEvent(
+                                    email: email,
+                                    validationEmptyEmail:
+                                        AppLocalizations.of(context)!
+                                            .pleaseEnterYourEmailAddress,
+                                    validationIncorrectEmail:
+                                        AppLocalizations.of(context)!
+                                            .emailAddressIsIncorrect,
+                                  ));
 
                               // Validates a password.
                               context
@@ -170,15 +172,16 @@ class SignInScreen extends StatelessWidget {
                                   .add(TextFormValidationEvent(
                                     text: password,
                                     lastValidation: true,
-                                    minSymbols: 6,
+                                    minSymbols: minSymbols,
+                                    maxSymbols: maxSymbols,
                                     validationForbiddenSymbolsText:
-                                        'Symbols [] are forbidden to use in the password',
+                                        '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.password.toLowerCase()}',
                                     validationEmptyText:
-                                        'Please enter the password',
+                                        '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.password}',
                                     validationToManySymbolsText:
-                                        'Maximal length of the password is 55 symbols',
+                                        '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
                                     validationNotEnoughtSymbolsText:
-                                        'Minimal lenght of the password is 6 symbols',
+                                        '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
                                   ));
                             },
                           ),
@@ -186,7 +189,7 @@ class SignInScreen extends StatelessWidget {
                           const LogInFormSeparator(),
                           SizedBox(height: 35.h),
                           CustomOutlinedButton(
-                            text: 'Sign in anonymously',
+                            text: AppLocalizations.of(context)!.signIn,
                             color: CustomColors.mainDarkColor,
                             onTap: () {
                               log('signin ------------------ sign in anonymously button pressed');
@@ -197,7 +200,8 @@ class SignInScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 20.h),
                           CustomIconOutlinedButton(
-                            text: 'Sign in with Google',
+                            text:
+                                AppLocalizations.of(context)!.signInWithGoogle,
                             color: CustomColors.mainDarkColor,
                             svgPicture: SvgPicture.asset(
                               Svgs.gogleIcon,

@@ -6,6 +6,7 @@ import 'package:game/presentation/screens/settings_screens/appearance_settings_s
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/switches/custom_switch.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppearanceSettingsScreen extends StatelessWidget {
   const AppearanceSettingsScreen({super.key});
@@ -33,7 +34,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
             ),
             SizedBox(height: 55.h),
             CustomText(
-              text: 'Appearance',
+              text: AppLocalizations.of(context)!.appearance,
               fontSize: 26.sp,
               fontWeight: FontWeight.w400,
             ),
@@ -42,7 +43,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SettingsAppearanceSelectItem(
-                  text: 'Light',
+                  text: AppLocalizations.of(context)!.light,
                   isSelected: true,
                   onTap: () {
                     //
@@ -50,7 +51,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
                 ),
                 SizedBox(width: 40.w),
                 SettingsAppearanceSelectItem(
-                  text: 'Dark',
+                  text: AppLocalizations.of(context)!.dark,
                   isSelected: false,
                   onTap: () {
                     //
@@ -62,7 +63,7 @@ class AppearanceSettingsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const CustomText(text: 'Automatic'),
+                CustomText(text: AppLocalizations.of(context)!.automatic),
                 CustomSwitch(
                   isSelected: true,
                   onChanged: (value) {
@@ -73,7 +74,8 @@ class AppearanceSettingsScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
             CustomText(
-              text: 'Sets theme based on your device’s appearance mode.',
+              text: AppLocalizations.of(context)!
+                  .setsThemeBasedOnYourDeviceAppearanceMode,
               maxLines: 3,
               fontSize: 14.sp,
               color: CustomColors.secondTextColor,

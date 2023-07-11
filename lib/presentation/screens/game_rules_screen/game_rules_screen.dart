@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GameRulesScreen extends StatelessWidget {
   const GameRulesScreen({super.key});
@@ -36,13 +37,13 @@ class GameRulesScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomText(
-                      text: 'Game rules',
+                      text: AppLocalizations.of(context)!.gameRules,
                       fontSize: 26.sp,
                     ),
                     SizedBox(height: 15.h),
                     CustomText(
                       text:
-                          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                          AppLocalizations.of(context)!.gameRulesText,
                       color: CustomColors.secondTextColor,
                       maxLines: 100,
                     ),

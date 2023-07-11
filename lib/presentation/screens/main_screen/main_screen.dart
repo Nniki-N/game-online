@@ -14,6 +14,7 @@ import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/screens/main_screen/custom_bottom_navigation_bar.dart';
 import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -44,9 +45,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         if (showPopupWithBasicSentences) {
           showNotificationDialog(
             context: context,
-            dialogTitle: 'Room error',
-            dialogContent: 'Some kind of a room error has occured',
-            buttonText: 'Ok',
+            dialogTitle: AppLocalizations.of(context)!.roomError,
+            dialogContent: AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
+            buttonText: AppLocalizations.of(context)!.ok,
           );
         }
       }
@@ -108,9 +109,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
             if (showPopupWithBasicSentences) {
               showNotificationDialog(
                 context: context,
-                dialogTitle: 'Room error',
-                dialogContent: 'Some kind of a room error has occured',
-                buttonText: 'Ok',
+                dialogTitle: AppLocalizations.of(context)!.roomError,
+                dialogContent: AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
+                buttonText: AppLocalizations.of(context)!.ok,
               );
             }
           }

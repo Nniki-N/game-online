@@ -12,10 +12,14 @@ abstract class FormValidationEvent {
 @immutable
 class EmailFormValidationEvent extends FormValidationEvent {
   final String? email;
+  final String validationEmptyEmail;
+  final String validationIncorrectEmail;
 
   const EmailFormValidationEvent({
     bool lastValidation = false,
     required this.email,
+    required this.validationEmptyEmail,
+    required this.validationIncorrectEmail,
   }): super(lastValidation: lastValidation);
 }
 

@@ -5,6 +5,7 @@ import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/screens/choose_friend_for_game_screen/friend_list_item.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChoosefriendForGameScreen extends StatelessWidget {
   const ChoosefriendForGameScreen({super.key});
@@ -38,7 +39,7 @@ class ChoosefriendForGameScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomText(
-                      text: 'Choose friend',
+                      text: AppLocalizations.of(context)!.chooseFriend,
                       fontSize: 26.sp,
                     ),
                     SizedBox(height: 25.h),
@@ -48,7 +49,7 @@ class ChoosefriendForGameScreen extends StatelessWidget {
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         return FriendsListItem(
-                          username: 'Username',
+                          username: AppLocalizations.of(context)!.username,
                           onTap: () {
                             //
                           },

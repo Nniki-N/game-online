@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConnectionsTabBar extends StatefulWidget {
   const ConnectionsTabBar({
@@ -33,7 +34,7 @@ class _ConnectionsTabBarState extends State<ConnectionsTabBar> {
           Expanded(
             child: ConnectionsTabBarItem(
               index: 0,
-              text: 'Friends and me',
+              text: AppLocalizations.of(context)!.friendsAndMe,
               onTap: onTap,
             ),
           ),
@@ -48,7 +49,7 @@ class _ConnectionsTabBarState extends State<ConnectionsTabBar> {
           Expanded(
             child: ConnectionsTabBarItem(
               index: 1,
-              text: 'Notifications',
+              text: AppLocalizations.of(context)!.notifications,
               onTap: onTap,
             ),
           ),

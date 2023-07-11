@@ -12,6 +12,7 @@ import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WaitingRoomScreen extends StatelessWidget {
   const WaitingRoomScreen({super.key});
@@ -39,12 +40,12 @@ class WaitingRoomScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        String waitingText = 'Searching...';
+        String waitingText = AppLocalizations.of(context)!.searching;
 
         if (state is SearchingRoomState) {
-          waitingText = 'Searching for a free room, please wait a bit...';
+          waitingText = AppLocalizations.of(context)!.searchingForFreeRoom;
         } else if (state is InRoomState) {
-          waitingText = 'Searching for a second player, please wait a bit...';
+          waitingText = AppLocalizations.of(context)!.searchingForSecondPlayer;
         }
 
         return Scaffold(

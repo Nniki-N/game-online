@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConnectionsFriendItem extends StatelessWidget {
   final String username;
@@ -45,12 +46,12 @@ class ConnectionsFriendItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomText(
-                    text: 'Total games: $totalGames',
+                    text: '${AppLocalizations.of(context)!.totalGames}: $totalGames',
                     fontSize: 12.sp,
                   ),
                   SizedBox(width: 15.w),
                   CustomText(
-                    text: 'Victories: $victories',
+                    text: '${AppLocalizations.of(context)!.victories}: $victories',
                     fontSize: 12.sp,
                   ),
                 ],
