@@ -3,10 +3,14 @@ import 'package:game/data/repositories/firestore_account_repository.dart';
 import 'package:game/data/repositories/firebase_auth_repository.dart';
 import 'package:game/data/repositories/firestore_game_repository.dart';
 import 'package:game/data/repositories/firestore_room_repository.dart';
+import 'package:game/data/repositories/preferences_language_repository.dart';
 import 'package:game/domain/repositories/account_repository.dart';
 import 'package:game/domain/repositories/auth_repository.dart';
 import 'package:game/domain/repositories/game_repository.dart';
+import 'package:game/domain/repositories/language_repository.dart';
 import 'package:game/domain/repositories/room_repository.dart';
+import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
+import 'package:game/presentation/bloc/language_bloc/language_event.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
@@ -37,5 +41,15 @@ Future<void> setUpLocator() async {
 
   getIt.registerLazySingleton<GameRepository>(
     () => const FirestoreGameRepository(),
+  );
+
+  getIt.registerSingleton<LanguageRepository>(
+    PreferencesLanguageRepository(logger: getIt()),
+  );
+
+  getIt.registerSingleton<LanguageBloc>(
+    LanguageBloc(
+      languageRepository: getIt(),
+    )..add(const InitializeLanguageEvent()),
   );
 }

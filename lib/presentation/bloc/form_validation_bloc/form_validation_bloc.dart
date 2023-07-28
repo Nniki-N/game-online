@@ -2,7 +2,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_event.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FormValidationBloc
     extends Bloc<FormValidationEvent, FormValidationState> {

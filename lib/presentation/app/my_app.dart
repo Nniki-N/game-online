@@ -6,6 +6,8 @@ import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
+import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
+import 'package:game/presentation/bloc/language_bloc/language_state.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,15 +41,26 @@ class MyApp extends StatelessWidget {
                   accountRepository: getIt(),
                 ),
               ),
+              BlocProvider<LanguageBloc>(
+                create: (_) => getIt(),
+              ),
             ],
-            child: MaterialApp.router(
-              title: 'Tic Tac Toe',
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              routerDelegate: getIt<AppRouter>().delegate(),
-              routeInformationParser: getIt<AppRouter>().defaultRouteParser(),
-              builder: (context, router) => router!,
+            child: BlocBuilder<LanguageBloc, LanguageState>(
+              builder: (context, languageState) {
+                return MaterialApp.router(
+                  title: 'Tic Tac Toe',
+                  debugShowCheckedModeBanner: false,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  // locale: const Locale('en'),
+                  locale: languageState.language.locale,
+                  routerDelegate: getIt<AppRouter>().delegate(),
+                  routeInformationParser:
+                      getIt<AppRouter>().defaultRouteParser(),
+                  builder: (context, router) => router!,
+                );
+              },
             ),
           );
         });

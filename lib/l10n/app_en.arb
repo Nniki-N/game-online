@@ -36,7 +36,7 @@
   "wonDoYouWantToRestartGame": "won. Do you want to restart the game with the same player?",
   "restart": "Restart",
   "gameError": "Game error",
-  "someKindOfGameErrorHasOccured": "Some kind of a game error has occured. You will be sent back to the main screen",
+  "someKindOfGameErrorHasOccured": "Some kind of a game error has occurred. You will be sent back to the main screen",
   "searchingForFreeRoom": "Searching for a free room, please wait a bit...",
   "searchingForSecondPlayer": "Searching for a second player, please wait a bit...",
   "searching": "Searching...",
