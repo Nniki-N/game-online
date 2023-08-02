@@ -1,8 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide IconTheme, TextTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/theme/extensions/icon_theme.dart';
+import 'package:game/presentation/theme/extensions/popup_theme.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/presentation/widgets/loading_overlay/loading_overlay_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -62,23 +65,30 @@ class LoadingOverlay {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final Size size = renderBox.size;
 
+    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+    final PopUpTheme popUpTheme =
+        Theme.of(context).extension<PopUpTheme>()!;
+
     // Creates overlay.
     final overlay = OverlayEntry(
       builder: (context) {
         return Material(
-          color: Colors.black.withOpacity(0.6),
+          color: popUpTheme.overlayColor,
           child: Container(
             width: size.width,
             height: size.height,
             padding: EdgeInsets.all(30.w),
-            color: Colors.white,
+            color: backgroundTheme.color,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Loading widget.
                 LoadingAnimationWidget.hexagonDots(
-                  color: CustomColors.mainColor,
+                  color: iconTheme.color2,
                   size: 100.w,
                 ),
                 const SizedBox(height: 20),
@@ -106,7 +116,6 @@ class LoadingOverlay {
                                   textAlign: TextAlign.center,
                                   fontSize: 27.sp,
                                   fontWeight: FontWeight.w400,
-                                  color: CustomColors.mainTextColor,
                                 ),
                           // Space between the title and the text content.
                           snapshotTitle != null && snapshotText != null
@@ -119,7 +128,7 @@ class LoadingOverlay {
                                   text: snapshotText,
                                   textAlign: TextAlign.center,
                                   fontWeight: FontWeight.w400,
-                                  color: CustomColors.secondTextColor,
+                                  color: textTheme.color3,
                                 ),
                         ],
                       );

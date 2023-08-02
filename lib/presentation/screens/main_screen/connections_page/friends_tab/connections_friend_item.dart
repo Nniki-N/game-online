@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide IconTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -20,6 +20,8 @@ class ConnectionsFriendItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -46,12 +48,14 @@ class ConnectionsFriendItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomText(
-                    text: '${AppLocalizations.of(context)!.totalGames}: $totalGames',
+                    text:
+                        '${AppLocalizations.of(context)!.totalGames}: $totalGames',
                     fontSize: 12.sp,
                   ),
                   SizedBox(width: 15.w),
                   CustomText(
-                    text: '${AppLocalizations.of(context)!.victories}: $victories',
+                    text:
+                        '${AppLocalizations.of(context)!.victories}: $victories',
                     fontSize: 12.sp,
                   ),
                 ],
@@ -64,10 +68,10 @@ class ConnectionsFriendItem extends StatelessWidget {
             //
           },
           child: SvgPicture.asset(
-            Svgs.dotsIcon,
+            Svgs.dots,
             width: 3.w,
             colorFilter: ColorFilter.mode(
-              CustomColors.mainTextColor,
+              iconTheme.color,
               BlendMode.srcIn,
             ),
           ),

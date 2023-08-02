@@ -1,12 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ButtonTheme, IconTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_event.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/button_theme.dart';
+import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_icon_text_button.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
@@ -18,6 +19,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
+    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       child: Center(
@@ -26,9 +30,13 @@ class HomePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SvgPicture.asset(
-                Svgs.logoIngameIcon,
+                Svgs.logoIngame,
                 width: 155.w,
                 height: 155.w,
+                colorFilter: ColorFilter.mode(
+                  iconTheme.color,
+                  BlendMode.srcIn,
+                ),
               ),
               SizedBox(height: 10.h),
               CustomText(
@@ -36,7 +44,7 @@ class HomePage extends StatelessWidget {
                 fontSize: 25.sp,
                 fontWeight: FontWeight.w600,
               ),
-              SizedBox(height: 45.h),
+              SizedBox(height: 30.h),
               CustomButton(
                 text: AppLocalizations.of(context)!.playOnOneDevice,
                 onTap: () {
@@ -67,13 +75,13 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   AutoRouter.of(context).push(const GameRulesRouter());
                 },
-                color: CustomColors.mainDarkColor,
+                foregroundColor: buttonTheme.textColor3,
                 svgPicture: SvgPicture.asset(
-                  Svgs.informIcon,
+                  Svgs.inform,
                   width: 15.w,
                   height: 15.w,
                   colorFilter: ColorFilter.mode(
-                    CustomColors.mainDarkColor,
+                    iconTheme.color3,
                     BlendMode.srcIn,
                   ),
                 ),

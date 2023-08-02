@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/settings_item_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
@@ -19,6 +19,8 @@ class ProfileDetailsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsItemTheme settingsItemTheme = Theme.of(context).extension<SettingsItemTheme>()!;
+
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (context, accountState) {
         // Settings profile container layout.
@@ -32,7 +34,7 @@ class ProfileDetailsContainer extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
-                color: CustomColors.backgroundLightGrayColor,
+                color: settingsItemTheme.backgroundColor,
                 borderRadius: BorderRadius.circular(10.w),
               ),
               child: Row(
@@ -77,7 +79,7 @@ class ProfileDetailsContainer extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
-              color: CustomColors.backgroundLightGrayColor,
+              color: settingsItemTheme.backgroundColor,
               borderRadius: BorderRadius.circular(10.w),
             ),
             child: Row(

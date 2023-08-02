@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ButtonTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/button_theme.dart';
+import 'package:game/presentation/theme/extensions/notification_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
@@ -21,13 +22,17 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NotificationTheme notificationTheme =
+        Theme.of(context).extension<NotificationTheme>()!;
+    final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 15.w,
         vertical: 10.h,
       ),
       decoration: BoxDecoration(
-        color: CustomColors.backgroundGreenGreyColor,
+        color: notificationTheme.backgroundColor,
         borderRadius: BorderRadius.circular(10.w),
       ),
       child: Column(
@@ -47,7 +52,10 @@ class NotificationItem extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 10.w),
-              CustomText(text: username),
+              CustomText(
+                text: username,
+                color: notificationTheme.usernameColor,
+              ),
             ],
           ),
           SizedBox(height: 10.h),
@@ -55,14 +63,15 @@ class NotificationItem extends StatelessWidget {
             height: 1.h,
             width: double.infinity,
             decoration: BoxDecoration(
-                color: CustomColors.mainMudColor,
+                color: notificationTheme.separatorColor,
                 borderRadius: BorderRadius.circular(1.w)),
           ),
           SizedBox(height: 15.h),
           CustomText(
-            text: '${AppLocalizations.of(context)!.player} $username ${AppLocalizations.of(context)!.asksToBeYourFriend}',
+            text:
+                '${AppLocalizations.of(context)!.player} $username ${AppLocalizations.of(context)!.asksToBeYourFriend}',
             fontSize: 14.sp,
-            color: CustomColors.secondTextColor,
+            color: notificationTheme.textColor,
             maxLines: 4,
           ),
           SizedBox(height: 15.h),
@@ -71,7 +80,7 @@ class NotificationItem extends StatelessWidget {
             children: [
               CustomButton(
                 text: AppLocalizations.of(context)!.deny,
-                backgroundColor: CustomColors.brightRedColor,
+                backgroundColor: buttonTheme.backgroundColor2,
                 height: 40.h,
                 width: 106.w,
                 onTap: onTapDeny,

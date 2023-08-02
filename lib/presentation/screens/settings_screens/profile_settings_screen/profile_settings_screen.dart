@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ButtonTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,13 +12,14 @@ import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_outlined_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_text_button.dart';
-import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
+import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
 import 'package:game/presentation/widgets/fields/custom_field.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,6 +29,10 @@ class ProfileSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+
     return BlocConsumer<AccountBloc, AccountState>(
       listener: (context, accountState) {
         // Displays an acoount error message if an error occurs.
@@ -49,7 +54,8 @@ class ProfileSettingsScreen extends StatelessWidget {
             showNotificationDialog(
               context: context,
               dialogTitle: AppLocalizations.of(context)!.error,
-              dialogContent: AppLocalizations.of(context)!.somethingWentWrongPleaseTryAgain,
+              dialogContent: AppLocalizations.of(context)!
+                  .somethingWentWrongPleaseTryAgain,
               buttonText: AppLocalizations.of(context)!.ok,
             );
           }
@@ -61,8 +67,8 @@ class ProfileSettingsScreen extends StatelessWidget {
           return LoadingScreen(
             loadingText: AppLocalizations.of(context)!.loading,
           );
-        } 
-        
+        }
+
         // Profile settings screen layoyt.
         else {
           final UserAccount userAccount = accountState.getUserAccount()!;
@@ -76,6 +82,7 @@ class ProfileSettingsScreen extends StatelessWidget {
           );
 
           return Scaffold(
+            backgroundColor: backgroundTheme.color,
             body: Padding(
               padding: EdgeInsets.only(
                 top: 45.h,
@@ -159,7 +166,8 @@ class ProfileSettingsScreen extends StatelessWidget {
                   const Spacer(),
                   CustomOutlinedButton(
                     text: AppLocalizations.of(context)!.logOut,
-                    color: CustomColors.darkRedColor,
+                    textColor: buttonTheme.textColor4,
+                    border: buttonTheme.border3,
                     onTap: () {
                       log('profile settings ------------------ log out button pressed');
                       context.read<AuthBloc>().add(const LogOutAuthEvent());

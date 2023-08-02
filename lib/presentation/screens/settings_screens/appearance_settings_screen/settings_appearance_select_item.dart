@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/radio_button_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 
 class SettingsAppearanceSelectItem extends StatelessWidget {
@@ -18,6 +18,8 @@ class SettingsAppearanceSelectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final RadioButtonTheme radioButtonTheme = Theme.of(context).extension<RadioButtonTheme>()!;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -45,7 +47,7 @@ class SettingsAppearanceSelectItem extends StatelessWidget {
                   height: 17.w,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: CustomColors.mainColor,
+                      color: radioButtonTheme.activColor,
                       width: 1.5.w,
                     ),
                     borderRadius: BorderRadius.circular(10.w),
@@ -55,7 +57,7 @@ class SettingsAppearanceSelectItem extends StatelessWidget {
                       width: 11.w,
                       height: 11.w,
                       decoration: BoxDecoration(
-                        color: CustomColors.mainColor,
+                        color: radioButtonTheme.activColor,
                         borderRadius: BorderRadius.circular(6.w),
                       ),
                     ),
@@ -66,7 +68,7 @@ class SettingsAppearanceSelectItem extends StatelessWidget {
                   height: 17.w,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: CustomColors.secondTextColor,
+                      color: radioButtonTheme.inactivColor,
                       width: 1.5.w,
                     ),
                     borderRadius: BorderRadius.circular(10.w),

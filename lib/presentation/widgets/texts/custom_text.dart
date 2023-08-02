@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// A custom text button with an icon.
@@ -13,7 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 ///
 /// [maxLines] defines max lines of a text.
 ///
-/// [color] is a color of a button. By default is CustomColors.mainTextColor.
+/// [color] is a color of a button. By default is TextTheme.color.
 ///
 /// [fontSize] is a font size of a text. By default is 17.sp.
 ///
@@ -40,6 +40,8 @@ class CustomText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+
     return Text(
       text,
       softWrap: true,
@@ -47,7 +49,7 @@ class CustomText extends StatelessWidget {
       maxLines: maxLines,
       overflow: TextOverflow.ellipsis,
       style: GoogleFonts.inter(
-        color: color ?? CustomColors.mainTextColor,
+        color: color ?? textTheme.color,
         fontSize: fontSize ?? 17.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
         decoration: textDecoration,

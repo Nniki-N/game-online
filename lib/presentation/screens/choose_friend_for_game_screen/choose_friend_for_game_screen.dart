@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/screens/choose_friend_for_game_screen/friend_list_item.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +13,11 @@ class ChoosefriendForGameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+
     return Scaffold(
+      backgroundColor: backgroundTheme.color,
       body: Padding(
         padding: EdgeInsets.only(
           top: 45.h,

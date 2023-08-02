@@ -9,12 +9,16 @@ import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
 
 class InitialScreen extends StatelessWidget {
   const InitialScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (content, state) {
         // Navigates to the login screen if an error occurs.
@@ -37,7 +41,10 @@ class InitialScreen extends StatelessWidget {
           AutoRouter.of(context).replace(const SignInRouter());
         }
       },
-      child: const LoadingScreen(),
+      child: LoadingScreen(
+        backgroundColor: backgroundTheme.color2,
+        animationWidgetColor: Colors.white,
+      ),
     );
   }
 }

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/domain/entities/language.dart';
 import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
 import 'package:game/presentation/bloc/language_bloc/language_event.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
@@ -23,6 +23,9 @@ class LanguageListViewItem extends StatelessWidget {
     final String text = language.languageName;
     final bool isSelected = index == appLanguage.index;
 
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+
+
     return GestureDetector(
       onTap: () {
         context.read<LanguageBloc>().add(ChangeLanguageEvent(
@@ -37,9 +40,9 @@ class LanguageListViewItem extends StatelessWidget {
           !isSelected
               ? const SizedBox.shrink()
               : SvgPicture.asset(
-                  Svgs.arrowDownIcon,
+                  Svgs.arrowDown,
                   colorFilter: ColorFilter.mode(
-                    CustomColors.mainTextColor,
+                    textTheme.color,
                     BlendMode.srcIn,
                   ),
                 ),

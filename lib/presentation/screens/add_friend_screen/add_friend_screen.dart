@@ -1,12 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/utils/string_extension.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_event.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/fields/custom_field.dart';
@@ -21,6 +22,10 @@ class AddFriendScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController loginController = TextEditingController();
 
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+
     return BlocProvider(
       create: (context) => FormValidationBloc(),
       child: BlocListener<FormValidationBloc, FormValidationState>(
@@ -32,6 +37,7 @@ class AddFriendScreen extends StatelessWidget {
         },
         child: Builder(builder: (context) {
           return Scaffold(
+            backgroundColor: backgroundTheme.color,
             body: Padding(
               padding: EdgeInsets.only(
                 top: 45.h,
@@ -64,7 +70,7 @@ class AddFriendScreen extends StatelessWidget {
                           CustomText(
                             text: AppLocalizations.of(context)!
                                 .enterUsernameOfPlayerYouWantToAddAsFriends,
-                            color: CustomColors.secondTextColor,
+                            color: textTheme.color3,
                             maxLines: 4,
                             textAlign: TextAlign.center,
                           ),

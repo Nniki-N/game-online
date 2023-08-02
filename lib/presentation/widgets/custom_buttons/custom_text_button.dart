@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ButtonTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 
 /// A custom text button.
 /// 
 /// Only [text] has to be set, another fields are set by default.
 /// 
-/// [color] is a color of a text. By default is CustomColors.mainColor
+/// [color] is a color of a text. By default is CButtonTheme.textColor2.
 /// 
 /// [padding] is a padding that sets the space around the button. By defauld is EdgeInsets.zero.
 /// 
@@ -39,6 +39,8 @@ class CustomTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -47,7 +49,7 @@ class CustomTextButton extends StatelessWidget {
         child: CustomText(
           text: text,
           fontSize: fontSize ?? 17.sp,
-          color: color ?? CustomColors.mainColor,
+          color: color ?? buttonTheme.textColor2,
           fontWeight: fontWeight ?? FontWeight.w500,
         ),
       ),

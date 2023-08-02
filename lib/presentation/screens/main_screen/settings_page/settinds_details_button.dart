@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/settings_item_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
@@ -17,6 +17,9 @@ class SettingsDetatilsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsItemTheme settingsItemTheme =
+        Theme.of(context).extension<SettingsItemTheme>()!;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -27,7 +30,7 @@ class SettingsDetatilsButton extends StatelessWidget {
           horizontal: 15.w,
         ),
         decoration: BoxDecoration(
-          color: CustomColors.backgroundLightGrayColor,
+          color: settingsItemTheme.backgroundColor,
           borderRadius: BorderRadius.circular(10.w),
         ),
         child: Row(
@@ -38,10 +41,10 @@ class SettingsDetatilsButton extends StatelessWidget {
               fontSize: 14.sp,
             ),
             SvgPicture.asset(
-              Svgs.arrowForwardIcon,
+              Svgs.arrowForward,
               width: 18.w,
               colorFilter: ColorFilter.mode(
-                CustomColors.mainTextColor,
+                settingsItemTheme.foregroundColor,
                 BlendMode.srcIn,
               ),
             ),

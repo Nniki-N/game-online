@@ -1,6 +1,5 @@
-
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:game/common/constants/language_constants.dart';
+import 'package:game/common/constants/shared_preferences_constants.dart';
 import 'package:game/domain/entities/language.dart';
 import 'package:game/domain/repositories/language_repository.dart';
 import 'package:logger/logger.dart';
@@ -22,7 +21,7 @@ class PreferencesLanguageRepository implements LanguageRepository {
 
       // Saves a language code in the shared preferences.
       await prefs.setString(
-        LanguageConstants.localeLanguageCodeKey,
+        PreferencesConstants.localeLanguageCodeKey,
         language.locale.languageCode,
       );
     } catch (exception) {
@@ -40,7 +39,7 @@ class PreferencesLanguageRepository implements LanguageRepository {
 
       // Retrieves a language code from the shared preferences.
       final String? languageCode = prefs.getString(
-        LanguageConstants.localeLanguageCodeKey,
+        PreferencesConstants.localeLanguageCodeKey,
       );
 
       // If nothing is saved in the shared preferences, saves english as a default language.

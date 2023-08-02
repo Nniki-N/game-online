@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide IconTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/screens/main_screen/connections_page/friends_tab/connections_friend_item.dart';
+import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_icon_text_button.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,6 +14,8 @@ class FriendsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
@@ -21,11 +23,13 @@ class FriendsTab extends StatelessWidget {
         CustomIconTextButton(
           text: AppLocalizations.of(context)!.addFriend,
           svgPicture: SvgPicture.asset(
-            Svgs.addIcon,
+            Svgs.add,
             colorFilter: ColorFilter.mode(
-              CustomColors.mainColor,
+              iconTheme.color2,
               BlendMode.srcIn,
             ),
+            width: 18.w,
+            height: 18.h,
           ),
           spaceBetween: 7.w,
           onTap: () {

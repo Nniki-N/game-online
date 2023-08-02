@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/errors/auth_error.dart';
@@ -14,11 +14,12 @@ import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_event.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
-import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
+import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
 import 'package:game/presentation/widgets/fields/custom_field.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:game/presentation/widgets/validation_messages_list.dart';
@@ -35,6 +36,10 @@ class SettingsRegisterScreen extends StatelessWidget {
     final TextEditingController passwordController = TextEditingController();
     final TextEditingController repeatPasswordController =
         TextEditingController();
+
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
 
     return BlocProvider(
       create: (context) => FormValidationBloc(),
@@ -105,6 +110,7 @@ class SettingsRegisterScreen extends StatelessWidget {
 
             // Registration screen layout.
             return Scaffold(
+              backgroundColor: backgroundTheme.color,
               body: Padding(
                 padding: EdgeInsets.only(
                   top: 45.h,
@@ -138,7 +144,7 @@ class SettingsRegisterScreen extends StatelessWidget {
                             CustomText(
                               text: AppLocalizations.of(context)!
                                   .allYourScoreWillBeSaved,
-                              color: CustomColors.secondTextColor,
+                              color: textTheme.color3,
                               textAlign: TextAlign.center,
                               maxLines: 3,
                             ),

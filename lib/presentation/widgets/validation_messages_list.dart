@@ -1,10 +1,9 @@
-
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 
 class ValidationMessagesList extends StatelessWidget {
@@ -12,6 +11,8 @@ class ValidationMessagesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+    
     return BlocBuilder<FormValidationBloc, FormValidationState>(
       builder: (context, validationState) {
         final bool showValidationMessages =
@@ -34,7 +35,7 @@ class ValidationMessagesList extends StatelessWidget {
               itemBuilder: (_, index) => CustomText(
                 text: validationMessages[index],
                 maxLines: 3,
-                color: CustomColors.brightRedColor,
+                color: textTheme.color4,
               ),
             ),
           );

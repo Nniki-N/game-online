@@ -11,6 +11,8 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:ui' as _i24;
+
 import 'package:auto_route/auto_route.dart' as _i22;
 import 'package:flutter/material.dart' as _i23;
 
@@ -71,9 +73,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i1.InitialScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -86,9 +88,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i2.SignInScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -101,9 +103,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i3.RegistrationScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -115,9 +117,9 @@ class AppRouter extends _i22.RootStackRouter {
           _i4.loadLibrary,
           () => _i4.MainScreen(),
         ),
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -130,9 +132,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i5.ProfileSettingsScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -145,9 +147,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i6.AppearanceSettingsScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -160,9 +162,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i7.LanguageSettingsScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -175,9 +177,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i8.SettingsRegisterScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -190,9 +192,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i9.WaitingRoomScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -205,9 +207,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i10.OfflineGameScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -220,9 +222,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i11.OnlineGameScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -235,9 +237,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i12.GameRulesScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -250,9 +252,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i13.AddFriendScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -265,9 +267,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i14.ChoosefriendForGameScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -280,9 +282,9 @@ class AppRouter extends _i22.RootStackRouter {
           () => _i15.NotExistingScreen(),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -296,14 +298,16 @@ class AppRouter extends _i22.RootStackRouter {
           _i16.loadLibrary,
           () => _i16.LoadingScreen(
             key: args.key,
+            backgroundColor: args.backgroundColor,
+            animationWidgetColor: args.animationWidgetColor,
             loadingTitle: args.loadingTitle,
             loadingText: args.loadingText,
           ),
         ),
         maintainState: false,
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -315,9 +319,9 @@ class AppRouter extends _i22.RootStackRouter {
           _i17.loadLibrary,
           () => _i17.ConnectionPage(),
         ),
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -329,9 +333,9 @@ class AppRouter extends _i22.RootStackRouter {
           _i18.loadLibrary,
           () => _i18.HomePage(),
         ),
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -343,9 +347,9 @@ class AppRouter extends _i22.RootStackRouter {
           _i19.loadLibrary,
           () => _i19.SettingsPage(),
         ),
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -357,9 +361,9 @@ class AppRouter extends _i22.RootStackRouter {
           _i20.loadLibrary,
           () => _i20.FriendsTab(),
         ),
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -371,9 +375,9 @@ class AppRouter extends _i22.RootStackRouter {
           _i21.loadLibrary,
           () => _i21.NotificationsTab(),
         ),
-        transitionsBuilder: _i22.TransitionsBuilders.noTransition,
-        durationInMilliseconds: 300,
-        reverseDurationInMilliseconds: 300,
+        transitionsBuilder: _i22.TransitionsBuilders.fadeIn,
+        durationInMilliseconds: 200,
+        reverseDurationInMilliseconds: 200,
         opaque: true,
         barrierDismissible: false,
       );
@@ -699,6 +703,8 @@ class NotExistingRouter extends _i22.PageRouteInfo<void> {
 class LoadingRouter extends _i22.PageRouteInfo<LoadingRouterArgs> {
   LoadingRouter({
     _i23.Key? key,
+    _i24.Color? backgroundColor,
+    _i24.Color? animationWidgetColor,
     String? loadingTitle,
     String? loadingText,
   }) : super(
@@ -706,6 +712,8 @@ class LoadingRouter extends _i22.PageRouteInfo<LoadingRouterArgs> {
           path: '/loading',
           args: LoadingRouterArgs(
             key: key,
+            backgroundColor: backgroundColor,
+            animationWidgetColor: animationWidgetColor,
             loadingTitle: loadingTitle,
             loadingText: loadingText,
           ),
@@ -717,11 +725,17 @@ class LoadingRouter extends _i22.PageRouteInfo<LoadingRouterArgs> {
 class LoadingRouterArgs {
   const LoadingRouterArgs({
     this.key,
+    this.backgroundColor,
+    this.animationWidgetColor,
     this.loadingTitle,
     this.loadingText,
   });
 
   final _i23.Key? key;
+
+  final _i24.Color? backgroundColor;
+
+  final _i24.Color? animationWidgetColor;
 
   final String? loadingTitle;
 
@@ -729,7 +743,7 @@ class LoadingRouterArgs {
 
   @override
   String toString() {
-    return 'LoadingRouterArgs{key: $key, loadingTitle: $loadingTitle, loadingText: $loadingText}';
+    return 'LoadingRouterArgs{key: $key, backgroundColor: $backgroundColor, animationWidgetColor: $animationWidgetColor, loadingTitle: $loadingTitle, loadingText: $loadingText}';
   }
 }
 

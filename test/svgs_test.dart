@@ -5,11 +5,11 @@ import 'package:game/resources/resources.dart';
 
 void main() {
   test('svgs assets test', () {
-    expect(File(Svgs.addIcon).existsSync(), true);
-    expect(File(Svgs.alertIcon).existsSync(), true);
-    expect(File(Svgs.arrowBackIcon).existsSync(), true);
-    expect(File(Svgs.arrowDownIcon).existsSync(), true);
-    expect(File(Svgs.arrowForwardIcon).existsSync(), true);
+    expect(File(Svgs.add).existsSync(), true);
+    expect(File(Svgs.alert).existsSync(), true);
+    expect(File(Svgs.arrowBack).existsSync(), true);
+    expect(File(Svgs.arrowDown).existsSync(), true);
+    expect(File(Svgs.arrowForward).existsSync(), true);
     expect(File(Svgs.avatarBlue).existsSync(), true);
     expect(File(Svgs.avatarCyan).existsSync(), true);
     expect(File(Svgs.avatarGreen).existsSync(), true);
@@ -17,13 +17,15 @@ void main() {
     expect(File(Svgs.avatarRed).existsSync(), true);
     expect(File(Svgs.chipCyan).existsSync(), true);
     expect(File(Svgs.chipRed).existsSync(), true);
-    expect(File(Svgs.connectionIcon).existsSync(), true);
-    expect(File(Svgs.dotsIcon).existsSync(), true);
-    expect(File(Svgs.gameIcon).existsSync(), true);
-    expect(File(Svgs.gearIcon).existsSync(), true);
-    expect(File(Svgs.gogleIcon).existsSync(), true);
-    expect(File(Svgs.informIcon).existsSync(), true);
-    expect(File(Svgs.logoIngameIcon).existsSync(), true);
-    expect(File(Svgs.separatorMidleRectangleIcon).existsSync(), true);
+    expect(File(Svgs.connection).existsSync(), true);
+    expect(File(Svgs.dots).existsSync(), true);
+    expect(File(Svgs.game).existsSync(), true);
+    expect(File(Svgs.gear).existsSync(), true);
+    expect(File(Svgs.gogle).existsSync(), true);
+    expect(File(Svgs.inform).existsSync(), true);
+    expect(File(Svgs.logoIngame).existsSync(), true);
+    expect(File(Svgs.signInSeparator).existsSync(), true);
+    expect(File(Svgs.splashScreen).existsSync(), true);
+    expect(File(Svgs.splashScreen2).existsSync(), true);
   });
 }

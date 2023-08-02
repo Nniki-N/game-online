@@ -11,9 +11,9 @@ import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
 import 'package:game/presentation/screens/main_screen/custom_bottom_navigation_bar.dart';
-import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
@@ -46,7 +46,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           showNotificationDialog(
             context: context,
             dialogTitle: AppLocalizations.of(context)!.roomError,
-            dialogContent: AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
+            dialogContent:
+                AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
             buttonText: AppLocalizations.of(context)!.ok,
           );
         }
@@ -74,6 +75,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, authState) {
         // Closes the app activiness observing and navigates to the sign in screen
@@ -110,26 +114,38 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
               showNotificationDialog(
                 context: context,
                 dialogTitle: AppLocalizations.of(context)!.roomError,
-                dialogContent: AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
+                dialogContent:
+                    AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
             }
           }
         },
-        child: Scaffold(
-          backgroundColor: CustomColors.backgroundColor,
-          body: AutoTabsRouter(
-            routes: const [
-              ConnectionsRouter(),
-              HomeRouter(),
-              SettingsRouter(),
-            ],
-            builder: (context, child, animation) {
-              return Scaffold(
-                body: child,
-                bottomNavigationBar: const CustomBottomNavigationBar(),
-              );
-            },
+        child: WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: Scaffold(
+            backgroundColor: backgroundTheme.color,
+            body: AutoTabsRouter(
+              routes: const [
+                ConnectionsRouter(),
+                HomeRouter(),
+                SettingsRouter(),
+              ],
+              curve: Curves.easeInOutCirc,
+              duration: const Duration(milliseconds: 500),
+              lazyLoad: false,
+              builder: (context, child, animation) {
+                return Scaffold(
+                  body: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                  bottomNavigationBar: const CustomBottomNavigationBar(),
+                );
+              },
+            ),
           ),
         ),
       ),

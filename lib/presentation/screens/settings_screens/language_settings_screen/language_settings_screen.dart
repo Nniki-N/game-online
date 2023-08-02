@@ -6,6 +6,7 @@ import 'package:game/domain/entities/language.dart';
 import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
 import 'package:game/presentation/bloc/language_bloc/language_state.dart';
 import 'package:game/presentation/screens/settings_screens/language_settings_screen/language_list_view_item.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,9 +16,13 @@ class LanguageSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+
     return BlocBuilder<LanguageBloc, LanguageState>(
       builder: (context, languageState) {
         return Scaffold(
+          backgroundColor: backgroundTheme.color,
           body: Padding(
             padding: EdgeInsets.only(
               top: 45.h,

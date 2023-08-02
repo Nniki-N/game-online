@@ -16,13 +16,14 @@ import 'package:game/presentation/bloc/game_bloc/game_event.dart';
 import 'package:game/presentation/bloc/game_bloc/game_state.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
-import 'package:game/presentation/screens/game_screens/field.dart';
-import 'package:game/presentation/screens/game_screens/leave_game_room.dart';
-import 'package:game/presentation/screens/game_screens/online_footer.dart';
-import 'package:game/presentation/screens/game_screens/online_header.dart';
-import 'package:game/presentation/screens/game_screens/row_with_buttons.dart';
-import 'package:game/presentation/widgets/dialogs/show_accept_or_deny_dialog.dart';
-import 'package:game/presentation/widgets/dialogs/show_notification_dialog.dart';
+import 'package:game/presentation/screens/game_screens/online_game_screen/field.dart';
+import 'package:game/presentation/screens/game_screens/online_game_screen/leave_game_room.dart';
+import 'package:game/presentation/screens/game_screens/online_game_screen/online_footer.dart';
+import 'package:game/presentation/screens/game_screens/online_game_screen/online_header.dart';
+import 'package:game/presentation/screens/game_screens/online_game_screen/row_with_buttons.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/widgets/popups/show_accept_or_deny_popup.dart';
+import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnlineGameScreen extends StatelessWidget {
@@ -36,8 +37,10 @@ class OnlineGameScreen extends StatelessWidget {
     final Stream<Chips?> chipStream =
         chipStreamController.stream.asBroadcastStream();
 
-    // final AccountBloc accountBloc = context.watch<AccountBloc>();
     final AccountBloc accountBloc = context.read<AccountBloc>();
+
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
 
     return BlocProvider(
       create: (context) => GameBloc(
@@ -64,7 +67,7 @@ class OnlineGameScreen extends StatelessWidget {
 
             // Shows a popup if another popup is not opened.
             if (!isPopUpShown) {
-              showAcceptOrDenyDialog(
+              showAcceptOrDenyPopUp(
                 context: context,
                 dialogTitle: AppLocalizations.of(context)!.secondPlayerLeft,
                 dialogContent:
@@ -128,7 +131,7 @@ class OnlineGameScreen extends StatelessWidget {
                         .firstWhere((winner) => winner.uid == winnerUid)
                         .username;
 
-                showAcceptOrDenyDialog(
+                showAcceptOrDenyPopUp(
                   context: context,
                   dialogTitle: AppLocalizations.of(context)!.gameFinished,
                   dialogContent:
@@ -189,6 +192,7 @@ class OnlineGameScreen extends StatelessWidget {
           builder: (context, gameState) {
             // Layout of the game sceen.
             return Scaffold(
+              backgroundColor: backgroundTheme.color,
               body: Column(
                 children: [
                   const OnlineHeader(),

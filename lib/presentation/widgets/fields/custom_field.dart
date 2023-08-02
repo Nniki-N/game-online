@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/field_theme.dart';
 
 /// A custom form field.
 ///
@@ -39,13 +39,15 @@ class CustomField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final FieldTheme fieldTheme = Theme.of(context).extension<FieldTheme>()!;
+
     return Container(
       height: 50.h,
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: CustomColors.backgroundLightGrayColor,
-        borderRadius: BorderRadius.circular(10.w),
+        color: fieldTheme.backgroundColor,
+        borderRadius: fieldTheme.borderRadius,
       ),
       child: TextFormField(
         obscureText: obscureText,
@@ -54,18 +56,18 @@ class CustomField extends StatelessWidget {
         keyboardType: keyboardType,
         // The field decoration.
         textAlign: TextAlign.left,
-        cursorColor: CustomColors.mainColor,
+        cursorColor: fieldTheme.cursorColor,
         style: TextStyle(
           fontSize: 17.sp,
           fontWeight: FontWeight.w400,
-          color: Colors.black,
+          color: fieldTheme.textColor,
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: TextStyle(
             fontSize: 17.sp,
             fontWeight: FontWeight.w400,
-            color: CustomColors.fieldGreyTextColor,
+            color: fieldTheme.hintextColor,
           ),
           isDense: true,
           border: InputBorder.none,

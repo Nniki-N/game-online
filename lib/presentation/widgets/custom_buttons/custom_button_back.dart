@@ -1,20 +1,21 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ButtonTheme, IconTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/button_theme.dart';
+import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/resources/resources.dart';
 
 /// A custom text button with an icon.
 ///
 /// All fields are set by default.
 ///
-/// [color] is a color of a button and a text. By default is CustomColors.mainColor
+/// [color] is a color of a button. By default is ButtonTheme.backgroundColor.
 ///
 /// [height] is a height of a button. By default is 40.h.
 ///
 /// [width] is a width of a button. By default is 40.w.
 ///
-/// [borderRadius] is a border radius of a button. By default is 8.w.
+/// [borderRadius] is a border radius of a button. By default is ButtonTheme.borderRadius2.
 ///
 /// [svgPicture] is an icon that is positioned on the center of the button.
 ///
@@ -40,6 +41,9 @@ class CustomButtonBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
+    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -47,15 +51,16 @@ class CustomButtonBack extends StatelessWidget {
         width: width ?? 40.w,
         height: height ?? 40.w,
         decoration: BoxDecoration(
-            color: color ?? CustomColors.mainColor,
-            borderRadius: borderRadius ?? BorderRadius.circular(8.w)),
+          color: color ?? buttonTheme.backgroundColor,
+          borderRadius: borderRadius ?? buttonTheme.borderRadius2,
+        ),
         clipBehavior: Clip.hardEdge,
         alignment: Alignment.center,
         child: svgPicture ??
             SvgPicture.asset(
-              Svgs.arrowBackIcon,
-              colorFilter: const ColorFilter.mode(
-                Colors.white,
+              Svgs.arrowBack,
+              colorFilter: ColorFilter.mode(
+                iconTheme.color4,
                 BlendMode.srcIn,
               ),
             ),

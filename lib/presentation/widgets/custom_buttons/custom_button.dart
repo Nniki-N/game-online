@@ -1,19 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ButtonTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 
 /// A custom flat button.
 ///
 /// Only [text] has to be set, another fields are set by default.
 ///
-/// [backgroundColor] is a color of a button. By default is CustomColors.mainColor.
+/// [backgroundColor] is a color of a button. By default is ButtonTheme.backgroundColor.
 ///
 /// [height] is a height of a button. By default is 50.h.
 ///
 /// [width] is a width of a button. By default is double.infinity.
 ///
-/// [borderRadius] is a border radius of a button. By default is 10.h.
+/// [borderRadius] is a border radius of a button. By default is ButtonTheme.borderRadius.
 ///
 /// [text] is a text that describes meaning of the button.
 ///
@@ -51,6 +51,8 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
+    
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -59,14 +61,14 @@ class CustomButton extends StatelessWidget {
         width: width ?? double.infinity,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: backgroundColor ?? CustomColors.mainColor,
-          borderRadius: borderRadius ?? BorderRadius.circular(10.h),
+          color: backgroundColor ?? buttonTheme.backgroundColor,
+          borderRadius: borderRadius ?? buttonTheme.borderRadius,
         ),
         child: CustomText(
           text: text,
           textAlign: TextAlign.center,
           fontSize: fontSize ?? 17.sp,
-          color: foregroundColor ?? Colors.white,
+          color: foregroundColor ?? buttonTheme.textColor,
           fontWeight: fontWeight ?? FontWeight.w500,
         ),
       ),

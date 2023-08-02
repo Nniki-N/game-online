@@ -1,14 +1,16 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide IconTheme, TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/background_theme.dart';
+import 'package:game/presentation/theme/extensions/icon_theme.dart';
+import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/texts/custom_text.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -19,6 +21,11 @@ class WaitingRoomScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+    final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
+    final BackgroundTheme backgroundTheme =
+        Theme.of(context).extension<BackgroundTheme>()!;
+        
     return BlocConsumer<RoomBloc, RoomState>(
       listener: (context, roomState) {
         // Navigates user back to the main screen if the user is outside the room.
@@ -49,6 +56,7 @@ class WaitingRoomScreen extends StatelessWidget {
         }
 
         return Scaffold(
+          backgroundColor: backgroundTheme.color,
           body: Stack(
             children: [
               Padding(
@@ -58,7 +66,7 @@ class WaitingRoomScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       LoadingAnimationWidget.hexagonDots(
-                        color: CustomColors.mainColor,
+                        color: iconTheme.color2,
                         size: 100.w,
                       ),
                       SizedBox(height: 35.h),
@@ -66,7 +74,7 @@ class WaitingRoomScreen extends StatelessWidget {
                         text: waitingText,
                         maxLines: 4,
                         textAlign: TextAlign.center,
-                        color: CustomColors.secondTextColor,
+                        color: textTheme.color3,
                       ),
                     ],
                   ),

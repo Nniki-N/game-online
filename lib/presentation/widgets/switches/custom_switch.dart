@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SwitchTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/switch_theme.dart';
 
 class CustomSwitch extends StatefulWidget {
   final bool isSelected;
@@ -27,9 +27,11 @@ class _CustomSwitchState extends State<CustomSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    final double switchBodyHight = 10.h;
-    final double switchBodyWidth = 24.w;
-    final double trackSize = 14.w;
+    final double switchBodyHight = 16.h;
+    final double switchBodyWidth = 36.w;
+    final double trackSize = 20.w;
+
+    final SwitchTheme switchTheme = Theme.of(context).extension<SwitchTheme>()!;
 
     return GestureDetector(
       onTap: () {
@@ -45,7 +47,9 @@ class _CustomSwitchState extends State<CustomSwitch> {
             width: switchBodyWidth,
             height: switchBodyHight,
             decoration: BoxDecoration(
-              color: Colors.grey.shade400,
+              color: isSelected
+                  ? switchTheme.activeBackgroundColor
+                  : switchTheme.inactiveBackgroundColor,
               borderRadius: BorderRadius.circular(10.w),
             ),
           ),
@@ -57,8 +61,9 @@ class _CustomSwitchState extends State<CustomSwitch> {
               width: trackSize,
               height: trackSize,
               decoration: BoxDecoration(
-                color:
-                    isSelected ? CustomColors.mainColor : Colors.grey.shade600,
+                color: isSelected
+                    ? switchTheme.activeForegroundColor
+                    : switchTheme.inactiveForegroundColor,
                 borderRadius: BorderRadius.circular(10.w),
               ),
             ),

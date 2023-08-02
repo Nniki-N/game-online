@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/constants/colors_constants.dart';
+import 'package:game/presentation/theme/extensions/slider_them.dart'
+    as custom_slider;
 
 class CustomSlider extends StatefulWidget {
   final double sliderHeight;
@@ -35,6 +36,9 @@ class _CustomSliderState extends State<CustomSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final custom_slider.SliderTheme sliderTheme =
+        Theme.of(context).extension<custom_slider.SliderTheme>()!;
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -42,10 +46,11 @@ class _CustomSliderState extends State<CustomSlider> {
           height: widget.sliderHeight,
           child: SliderTheme(
             data: SliderThemeData(
-              activeTrackColor: CustomColors.mainDarkColor,
-              inactiveTrackColor: CustomColors.mainMudColor,
-              thumbColor: CustomColors.mainDarkColor,
-              activeTickMarkColor: Colors.transparent,
+              activeTrackColor: sliderTheme.activeTrackColor,
+              inactiveTrackColor: sliderTheme.inactiveTrackColor,
+              thumbColor: sliderTheme.thumbColor,
+              activeTickMarkColor: sliderTheme.activeTickMarkColor,
+              inactiveTickMarkColor: sliderTheme.inactiveTickMarkColor,
               trackHeight: widget.trackHeight,
               thumbShape: RoundSliderThumbShape(
                 enabledThumbRadius: widget.sliderHeight / 2,
@@ -76,7 +81,7 @@ class _CustomSliderState extends State<CustomSlider> {
             width: widget.sliderSideBarsWidth,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2.w),
-              color: CustomColors.mainDarkColor,
+              color: sliderTheme.sideBarColor,
             ),
           ),
         ),
@@ -88,7 +93,7 @@ class _CustomSliderState extends State<CustomSlider> {
             width: widget.sliderSideBarsWidth,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2.w),
-              color: CustomColors.mainDarkColor,
+              color: sliderTheme.sideBarColor,
             ),
           ),
         ),
