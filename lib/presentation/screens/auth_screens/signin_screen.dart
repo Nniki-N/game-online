@@ -26,9 +26,9 @@ import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_icon_outlined_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_outlined_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_text_button.dart';
-import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
-import 'package:game/presentation/widgets/fields/custom_field.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_popups/show_notification_popup.dart';
+import 'package:game/presentation/widgets/custom_fields/custom_field.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -60,9 +60,9 @@ class SignInScreen extends StatelessWidget {
           }
         },
         child: BlocConsumer<AuthBloc, AuthState>(
-          listener: (context, state) {
+          listener: (context, authState) {
             // Checks if an error occurs and if error message has to be shown.
-            final AuthError? authError = state.error;
+            final AuthError? authError = authState.error;
             final bool showPopupWithError =
                 authError is AuthErrorInvalidEmail ||
                     authError is AuthErrorInvalidPassword ||
@@ -76,14 +76,14 @@ class SignInScreen extends StatelessWidget {
 
             // Displays an error message if needed.
             if (authError != null && showPopupWithError) {
-              showNotificationDialog(
+              showNotificationPopUp(
                 context: context,
                 dialogTitle: authError.errorTitle,
                 dialogContent: authError.errorText,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
             } else if (authError != null && showPopupWithBasicSentences) {
-              showNotificationDialog(
+              showNotificationPopUp(
                 context: context,
                 dialogTitle: AppLocalizations.of(context)!.authenticationError,
                 dialogContent:
@@ -93,15 +93,16 @@ class SignInScreen extends StatelessWidget {
             }
 
             // Navigates to the main screen if the user is logged in.
-            else if (state is LoggedInAuthState) {
+            else if (authState is LoggedInAuthState) {
               log('signin ------------------ go to the main');
               context.read<AccountBloc>().add(const InitializeAccountEvent());
               AutoRouter.of(context).replace(const MainRouter());
             }
           },
-          builder: (context, state) {
+          builder: (context, authState) {
             // Loading screen.
-            if (state is LoadingAuthState || state is LoggedInAuthState) {
+            if (authState is LoadingAuthState ||
+                authState is LoggedInAuthState) {
               return WillPopScope(
                 onWillPop: () async {
                   return false;

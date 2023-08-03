@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide ButtonTheme;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 
 /// A custom text button with an icon.
 ///

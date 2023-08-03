@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/theme/extensions/notification_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

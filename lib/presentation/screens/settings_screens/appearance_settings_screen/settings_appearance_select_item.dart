@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/theme/extensions/radio_button_theme.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 
 class SettingsAppearanceSelectItem extends StatelessWidget {
   final String text;

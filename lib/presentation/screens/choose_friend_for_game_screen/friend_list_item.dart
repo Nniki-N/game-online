@@ -1,17 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/domain/entities/account.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
 class FriendsListItem extends StatelessWidget {
-  final String username;
+  final Account account;
   final VoidCallback? onTap;
 
   const FriendsListItem({
     super.key,
-    required this.username,
+    required this.account,
     required this.onTap,
   });
 
@@ -34,7 +34,7 @@ class FriendsListItem extends StatelessWidget {
             ),
           ),
           SizedBox(width: 10.w),
-          CustomText(text: username),
+          CustomText(text: account.username),
         ],
       ),
     );

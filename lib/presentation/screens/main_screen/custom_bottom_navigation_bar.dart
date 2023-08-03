@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/theme/extensions/bottom_bar_theme.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ionicons/ionicons.dart';
 

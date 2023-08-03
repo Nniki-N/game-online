@@ -78,5 +78,13 @@
   "registerYourAccount": "Register your account",
   "allYourScoreWillBeSaved": "All your score will be saved",
   "pleaseEnterYourEmailAddress": "Please enter your email address",
-  "emailAddressIsIncorrect": "Email address is incorrect"
+  "emailAddressIsIncorrect": "Email address is incorrect",
+  "youDidNotAddFriendsToYourConnections": "You did not add friends to your connections. But you can do it now.",
+  "addingFriendError": "Adding friend error",
+  "somethingWentWrongWhileAddingFriend": "Something went wrong while adding friend, please try again",
+  "offerAGame": "Offer a game",
+  "removeFromFriends": "Remove from friends",
+  "remove": "Remove",
+  "friendWasAdded": "Friend was added",
+  "thisUserWasAddedToYourConnections": "This user was added to your connections"
 }

@@ -13,7 +13,7 @@ import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/screens/main_screen/custom_bottom_navigation_bar.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
-import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
+import 'package:game/presentation/widgets/custom_popups/show_notification_popup.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainScreen extends StatefulWidget {
@@ -43,7 +43,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
         // Displays an error message if needed.
         if (showPopupWithBasicSentences) {
-          showNotificationDialog(
+          showNotificationPopUp(
             context: context,
             dialogTitle: AppLocalizations.of(context)!.roomError,
             dialogContent:
@@ -111,7 +111,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
 
             // Displays an error message if needed.
             if (showPopupWithBasicSentences) {
-              showNotificationDialog(
+              showNotificationPopUp(
                 context: context,
                 dialogTitle: AppLocalizations.of(context)!.roomError,
                 dialogContent:

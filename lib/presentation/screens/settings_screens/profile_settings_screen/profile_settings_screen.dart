@@ -19,8 +19,8 @@ import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_outlined_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_text_button.dart';
-import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
-import 'package:game/presentation/widgets/fields/custom_field.dart';
+import 'package:game/presentation/widgets/custom_popups/show_notification_popup.dart';
+import 'package:game/presentation/widgets/custom_fields/custom_field.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -44,14 +44,14 @@ class ProfileSettingsScreen extends StatelessWidget {
 
           // Displays an error message.
           if (showPopupWithError) {
-            showNotificationDialog(
+            showNotificationPopUp(
               context: context,
               dialogTitle: accountError.errorTitle,
               dialogContent: accountError.errorText,
               buttonText: AppLocalizations.of(context)!.ok,
             );
           } else {
-            showNotificationDialog(
+            showNotificationPopUp(
               context: context,
               dialogTitle: AppLocalizations.of(context)!.error,
               dialogContent: AppLocalizations.of(context)!

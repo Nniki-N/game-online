@@ -116,7 +116,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
 
       // Retrieves a list of all users with specified login.
       final List<UserAccount> userAccountsList =
-          await _accountRepository.getAccountModelListWhere(
+          await _accountRepository.getUserAccountListWhere(
         fieldName: AccountSchema.login,
         fieldValue: event.newLogin,
       );

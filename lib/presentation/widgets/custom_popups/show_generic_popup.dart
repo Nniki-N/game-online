@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/theme/extensions/popup_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 
 typedef DialogOptionsBuilder<T> = Map<String, T?> Function();
 

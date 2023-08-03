@@ -8,7 +8,7 @@ import 'package:game/presentation/bloc/language_bloc/language_state.dart';
 import 'package:game/presentation/screens/settings_screens/language_settings_screen/language_list_view_item.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LanguageSettingsScreen extends StatelessWidget {

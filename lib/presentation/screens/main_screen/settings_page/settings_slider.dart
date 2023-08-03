@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/presentation/widgets/sliders/custom_slider.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_sliders/custom_slider.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 
 class SettingsSlider extends StatelessWidget {
   final String text;

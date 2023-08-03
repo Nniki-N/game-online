@@ -6,8 +6,8 @@ import 'package:game/presentation/bloc/game_bloc/game_event.dart';
 import 'package:game/presentation/screens/game_screens/online_game_screen/leave_game_room.dart';
 import 'package:game/presentation/theme/extensions/timer_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
-import 'package:game/presentation/widgets/popups/show_accept_or_deny_popup.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_popups/show_accept_or_deny_popup.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RowWithButtons extends StatelessWidget {

@@ -21,9 +21,9 @@ import 'package:game/presentation/widgets/validation_messages_list.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_text_button.dart';
-import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
-import 'package:game/presentation/widgets/fields/custom_field.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_popups/show_notification_popup.dart';
+import 'package:game/presentation/widgets/custom_fields/custom_field.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegistrationScreen extends StatelessWidget {
@@ -77,14 +77,14 @@ class RegistrationScreen extends StatelessWidget {
 
             // Displays an error message if needed.
             if (authError != null && showPopupWithError) {
-              showNotificationDialog(
+              showNotificationPopUp(
                 context: context,
                 dialogTitle: authError.errorTitle,
                 dialogContent: authError.errorText,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
             } else if (authError != null && showPopupWithBasicSentences) {
-              showNotificationDialog(
+              showNotificationPopUp(
                 context: context,
                 dialogTitle: AppLocalizations.of(context)!.registrationError,
                 dialogContent: AppLocalizations.of(context)!

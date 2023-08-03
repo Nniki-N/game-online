@@ -9,8 +9,8 @@ import 'package:game/presentation/screens/settings_screens/appearance_settings_s
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart';
-import 'package:game/presentation/widgets/switches/custom_switch.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_switches/custom_switch.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppearanceSettingsScreen extends StatelessWidget {

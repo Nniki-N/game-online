@@ -5,7 +5,7 @@ import 'package:game/domain/entities/language.dart';
 import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
 import 'package:game/presentation/bloc/language_bloc/language_event.dart';
 import 'package:game/presentation/theme/extensions/text_theme.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
 class LanguageListViewItem extends StatelessWidget {

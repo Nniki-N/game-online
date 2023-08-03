@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game/presentation/widgets/popups/show_generic_popup.dart';
+import 'package:game/presentation/widgets/custom_popups/show_generic_popup.dart';
 
 /// A custom method that shows just a dialog popup with the choice to cancel 
 /// or confirm the action.

@@ -6,7 +6,7 @@ import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/theme/extensions/settings_item_theme.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
 class ProfileDetailsContainer extends StatelessWidget {

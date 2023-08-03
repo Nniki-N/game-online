@@ -78,5 +78,13 @@
   "registerYourAccount": "Зареєструвати аккаунт",
   "allYourScoreWillBeSaved": "Усі ваші результати будуть збережені",
   "pleaseEnterYourEmailAddress": "Будь ласка, введіть адресу електронної пошти",
-  "emailAddressIsIncorrect": "Адреса електронної пошти неправильна"
+  "emailAddressIsIncorrect": "Адреса електронної пошти неправильна",
+  "youDidNotAddFriendsToYourConnections": "Ви не додали друзів до своїх зв’язків. Але ви можете зробити це зараз.",
+  "addingFriendError": "Помилка",
+  "somethingWentWrongWhileAddingFriend": "Під час додавання друга сталася помилка. Будь ласка, спробуйте ще раз",
+  "offerAGame": "Запропонувати гру",
+  "removeFromFriends": "Видалити з друзів",
+  "remove": "Видалити",
+  "friendWasAdded": "Друга додано",
+  "thisUserWasAddedToYourConnections": "Цього користувача додано до ваших зв’язків"
 }

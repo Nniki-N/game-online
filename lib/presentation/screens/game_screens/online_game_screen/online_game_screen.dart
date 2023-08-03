@@ -22,8 +22,8 @@ import 'package:game/presentation/screens/game_screens/online_game_screen/online
 import 'package:game/presentation/screens/game_screens/online_game_screen/online_header.dart';
 import 'package:game/presentation/screens/game_screens/online_game_screen/row_with_buttons.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
-import 'package:game/presentation/widgets/popups/show_accept_or_deny_popup.dart';
-import 'package:game/presentation/widgets/popups/show_notification_popup.dart';
+import 'package:game/presentation/widgets/custom_popups/show_accept_or_deny_popup.dart';
+import 'package:game/presentation/widgets/custom_popups/show_notification_popup.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnlineGameScreen extends StatelessWidget {
@@ -162,7 +162,7 @@ class OnlineGameScreen extends StatelessWidget {
 
               // Shows a popup if another popup is not opened.
               if (wrongMoveError) {
-                showNotificationDialog(
+                showNotificationPopUp(
                   context: context,
                   dialogTitle: gameRoomError.errorTitle,
                   dialogContent: gameRoomError.errorText,
@@ -174,7 +174,7 @@ class OnlineGameScreen extends StatelessWidget {
               else {
                 log('roomError in the online game room screen');
 
-                showNotificationDialog(
+                showNotificationPopUp(
                   context: context,
                   dialogTitle: AppLocalizations.of(context)!.gameError,
                   dialogContent: AppLocalizations.of(context)!

@@ -15,7 +15,7 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves an account data of the current user from the Firestore Database
   /// and returns [Account] if request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   @override
   Future<Account> getCurrentAccount() async {
@@ -35,7 +35,7 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves an account data of the current user from the Firestore Database
   /// and returns [UserAccount] if request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   @override
   Future<UserAccount> getCurrentUserAccount() async {
@@ -55,7 +55,7 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves an user account data from the Firestore Database
   /// and returns [UserAccount] if request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   @override
   Future<UserAccount> getUserAccount({required String uid}) async {
@@ -75,7 +75,7 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves a stream of changes of a account data of the current user from
   /// the Firestore Database and returns a stream of [UserAccount] if the request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   @override
   Stream<UserAccount> getCurrentUserAccountStream() {
@@ -95,7 +95,7 @@ class FirestoreAccountRepository implements AccountRepository {
   }
 
   /// Updates a user account data in the Firestore Database.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   @override
   Future<void> updateUserAccount({required UserAccount userAccount}) async {
@@ -113,10 +113,10 @@ class FirestoreAccountRepository implements AccountRepository {
 
   /// Retrieves a list of users where [fieldName] equals [fieldValue] from the Firestore Database
   /// and returns a list of [UserAccount] if the request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   @override
-  Future<List<UserAccount>> getAccountModelListWhere({
+  Future<List<UserAccount>> getUserAccountListWhere({
     required String fieldName,
     required dynamic fieldValue,
   }) async {

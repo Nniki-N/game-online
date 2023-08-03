@@ -6,8 +6,8 @@ import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/theme/extensions/popup_theme.dart';
 import 'package:game/presentation/theme/extensions/text_theme.dart';
-import 'package:game/presentation/widgets/texts/custom_text.dart';
-import 'package:game/presentation/widgets/loading_overlay/loading_overlay_controller.dart';
+import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
+import 'package:game/presentation/widgets/custom_loading_overlay/loading_overlay_controller.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 /// A custom fullscreen overlay.
