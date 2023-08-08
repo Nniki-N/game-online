@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/common/utils/avatar_selecting.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
@@ -27,11 +28,17 @@ class FriendsListItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.w),
             ),
             clipBehavior: Clip.hardEdge,
-            child: SvgPicture.asset(
-              Svgs.avatarGreen,
-              width: 40.w,
-              height: 40.w,
-            ),
+            child: account.avatarLink != null
+              ? Image.network(
+                  account.avatarLink!,
+                  width: 40.w,
+                  height: 40.w,
+                )
+              : SvgPicture.asset(
+                  selectRandomBasicAvatar(),
+                  width: 40.w,
+                  height: 40.w,
+                ),
           ),
           SizedBox(width: 10.w),
           CustomText(text: account.username),

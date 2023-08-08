@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/errors/game_room_error.dart';
+import 'package:game/common/utils/avatar_selecting.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
@@ -43,11 +44,17 @@ class ConnectionsFriendItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.w),
           ),
           clipBehavior: Clip.hardEdge,
-          child: SvgPicture.asset(
-            Svgs.avatarGreen,
-            width: 50.w,
-            height: 50.w,
-          ),
+          child: account.avatarLink != null
+              ? Image.network(
+                  account.avatarLink!,
+                  width: 50.w,
+                  height: 50.w,
+                )
+              : SvgPicture.asset(
+                  selectRandomBasicAvatar(),
+                  width: 50.w,
+                  height: 50.w,
+                ),
         ),
         SizedBox(width: 12.w),
         Expanded(

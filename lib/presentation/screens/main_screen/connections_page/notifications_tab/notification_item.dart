@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide ButtonTheme, Notification;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/common/utils/avatar_selecting.dart';
 import 'package:game/domain/entities/notification.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/theme/extensions/notification_theme.dart';
@@ -46,8 +47,14 @@ class NotificationItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.w),
                 ),
                 clipBehavior: Clip.hardEdge,
-                child: SvgPicture.asset(
-                  Svgs.avatarGreen,
+                child: notification.sender.avatarLink != null
+              ? Image.network(
+                  notification.sender.avatarLink!,
+                  width: 40.w,
+                  height: 40.w,
+                )
+              : SvgPicture.asset(
+                  selectRandomBasicAvatar(),
                   width: 40.w,
                   height: 40.w,
                 ),

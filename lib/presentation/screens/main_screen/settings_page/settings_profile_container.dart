@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/common/utils/avatar_selecting.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
@@ -19,7 +20,8 @@ class ProfileDetailsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SettingsItemTheme settingsItemTheme = Theme.of(context).extension<SettingsItemTheme>()!;
+    final SettingsItemTheme settingsItemTheme =
+        Theme.of(context).extension<SettingsItemTheme>()!;
 
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (context, accountState) {
@@ -45,11 +47,17 @@ class ProfileDetailsContainer extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8.w),
                     ),
                     clipBehavior: Clip.hardEdge,
-                    child: SvgPicture.asset(
-                      Svgs.avatarCyan,
-                      width: 61.w,
-                      height: 61.w,
-                    ),
+                    child: userAccount.avatarLink != null
+                        ? Image.network(
+                            userAccount.avatarLink!,
+                            width: 61.w,
+                            height: 61.w,
+                          )
+                        : SvgPicture.asset(
+                            randomUserAvatar,
+                            width: 61.w,
+                            height: 61.w,
+                          ),
                   ),
                   SizedBox(width: 17.w),
                   Column(
