@@ -114,13 +114,14 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
       // Selects only available to join game rooms.
       final List<GameRoom> availableGameRoomList = gameRoomList
-          .where((gameRoom) => gameRoom.players.length == 1)
+          .where(
+              (gameRoom) => gameRoom.players.length == 1 && !gameRoom.private)
           .toList();
 
       // If there is an available game room, joins it.
       // Otherwise, creates a new game room.
       if (availableGameRoomList.isEmpty) {
-        add(const CreateRoomEvent());
+        add(const CreateRoomEvent(private: false));
       } else {
         add(JoinRoomEvent(gameRoom: availableGameRoomList.first));
       }
@@ -145,7 +146,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       emit(const LoadingRoomState());
 
       // Creates game room.
-      GameRoom gameRoom = await _roomRepository.createGameRoom();
+      GameRoom gameRoom = await _roomRepository.createGameRoom(
+        private: event.private,
+      );
 
       // Adds the current user to the game room.
       add(JoinRoomEvent(gameRoom: gameRoom));
@@ -176,14 +179,13 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
       GameRoom gameRoom = event.gameRoom;
 
-      UserAccount currentUserAccount =
-          await _accountRepository.getCurrentUserAccount();
+      Account currentAccount = await _accountRepository.getCurrentAccount();
 
       // Creates a player to join.
       final Player playerToJoin = Player(
-        uid: currentUserAccount.uid,
-        username: currentUserAccount.username,
-        avatarLink: currentUserAccount.avatarLink,
+        uid: currentAccount.uid,
+        username: currentAccount.username,
+        avatarLink: currentAccount.avatarLink,
         chipsCount: {
           Chips.chipSize1: 3,
           Chips.chipSize2: 3,
@@ -198,14 +200,14 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
       );
 
       // Changes the current user account data to show that the user is in a game.
-      currentUserAccount = currentUserAccount.copyWith(
+      currentAccount = currentAccount.copyWith(
         isInGame: true,
         inGameRoomId: gameRoom.uid,
       );
 
       // Updates the user data according to joining the game room.
-      await _accountRepository.updateUserAccount(
-        userAccount: currentUserAccount,
+      await _accountRepository.updateAccount(
+        account: currentAccount,
       );
 
       // Shows that the user has to wait for a second player
@@ -253,27 +255,27 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
         gameRoomState: GameRoomState.result,
       );
 
-      UserAccount currentUserAccount =
-          await _accountRepository.getCurrentUserAccount();
+      Account currentAccount = await _accountRepository.getCurrentAccount();
 
       // Removes the current user from the game room.
       gameRoom = await _roomRepository.removePlayerFromGameRoom(
         gameRoom: gameRoom,
-        uid: currentUserAccount.uid,
+        uid: currentAccount.uid,
       );
 
       // Changes the current user account data to show that the user is not in a game.
-      currentUserAccount = currentUserAccount.copyWith(
+      currentAccount = currentAccount.copyWith(
         isInGame: false,
         inGameRoomId: '',
         gamesCount: event.leaveWithLoose
-            ? currentUserAccount.gamesCount + 1
-            : currentUserAccount.gamesCount,
+            ? currentAccount.gamesCount + 1
+            : currentAccount.gamesCount,
       );
 
       // Updates the user data according to leaving the game room.
-      await _accountRepository.updateUserAccount(
-          userAccount: currentUserAccount);
+      await _accountRepository.updateAccount(
+        account: currentAccount,
+      );
 
       // Deletes the game room if there are no player anymore.
       if (gameRoom.players.isEmpty) {

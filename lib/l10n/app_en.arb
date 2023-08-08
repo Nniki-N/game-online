@@ -26,7 +26,7 @@
   "wordAdd": "Add",
   "chooseFriend": "Choose friend",
   "gameRules": "Game rules",
-  "gameRulesText": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  "gameRulesText": "Welcome to Tic-Tac-Toe! In this unique twist on the classic game, each player has 9 tokens of varying sizes: large, medium, and small. The goal is simple: be the first to place three of your tokens in a straight line, either horizontally, vertically, or diagonally. Here's how to play: \n\nPlayers take turns to put one of their tokens on any empty cell within the grid, aiming to form a winning combination. The twist lies in the stacking feature: larger tokens can be placed on top of smaller ones, regardless of whose token it is. \n\nYou win as soon as you arrange three of your tokens in a row. This could be a line that goes through the columns, rows, or diagonals of the grid. \n\nRemember, the game also ends if the entire grid is filled, and no player achieves a winning alignment. This creates an exciting balance between strategic placement and preventing your opponent from achieving victory. Get ready to engage in a multidimensional battle of wits and strategy!",
   "secondPlayerLeft": "Second player left",
   "doYouWantToWaitForNewPlayer": "Do you want to wait for a new player?",
   "wait": "Wait",
@@ -86,5 +86,9 @@
   "removeFromFriends": "Remove from friends",
   "remove": "Remove",
   "friendWasAdded": "Friend was added",
-  "thisUserWasAddedToYourConnections": "This user was added to your connections"
+  "thisUserWasAddedToYourConnections": "This user was added to your connections",
+  "youDontHaveAnyNotifications": "You do not have any notifications",
+  "waitingForSecondPlayer": "Waiting for a second player, please wait a bit...",
+  "refusal": "Refusal",
+  "yourGameOfferWasDenied": "Your game offer was denied"
 }

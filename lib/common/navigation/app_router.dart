@@ -4,7 +4,6 @@ import 'package:game/presentation/screens/choose_friend_for_game_screen/choose_f
 import 'package:game/presentation/screens/auth_screens/signin_screen.dart';
 import 'package:game/presentation/screens/auth_screens/registration_screen.dart';
 import 'package:game/presentation/screens/game_rules_screen/game_rules_screen.dart';
-import 'package:game/presentation/screens/game_screens/offline_game_screen/offline_game_screen.dart';
 import 'package:game/presentation/screens/game_screens/online_game_screen/online_game_screen.dart';
 import 'package:game/presentation/screens/game_screens/waiting_room_screen/waiting_room_screen.dart';
 import 'package:game/presentation/screens/initial_screen/initial_screen.dart';
@@ -115,12 +114,6 @@ import 'package:game/presentation/screens/settings_screens/settings_register_scr
       path: '/waitingRoom',
       page: WaitingRoomScreen,
       name: 'WaitingRoomRouter',
-      maintainState: false,
-    ),
-    AutoRoute(
-      path: '/offlineGame',
-      page: OfflineGameScreen,
-      name: 'OfflineGameRouter',
       maintainState: false,
     ),
     AutoRoute(

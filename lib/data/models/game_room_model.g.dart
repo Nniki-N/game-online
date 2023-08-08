@@ -9,6 +9,7 @@ part of 'game_room_model.dart';
 GameRoomModel _$GameRoomModelFromJson(Map<String, dynamic> json) =>
     GameRoomModel(
       uid: json['uid'] as String,
+      private: json['private'] as bool,
       players: (json['players'] as List<dynamic>)
           .map((e) => PlayerModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -21,6 +22,7 @@ GameRoomModel _$GameRoomModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$GameRoomModelToJson(GameRoomModel instance) =>
     <String, dynamic>{
       'uid': instance.uid,
+      'private': instance.private,
       'players': instance.players.map((e) => e.toJson()).toList(),
       'gameRoomState': _$GameRoomStateEnumMap[instance.gameRoomState]!,
       'winnerUid': instance.winnerUid,

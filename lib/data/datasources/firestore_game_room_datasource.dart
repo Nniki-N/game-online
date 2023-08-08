@@ -24,11 +24,12 @@ class FirestoreGameRoomDatasource {
   /// Returns the created [GameRoomModel].
   /// 
   /// Throws [GameRoomErrorCreatingRoom] when the error occurs.
-  Future<GameRoomModel> createGameRoom() async {
+  Future<GameRoomModel> createGameRoom({required bool private}) async {
     try {
       // Creates a new game room with data of the first player.
       final GameRoomModel gameRoomModel = GameRoomModel(
         uid: const Uuid().v4(),
+        private: private,
         players: const [],
         gameRoomState: GameRoomState.init,
         winnerUid: '',

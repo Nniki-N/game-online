@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game/common/errors/account_error.dart';
@@ -24,6 +25,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     on<InitializeFriendsEvent>(_init);
     on<AddFriendsEvent>(_addFriend);
     on<RemoveFriendsEvent>(_removeFriend);
+    on<StopListenUpdatesFriendsEvent>(_stopListenStream);
   }
 
   /// Initializes a friends list.
@@ -34,6 +36,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     Emitter<FriendsState> emit,
   ) async {
     try {
+      log('start friends initializing');
       // Loads a friends list and indicates that this list was retrieved.
       await _loadFriendsList(emit: emit);
 
@@ -42,8 +45,10 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
           _accountRepository.getCurrentUserAccountStream().asBroadcastStream();
 
       // Retrieves a list of friends uid of a current user.
-      final UserAccount currentUserAccount = await _accountRepository.getCurrentUserAccount();
-      final List<String> initialFriendsUidList = currentUserAccount.friendsUidList;
+      final UserAccount currentUserAccount =
+          await _accountRepository.getCurrentUserAccount();
+      final List<String> initialFriendsUidList =
+          currentUserAccount.friendsUidList;
 
       // Listens to changes of the account steam and emits if a friends list was changed.
       await _listenStream(
@@ -55,7 +60,9 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
             await _loadFriendsList(emit: emit);
           }
         },
-        onError: (error, stackTrace) {},
+        onError: (error, stackTrace) async {
+          await streamSubscription.cancel();
+        },
       );
     } on FriendsError catch (exeption) {
       emit(ErrorFriendsState(
@@ -188,5 +195,22 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
 
     // Indicates that friends list was retrieved.
     emit(LoadedFriendsState(friendsList: friendsList));
+  }
+
+  /// Closes the stream subscription.
+  Future<void> _stopListenStream(
+    StopListenUpdatesFriendsEvent event,
+    Emitter<FriendsState> emit,
+  ) async {
+    await streamSubscription.cancel();
+    emit(const UnlistenedFriendsState());
+  }
+
+
+  /// Closes the stream subscription.
+  @override
+  Future<void> close() async {
+    await streamSubscription.cancel();
+    super.close();
   }
 }

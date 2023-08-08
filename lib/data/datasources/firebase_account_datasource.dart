@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:game/common/errors/account_error.dart';
@@ -27,7 +29,7 @@ class FirebaseAccountDatasource {
   ///
   /// Throws [AccountErrorRetrievingAccount] if a [User] retrieving from local
   /// Firebase Database failed.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   Future<AccountModel> getCurrentAccountModel() async {
     try {
@@ -48,7 +50,7 @@ class FirebaseAccountDatasource {
 
   /// Retrieves a user account data from the Firestore Database and returns
   /// [AccountModel] if the request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   Future<AccountModel> getAccountModel({required String uid}) async {
     try {
@@ -68,7 +70,7 @@ class FirebaseAccountDatasource {
   ///
   /// Throws [AccountErrorRetrievingAccount] if a [User] retrieving from local
   /// Firebase Database failed.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   Stream<AccountModel> getCurrentAccountModelStream() {
     try {
@@ -86,21 +88,25 @@ class FirebaseAccountDatasource {
   }
 
   /// Updates a user account data in the Firestore Database.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
+      log('notificationsUidList inside account datasource: ${accountModel.notificationsUidList}');
+
       await _firebaseAccountDatasourceHelper.updateAccount(
         accountModel: accountModel,
       );
+
+      log('updated inside datasource');
     } catch (exception) {
       rethrow;
     }
   }
 
-  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the 
+  /// Retrieves a list of users where [fieldName] equals [fieldValue] from the
   /// Firestore Database and returns a list of [AccountModel] if the request was successful.
-  /// 
+  ///
   /// Rethrows [AccountError] when the error occurs.
   Future<List<AccountModel>> getAccountModelListWhere({
     required String fieldName,

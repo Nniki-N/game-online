@@ -12,6 +12,10 @@ import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_bloc.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_event.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
@@ -170,7 +174,16 @@ class ProfileSettingsScreen extends StatelessWidget {
                     border: buttonTheme.border3,
                     onTap: () {
                       log('profile settings ------------------ log out button pressed');
+
+                      context
+                          .read<NotificationBloc>()
+                          .add(const StopListenUpdatesNotificationEvent());
+                      context
+                          .read<FriendsBloc>()
+                          .add(const StopListenUpdatesFriendsEvent());
+
                       context.read<AuthBloc>().add(const LogOutAuthEvent());
+
                       context
                           .read<AccountBloc>()
                           .add(const LogOutAccountEvent());

@@ -176,4 +176,11 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     await streamSubscription.cancel();
     emit(const EmptyAccountState());
   }
+
+  /// Closes the stream subscription.
+  @override
+  Future<void> close() async {
+    await streamSubscription.cancel();
+    super.close();
+  }
 }

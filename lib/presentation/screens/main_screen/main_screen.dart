@@ -91,12 +91,24 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       },
       child: BlocListener<RoomBloc, RoomState>(
         listener: (context, roomState) {
-          log('main screen --------- state $roomState');
+          log('main screen --------- state //');
 
           // Navigates user to the waiting room screen.
           if (roomState is SearchingRoomState) {
             log('main screen ------------------ go to the waiting room screen');
-            AutoRouter.of(context).replace(const WaitingRoomRouter());
+            AutoRouter.of(context).replaceAll(const [WaitingRoomRouter()]);
+          }
+
+          // Navigates user to the waiting room screen.
+          else if (roomState is InRoomState) {
+            log('main screen ------------------ go to the waiting room screen when the room is created');
+            AutoRouter.of(context).replaceAll(const [WaitingRoomRouter()]);
+          }
+
+          // Navigates to the online game room screen if the game room is full.
+          else if (roomState  is InFullRoomState) {
+            log('main screen ------------------ go to the online game room screen');
+            AutoRouter.of(context).replaceAll(const [OnlineGameRouter()]);
           }
 
           // Displays an error message if needed.

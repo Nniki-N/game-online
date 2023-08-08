@@ -20,11 +20,11 @@ class FirestoreRoomRepository implements RoomRepository {
   ///
   /// Rethrows [GameRoomError] when the error occurs.
   @override
-  Future<GameRoom> createGameRoom() async {
+  Future<GameRoom> createGameRoom({required bool private}) async {
     try {
       // Creates a new game room document in the Firestore Database.
       final GameRoomModel gameRoomModel =
-          await _firestoreGameRoomDatasource.createGameRoom();
+          await _firestoreGameRoomDatasource.createGameRoom(private: private);
 
       final GameRoom gameRoom = GameRoom.fromGameRoomModel(
         gameRoomModel: gameRoomModel,

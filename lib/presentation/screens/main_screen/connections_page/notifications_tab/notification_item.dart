@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart' hide ButtonTheme;
+import 'package:flutter/material.dart' hide ButtonTheme, Notification;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/domain/entities/notification.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/theme/extensions/notification_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
@@ -9,13 +10,13 @@ import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationItem extends StatelessWidget {
-  final String username;
+  final Notification notification;
   final VoidCallback? onTapDeny;
   final VoidCallback? onTapAccept;
 
   const NotificationItem({
     super.key,
-    required this.username,
+    required this.notification,
     this.onTapDeny,
     this.onTapAccept,
   });
@@ -53,7 +54,7 @@ class NotificationItem extends StatelessWidget {
               ),
               SizedBox(width: 10.w),
               CustomText(
-                text: username,
+                text: notification.sender.username,
                 color: notificationTheme.usernameColor,
               ),
             ],
@@ -69,7 +70,7 @@ class NotificationItem extends StatelessWidget {
           SizedBox(height: 15.h),
           CustomText(
             text:
-                '${AppLocalizations.of(context)!.player} $username ${AppLocalizations.of(context)!.asksToBeYourFriend}',
+                '${AppLocalizations.of(context)!.player} ${notification.sender.username} ${AppLocalizations.of(context)!.asksToBeYourFriend}',
             fontSize: 14.sp,
             color: notificationTheme.textColor,
             maxLines: 4,

@@ -26,7 +26,7 @@
   "wordAdd": "Додати",
   "chooseFriend": "Виберіть друга",
   "gameRules": "Правила гри",
-  "gameRulesText": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  "gameRulesText": "Ласкаво просимо до Tic-Tac-Toe! У цьому унікальному варіанті класичної гри кожен гравець має 9 жетонів різного розміру: великий, середній і малий. Мета проста: першим розмістіть три свої жетони по прямій лінії, горизонтально, вертикально або діагонально. Ось як грати: \n\nГравці по черзі кладуть один зі своїх жетонів на будь-яку порожню клітинку в сітці, прагнучи сформувати виграшну комбінацію. Особливість полягає в функції стекування: більші жетони можна розміщувати поверх менших, незалежно від того, чий це жетон. \n\nВи виграєте, як тільки розмістите три свої жетони в ряд. Це може бути лінія, яка проходить через стовпці, рядки або діагоналі сітки. \n\nПам’ятайте, що гра також закінчується, якщо вся сітка заповнена, і жоден гравець не досягає виграшного вирівнювання. Це створює захоплюючий баланс між стратегічним розміщенням і запобіганням перемоги суперника. Приготуйтеся до багатовимірної битви розуму та стратегії!",
   "secondPlayerLeft": "Другий гравець вийшов",
   "doYouWantToWaitForNewPlayer": "Хочете чекати на нового гравця?",
   "wait": "Чекати",
@@ -86,5 +86,9 @@
   "removeFromFriends": "Видалити з друзів",
   "remove": "Видалити",
   "friendWasAdded": "Друга додано",
-  "thisUserWasAddedToYourConnections": "Цього користувача додано до ваших зв’язків"
+  "thisUserWasAddedToYourConnections": "Цього користувача додано до ваших зв’язків",
+  "youDontHaveAnyNotifications": "У вас немає сповіщень",
+  "waitingForSecondPlayer": "В очікуванні на другого гравця, зачекайте трохи...",
+  "refusal": "Відмова",
+  "yourGameOfferWasDenied": "Ваше запрошення до гри було відхилено"
 }

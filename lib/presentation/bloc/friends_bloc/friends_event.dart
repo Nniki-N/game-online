@@ -31,3 +31,8 @@ class RemoveFriendsEvent extends FriendsEvent {
     required this.friendUid,
   });
 }
+
+@immutable
+class StopListenUpdatesFriendsEvent extends FriendsEvent {
+  const StopListenUpdatesFriendsEvent();
+}

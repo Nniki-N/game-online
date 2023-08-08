@@ -9,8 +9,10 @@ import 'package:game/presentation/bloc/appearance_bloc/appearance_bloc.dart';
 import 'package:game/presentation/bloc/appearance_bloc/appearance_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_event.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
 import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
 import 'package:game/presentation/bloc/language_bloc/language_event.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:game/resources/resources.dart';
@@ -72,6 +74,19 @@ Future<void> main() async {
           create: (_) => AppearanceBloc(
             appearanceRepository: getIt(),
           )..add(const InitializeAppearanceEvent()),
+        ),
+        BlocProvider(
+          create: (_) => NotificationBloc(
+            notificationRepository: getIt(),
+            accountRepository: getIt(),
+            roomRepository: getIt()
+          ),
+        ),
+        BlocProvider(
+          create: (context) => FriendsBloc(
+            friendsRepository: getIt(),
+            accountRepository: getIt(),
+          ),
         ),
       ],
       child: const MyApp(),

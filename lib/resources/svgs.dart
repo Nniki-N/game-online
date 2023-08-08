@@ -22,7 +22,6 @@ class Svgs {
   static const String gogle = 'assets/svgs/gogle.svg';
   static const String inform = 'assets/svgs/inform.svg';
   static const String logoIngame = 'assets/svgs/logo-ingame.svg';
+  static const String logo = 'assets/svgs/logo.svg';
   static const String signInSeparator = 'assets/svgs/sign-in-separator.svg';
-  static const String splashScreen = 'assets/svgs/splash-screen.svg';
-  static const String splashScreen2 = 'assets/svgs/splash_screen2.svg';
 }

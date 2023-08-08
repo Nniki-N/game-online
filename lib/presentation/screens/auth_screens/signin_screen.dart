@@ -16,6 +16,10 @@ import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_event.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_bloc.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_event.dart';
 import 'package:game/presentation/screens/auth_screens/signin_form_separator.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
@@ -96,6 +100,8 @@ class SignInScreen extends StatelessWidget {
             else if (authState is LoggedInAuthState) {
               log('signin ------------------ go to the main');
               context.read<AccountBloc>().add(const InitializeAccountEvent());
+              context.read<FriendsBloc>().add(const InitializeFriendsEvent());
+              context.read<NotificationBloc>().add(const InitializeNotificationEvent());
               AutoRouter.of(context).replace(const MainRouter());
             }
           },

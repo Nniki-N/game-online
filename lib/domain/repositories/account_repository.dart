@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/domain/entities/account.dart';
+import 'package:game/common/errors/account_error.dart';
 
 @immutable
 abstract class AccountRepository {
@@ -30,6 +31,11 @@ abstract class AccountRepository {
   ///
   /// Rethrows [AccountError] when the error occurs.
   Future<void> updateUserAccount({required UserAccount userAccount});
+
+  /// Updates a user account data.
+  ///
+  /// Rethrows [AccountError] when the error occurs.
+  Future<void> updateAccount({required Account account});
 
   /// Retrieves a list of users where [fieldName] equals [fieldValue]
   /// and returns a list of [UserAccount] if the request was successful.

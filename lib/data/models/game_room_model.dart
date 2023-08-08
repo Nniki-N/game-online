@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
 import 'package:game/common/utils/game_room_model_convertor.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -18,6 +17,8 @@ part 'game_room_model.g.dart';
 class GameRoomModel {
   @JsonKey(name: GameRoomSchema.uid)
   final String uid;
+  @JsonKey(name: GameRoomSchema.private)
+  final bool private;
   @JsonKey(name: GameRoomSchema.players)
   final List<PlayerModel> players;
   @JsonKey(name: GameRoomSchema.gameRoomState)
@@ -35,6 +36,7 @@ class GameRoomModel {
 
   const GameRoomModel({
     required this.uid,
+    required this.private,
     required this.players,
     required this.gameRoomState,
     required this.winnerUid,
@@ -48,6 +50,7 @@ class GameRoomModel {
   factory GameRoomModel.fromGameRoomEntity({required GameRoom gameRoom}) =>
       GameRoomModel(
         uid: gameRoom.uid,
+        private: gameRoom.private,
         players: gameRoom.players
             .map(
               (playerEntity) =>
@@ -72,6 +75,7 @@ class GameRoomModel {
 
   GameRoomModel copyWith({
     String? uid,
+    bool? private,
     List<PlayerModel>? players,
     GameRoomState? gameRoomState,
     String? winnerUid,
@@ -80,6 +84,7 @@ class GameRoomModel {
   }) {
     return GameRoomModel(
       uid: uid ?? this.uid,
+      private: private ?? this.private,
       players: players ?? this.players,
       gameRoomState: gameRoomState ?? this.gameRoomState,
       winnerUid: winnerUid ?? this.winnerUid,

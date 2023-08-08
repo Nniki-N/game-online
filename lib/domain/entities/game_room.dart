@@ -9,6 +9,7 @@ import 'package:game/domain/entities/player.dart';
 /// This entity can be converted from [GameRoomModel] model.
 class GameRoom {
   final String uid;
+  final bool private;
   final List<Player> players;
   final GameRoomState gameRoomState;
   final String winnerUid;
@@ -17,6 +18,7 @@ class GameRoom {
 
   const GameRoom({
     required this.uid,
+    required this.private,
     required this.players,
     required this.gameRoomState,
     required this.winnerUid,
@@ -27,6 +29,7 @@ class GameRoom {
   factory GameRoom.fromGameRoomModel({required GameRoomModel gameRoomModel}) =>
       GameRoom(
         uid: gameRoomModel.uid,
+        private: gameRoomModel.private,
         players: gameRoomModel.players.map(
           (playerModel) => Player.fromPlayerModel(
             playerModel: playerModel,
@@ -46,6 +49,7 @@ class GameRoom {
 
   GameRoom copyWith({
     String? uid,
+    bool? private,
     List<Player>? players,
     GameRoomState? gameRoomState,
     String? winnerUid,
@@ -54,6 +58,7 @@ class GameRoom {
   }) {
     return GameRoom(
       uid: uid ?? this.uid,
+      private: private ?? this.private,
       players: players ?? this.players,
       gameRoomState: gameRoomState ?? this.gameRoomState,
       winnerUid: winnerUid ?? this.winnerUid,

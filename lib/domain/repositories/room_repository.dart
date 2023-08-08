@@ -12,7 +12,7 @@ abstract class RoomRepository {
   /// Returns [GameRoom] if a creating process is successful.
   /// 
   /// Rethrows [GameRoomError] when the error occurs.
-  Future<GameRoom> createGameRoom();
+  Future<GameRoom> createGameRoom({required bool private});
 
   /// Updates a game room data.
   /// 

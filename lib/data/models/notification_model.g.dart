@@ -9,38 +9,23 @@ part of 'notification_model.dart';
 NotificationModel _$NotificationModelFromJson(Map<String, dynamic> json) =>
     NotificationModel(
       uid: json['uid'] as String,
-      title: json['title'] as String?,
-      message: json['message'] as String,
+      sender: AccountModel.fromJson(json['sender'] as Map<String, dynamic>),
       notificationType:
-          $enumDecode(_$NotificationTypeEnumMap, json['notificationType']),
-      sendingTime: DateTime.parse(json['sendingTime'] as String),
-      senderUid: json['senderUid'] as String?,
-      senderUsername: json['senderUsername'] as String?,
-      senderAvatarLink: json['senderAvatarLink'] as String?,
-      notificationOffer: $enumDecodeNullable(
-          _$NotificationOfferEnumMap, json['notificationOffer']),
+          $enumDecode(_$NotificationTypesEnumMap, json['notificationType']),
+      gameRoomModel:
+          GameRoomModel.fromJson(json['gameRoom'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NotificationModelToJson(NotificationModel instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'title': instance.title,
-      'message': instance.message,
-      'notificationType': _$NotificationTypeEnumMap[instance.notificationType]!,
-      'sendingTime': instance.sendingTime.toIso8601String(),
-      'senderUid': instance.senderUid,
-      'senderUsername': instance.senderUsername,
-      'senderAvatarLink': instance.senderAvatarLink,
-      'notificationOffer':
-          _$NotificationOfferEnumMap[instance.notificationOffer],
+      'sender': instance.sender.toJson(),
+      'notificationType':
+          _$NotificationTypesEnumMap[instance.notificationType]!,
+      'gameRoom': instance.gameRoomModel.toJson(),
     };
 
-const _$NotificationTypeEnumMap = {
-  NotificationType.textNotification: 'textNotification',
-  NotificationType.notificationFromUser: 'notificationFromUser',
-};
-
-const _$NotificationOfferEnumMap = {
-  NotificationOffer.friendshipOffer: 'friendshipOffer',
-  NotificationOffer.gameOffer: 'gameOffer',
+const _$NotificationTypesEnumMap = {
+  NotificationTypes.gameOffer: 'gameOffer',
+  NotificationTypes.gameOfferDenian: 'gameOfferDenian',
 };

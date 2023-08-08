@@ -14,10 +14,11 @@ import 'package:logger/logger.dart' as _i7;
 
 import '../../data/datasources/firebase_account_datasource.dart' as _i4;
 import '../../data/datasources/firebase_auth_datasource.dart' as _i8;
-import '../../data/datasources/firestore_game_room_datasource.dart' as _i11;
+import '../../data/datasources/firebase_notification_datasource.dart' as _i10;
+import '../../data/datasources/firestore_game_room_datasource.dart' as _i12;
 import '../navigation/app_router.gr.dart' as _i3;
-import '../services/firebase_service.dart' as _i10;
-import 'app_module.dart' as _i12; // ignore_for_file: unnecessary_lambdas
+import '../services/firebase_service.dart' as _i11;
+import 'app_module.dart' as _i13; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -45,16 +46,21 @@ Future<_i1.GetIt> $initGetIt(
         googleSignIn: get<_i9.GoogleSignIn>(),
         logger: get<_i7.Logger>(),
       ));
-  await gh.factoryAsync<_i10.FirebaseService>(
+  gh.lazySingleton<_i10.FirebaseNotificationDatasource>(
+      () => _i10.FirebaseNotificationDatasource(
+            firebaseFirestore: get<_i5.FirebaseFirestore>(),
+            logger: get<_i7.Logger>(),
+          ));
+  await gh.factoryAsync<_i11.FirebaseService>(
     () => appModule.firebaseService,
     preResolve: true,
   );
-  gh.lazySingleton<_i11.FirestoreGameRoomDatasource>(
-      () => _i11.FirestoreGameRoomDatasource(
+  gh.lazySingleton<_i12.FirestoreGameRoomDatasource>(
+      () => _i12.FirestoreGameRoomDatasource(
             firebaseFirestore: get<_i5.FirebaseFirestore>(),
             logger: get<_i7.Logger>(),
           ));
   return get;
 }
 
-class _$AppModule extends _i12.AppModule {}
+class _$AppModule extends _i13.AppModule {}

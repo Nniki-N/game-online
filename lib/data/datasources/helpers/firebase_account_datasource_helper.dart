@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/common/constants/firebase_constants.dart';
@@ -69,7 +71,7 @@ class FirebaseAccountDatasourceHelper {
 
   /// Retrieves a stream of changes of an account data from the Firestore Database
   /// and returns a stream of[AccountModel] if the request was successful.
-  /// 
+  ///
   /// Throws [AccountErrorRetrievingAccountStream] when the error occurs.
   Stream<AccountModel> getAccountModelStream({required String uid}) {
     try {
@@ -87,14 +89,18 @@ class FirebaseAccountDatasourceHelper {
   }
 
   /// Updates a user account data in the Firestore Database.
-  /// 
+  ///
   /// Throws [AccountErrorUpdatingAccount] when the error occurs.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
+      log('notificationsUidList inside account helper: ${accountModel.notificationsUidList}');
+
       await _firebaseFirestore
           .collection(FirebaseConstants.accounts)
           .doc(accountModel.uid)
           .update(accountModel.toJson());
+          
+      log('updated inside helper');
     } catch (exception) {
       _logger.e(exception);
       throw const AccountErrorUpdatingAccount();
@@ -102,7 +108,7 @@ class FirebaseAccountDatasourceHelper {
   }
 
   /// Checks if a user account already exists in the Firestore Database.
-  /// 
+  ///
   /// hrows [AccountErrorCreatingAccount] when the error occurs.
   Future<bool> accountExists({required String uid}) async {
     try {
@@ -121,7 +127,7 @@ class FirebaseAccountDatasourceHelper {
 
   /// Retrieves a list of users where [fieldName] equals [fieldValue] from the
   /// Firestore Database and returns a list of [AccountModel] if the request was successful.
-  /// 
+  ///
   /// hrows [AccountErrorRetrievingAccountList] when the error occurs.
   Future<List<AccountModel>> getAccountModelListWhere({
     required String fieldName,

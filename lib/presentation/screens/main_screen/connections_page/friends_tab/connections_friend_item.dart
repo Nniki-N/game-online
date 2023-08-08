@@ -4,9 +4,15 @@ import 'package:flutter/material.dart' hide IconTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:game/common/errors/game_room_error.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_bloc.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_event.dart';
+import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
+import 'package:game/presentation/bloc/room_bloc/room_event.dart';
+import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/theme/extensions/popup_menu_theme.dart';
 import 'package:game/presentation/widgets/custom_popup_menu_divider/custom_popup_menu_divider.dart';
@@ -62,7 +68,7 @@ class ConnectionsFriendItem extends StatelessWidget {
                   SizedBox(width: 15.w),
                   CustomText(
                     text:
-                        '${AppLocalizations.of(context)!.totalGames}: ${account.victoriesCount}',
+                        '${AppLocalizations.of(context)!.victories}: ${account.victoriesCount}',
                     fontSize: 12.sp,
                   ),
                 ],
@@ -77,17 +83,33 @@ class ConnectionsFriendItem extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: popUpMenuTheme.borderRadius,
           ),
-          onSelected: (index) {
+          onSelected: (index) async {
             switch (index) {
               case 0:
-                //
-                //
-                //
-                //
-                //
-                //
-                //
-                //
+                // Retrieves a room bloc to be used to a send game offer notification later.
+                final RoomBloc roomBloc = context.read<RoomBloc>();
+
+                // Creates a private room for a game between friends.
+                roomBloc.add(const CreateRoomEvent(private: true));
+
+                // Retrieves a room state base on creating game room process.
+                final RoomState roomState = await roomBloc.stream.firstWhere(
+                  (state) => state is InRoomState,
+                  orElse: () => const ErrorRoomState(
+                    gameRoomError: GameRoomErrorUnknown(),
+                  ),
+                );
+
+                // Sends a game offer notification to the friend.
+                if (roomState is InRoomState) {
+                  context
+                      .read<NotificationBloc>()
+                      .add(SendGameOfferNotificationEvent(
+                        recipientUid: account.uid,
+                        gameRoom: roomState.getGameRoom()!,
+                      ));
+                }
+
                 break;
               case 1:
                 showAcceptOrDenyPopUp(
@@ -132,7 +154,7 @@ class ConnectionsFriendItem extends StatelessWidget {
             ),
           ],
           child: Padding(
-            padding: EdgeInsets.only(left: 8.w),
+            padding: EdgeInsets.only(left: 15.w, right: 2.w),
             child: SvgPicture.asset(
               Svgs.dots,
               width: 3.w,

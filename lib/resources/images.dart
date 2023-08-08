@@ -3,7 +3,8 @@ part of 'resources.dart';
 class Images {
   Images._();
 
-  static const String splashIcon = 'assets/images/splash_icon.png';
-  static const String splashScreen = 'assets/images/splash_screen.png';
-  static const String splashScreen2 = 'assets/images/splash_screen2.png';
+  static const String logoBackground = 'assets/images/logo-background.png';
+  static const String logoForeground = 'assets/images/logo-foreground.png';
+  static const String logo = 'assets/images/logo.png';
+  static const String splashIcon = 'assets/images/splash-icon.png';
 }

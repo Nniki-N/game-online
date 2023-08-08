@@ -24,6 +24,11 @@ class LoadedFriendsState extends FriendsState {
 }
 
 @immutable
+class UnlistenedFriendsState extends FriendsState {
+  const UnlistenedFriendsState() : super(friendsList: const []);
+}
+
+@immutable
 class ErrorFriendsState extends FriendsState {
   final FriendsError friendsError;
 

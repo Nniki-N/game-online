@@ -8,6 +8,10 @@ import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
+import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_bloc.dart';
+import 'package:game/presentation/bloc/notification_bloc/notification_event.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 
@@ -32,6 +36,8 @@ class InitialScreen extends StatelessWidget {
         if (state is LoggedInAuthState) {
           log('initial ------------------ go to main');
           context.read<AccountBloc>().add(const InitializeAccountEvent());
+          context.read<FriendsBloc>().add(const InitializeFriendsEvent());
+          context.read<NotificationBloc>().add(const InitializeNotificationEvent());
           AutoRouter.of(context).replace(const MainRouter());
         }
 

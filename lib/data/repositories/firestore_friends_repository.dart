@@ -30,30 +30,50 @@ class FirestoreFriendsRepository extends FriendsRepository {
       // A list of friends of a current user.
       final List<String> friendsUidList = currentAccountModel.friendsUidList;
 
-      // Retrieves future account models of friends of a current user.
-      final List<Future<AccountModel>> friendsFutureAccountModels =
-          friendsUidList.map((uid) {
-        final accountModel =
-            _firebaseAccountDatasource.getAccountModel(uid: uid);
+      // // Retrieves future account models of friends of a current user.
+      // final List<Future<AccountModel>> friendsFutureAccountModels =
+      //     friendsUidList.map((uid) {
+      //   final Future<AccountModel> futureAccountModel =
+      //       _firebaseAccountDatasource.getAccountModel(uid: uid);
 
-        return accountModel;
-      }).toList();
+      //   return futureAccountModel;
+      // }).toList();
 
       List<Account> accountsList = [];
 
       // Converts account models to accounts.
       await Future.forEach(
-        friendsFutureAccountModels,
-        (futureAccountModel) async {
-          final AccountModel accountModel = await futureAccountModel;
+        friendsUidList,
+        (uid) async {
+          final bool accountExists = await _accountExists(uid: uid);
 
-          final Account account = Account.fromAccountModel(
-            accountModel: accountModel,
-          );
+          // Adds an account to the list only if it exists.
+          if (accountExists) {
+            final AccountModel accountModel =
+                await _firebaseAccountDatasource.getAccountModel(uid: uid);
 
-          accountsList.add(account);
+            final Account account = Account.fromAccountModel(
+              accountModel: accountModel,
+            );
+
+            accountsList.add(account);
+          }
         },
       );
+
+      // // Converts account models to accounts.
+      // await Future.forEach(
+      //   friendsFutureAccountModels,
+      //   (futureAccountModel) async {
+      //     final AccountModel accountModel = await futureAccountModel;
+
+      //     final Account account = Account.fromAccountModel(
+      //       accountModel: accountModel,
+      //     );
+
+      //     accountsList.add(account);
+      //   },
+      // );
 
       return accountsList;
     } catch (exeption) {
@@ -136,6 +156,24 @@ class FirestoreFriendsRepository extends FriendsRepository {
     } catch (exeption) {
       _logger.e(exeption);
       throw const FriendsErrorFriendRemoving();
+    }
+  }
+
+  /// Checks if an account with specified id exists in the Firestore Database.
+  ///
+  /// Returns true if the account exists.
+  ///
+  /// Returns false if any error occurs.
+  Future<bool> _accountExists({required String uid}) async {
+    try {
+      // Retrieves a notification model.
+      await _firebaseAccountDatasource.getAccountModel(
+        uid: uid,
+      );
+
+      return true;
+    } catch (notificationError) {
+      return false;
     }
   }
 }

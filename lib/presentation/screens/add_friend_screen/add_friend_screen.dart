@@ -1,10 +1,7 @@
-
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:game/common/di/locator.dart';
 import 'package:game/common/errors/friends_error.dart';
 import 'package:game/common/utils/string_extension.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
@@ -39,12 +36,12 @@ class AddFriendScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => FormValidationBloc(),
         ),
-        BlocProvider(
-          create: (context) => FriendsBloc(
-            friendsRepository: getIt(),
-            accountRepository: getIt(),
-          ),
-        ),
+        // BlocProvider(
+        //   create: (context) => FriendsBloc(
+        //     friendsRepository: getIt(),
+        //     accountRepository: getIt(),
+        //   ),
+        // ),
       ],
       child: BlocListener<FormValidationBloc, FormValidationState>(
         listener: (context, validationState) {
@@ -60,13 +57,17 @@ class AddFriendScreen extends StatelessWidget {
             if (friendsState is LoadedFriendsState) {
               loginController.clear();
 
-              showNotificationPopUp(
+              final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
+
+              if(!isPopUpShown) {
+                showNotificationPopUp(
                 context: context,
                 dialogTitle: AppLocalizations.of(context)!.friendWasAdded,
                 dialogContent: AppLocalizations.of(context)!
                     .thisUserWasAddedToYourConnections,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
+              }
             }
 
             // Checks if an error occurs and if error message has to be shown.
@@ -165,9 +166,9 @@ class AddFriendScreen extends StatelessWidget {
                                       validationEmptyText:
                                           '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.login}',
                                       validationToManySymbolsText:
-                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs}  ${AppLocalizations.of(context)!.symbols}',
+                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
                                       validationNotEnoughtSymbolsText:
-                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs}  ${AppLocalizations.of(context)!.symbols}',
+                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
                                     ));
                               },
                             )

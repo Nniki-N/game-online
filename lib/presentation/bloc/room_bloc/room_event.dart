@@ -13,7 +13,11 @@ class InitializeRoomEvent extends RoomEvent {
 
 @immutable
 class CreateRoomEvent extends RoomEvent {
-  const CreateRoomEvent();
+  final bool private;
+
+  const CreateRoomEvent({
+    required this.private,
+  });
 }
 
 @immutable

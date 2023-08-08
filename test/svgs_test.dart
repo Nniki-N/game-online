@@ -24,8 +24,7 @@ void main() {
     expect(File(Svgs.gogle).existsSync(), true);
     expect(File(Svgs.inform).existsSync(), true);
     expect(File(Svgs.logoIngame).existsSync(), true);
+    expect(File(Svgs.logo).existsSync(), true);
     expect(File(Svgs.signInSeparator).existsSync(), true);
-    expect(File(Svgs.splashScreen).existsSync(), true);
-    expect(File(Svgs.splashScreen2).existsSync(), true);
   });
 }

@@ -7,7 +7,6 @@ import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/screens/main_screen/settings_page/settinds_details_button.dart';
 import 'package:game/presentation/screens/main_screen/settings_page/settings_profile_container.dart';
-import 'package:game/presentation/screens/main_screen/settings_page/settings_slider.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_outlined_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -45,22 +44,22 @@ class SettingsPage extends StatelessWidget {
               AutoRouter.of(context).push(const LanguageSettingsRouter());
             },
           ),
-          SizedBox(height: 25.h),
-          SettingsSlider(
-            text: AppLocalizations.of(context)!.backgroundMusic,
-            currentValue: 70,
-            onCanged: (value) {
-              //
-            },
-          ),
-          SizedBox(height: 15.h),
-          SettingsSlider(
-            text: AppLocalizations.of(context)!.soundEffects,
-            currentValue: 30,
-            onCanged: (value) {
-              //
-            },
-          ),
+          // SizedBox(height: 25.h),
+          // SettingsSlider(
+          //   text: AppLocalizations.of(context)!.backgroundMusic,
+          //   currentValue: 70,
+          //   onCanged: (value) {
+          //     //
+          //   },
+          // ),
+          // SizedBox(height: 15.h),
+          // SettingsSlider(
+          //   text: AppLocalizations.of(context)!.soundEffects,
+          //   currentValue: 30,
+          //   onCanged: (value) {
+          //     //
+          //   },
+          // ),
           const Spacer(),
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, authState) {

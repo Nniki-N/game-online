@@ -44,18 +44,11 @@ class HomePage extends StatelessWidget {
                 fontSize: 25.sp,
                 fontWeight: FontWeight.w600,
               ),
-              SizedBox(height: 30.h),
-              CustomButton(
-                text: AppLocalizations.of(context)!.playOnOneDevice,
-                onTap: () {
-                  AutoRouter.of(context).replace(const OfflineGameRouter());
-                },
-              ),
-              SizedBox(height: 25.h),
+              SizedBox(height: 65.h),
               CustomButton(
                 text: AppLocalizations.of(context)!.playWithRandomPlayer,
                 onTap: () {
-                  // Searching for a room.
+                  // Searches for a room.
                   // Creates a room if there are no rooms.
                   final RoomBloc roomBloc = context.read<RoomBloc>();
                   roomBloc.add(const SearchRoomEvent());
@@ -66,7 +59,7 @@ class HomePage extends StatelessWidget {
                 text: AppLocalizations.of(context)!.playWithFriend,
                 onTap: () {
                   AutoRouter.of(context)
-                      .replace(const ChoosefriendForGameRouter());
+                      .push(const ChoosefriendForGameRouter());
                 },
               ),
               SizedBox(height: 35.h),

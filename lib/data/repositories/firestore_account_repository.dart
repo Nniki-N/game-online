@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/data/datasources/firebase_account_datasource.dart';
 import 'package:game/data/models/account_model.dart';
@@ -104,8 +106,44 @@ class FirestoreAccountRepository implements AccountRepository {
         userAccount: userAccount,
       );
 
+      log('notificationsUidList inside account repository: ${accountModel.notificationsUidList}');
+
       await _firebaseAccountDatasource.updateAccount(
-          accountModel: accountModel);
+        accountModel: accountModel,
+      );
+
+      log('updated inside repository');
+    } catch (exception) {
+      rethrow;
+    }
+  }
+
+  /// Updates a user account data in the Firestore Database.
+  ///
+  /// Rethrows [AccountError] when the error occurs.
+  @override
+  Future<void> updateAccount({required Account account}) async {
+    try {
+      AccountModel accountModel =
+          await _firebaseAccountDatasource.getAccountModel(uid: account.uid);
+
+      accountModel = accountModel.copyWith(
+        username: account.username,
+        avatarLink: account.avatarLink,
+        isOnline: account.isOnline,
+        isInGame: account.isInGame,
+        inGameRoomId: account.inGameRoomId,
+        gamesCount: account.gamesCount,
+        victoriesCount: account.victoriesCount,
+      );
+
+      log('notificationsUidList inside account repository 2: ${accountModel.notificationsUidList}');
+
+      await _firebaseAccountDatasource.updateAccount(
+        accountModel: accountModel,
+      );
+
+      log('updated inside repository 2');
     } catch (exception) {
       rethrow;
     }
