@@ -3,7 +3,7 @@ import 'package:game/data/repositories/firebase_storage_images_repository.dart';
 import 'package:game/data/repositories/firestore_account_repository.dart';
 import 'package:game/data/repositories/firebase_auth_repository.dart';
 import 'package:game/data/repositories/firestore_friends_repository.dart';
-import 'package:game/data/repositories/firestore_game_repository.dart';
+import 'package:game/data/repositories/i_game_repository.dart';
 import 'package:game/data/repositories/firestore_notification_repository.dart';
 import 'package:game/data/repositories/firestore_room_repository.dart';
 import 'package:game/data/repositories/i_game_timer_repository.dart';
@@ -48,7 +48,7 @@ Future<void> setUpLocator() async {
   );
 
   getIt.registerLazySingleton<GameRepository>(
-    () => const FirestoreGameRepository(),
+    () => const IGameRepository(),
   );
 
   getIt.registerLazySingleton<ImagesRepository>(

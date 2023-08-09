@@ -133,7 +133,8 @@ class OnlineGameScreen extends StatelessWidget {
                 (gameTimerBloc.state is InitialGameTimerState ||
                     gameTimerBloc.state is StoppedGameTimerState);
             final bool stopGameTimer =
-                gameTimerBloc.state is InProgressGameTimerState;
+                (gameTimerBloc.state is InitialGameTimerState ||
+                    gameTimerBloc.state is InProgressGameTimerState);
 
             // Stops the game timer for a second player when it is the turn of a current user.
             // Starts the game timer for a current user when it is the turn of a current user.

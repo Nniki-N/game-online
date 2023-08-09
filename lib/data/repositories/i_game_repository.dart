@@ -4,8 +4,8 @@ import 'package:game/domain/entities/game_room.dart';
 import 'package:game/domain/entities/player.dart';
 import 'package:game/domain/repositories/game_repository.dart';
 
-class FirestoreGameRepository implements GameRepository {
-  const FirestoreGameRepository();
+class IGameRepository implements GameRepository {
+  const IGameRepository();
 
   /// Checks if a player can make a move.
   ///
@@ -116,49 +116,65 @@ class FirestoreGameRepository implements GameRepository {
     required List<List<Chip?>> fieldWithChips,
   }) {
     try {
-      String? winnerUid;
-
-      if (fieldWithChips[0][0]?.chipOfPlayerUid == fieldWithChips[0][1]?.chipOfPlayerUid &&
+      // First row.
+      if (fieldWithChips[0][0] != null && 
+          fieldWithChips[0][0]?.chipOfPlayerUid ==
+              fieldWithChips[0][1]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[0][2]?.chipOfPlayerUid) {
-        return fieldWithChips[0][0]?.chipOfPlayerUid;
-      } else if (fieldWithChips[1][0]?.chipOfPlayerUid ==
+        return fieldWithChips[0][0]!.chipOfPlayerUid;
+      }
+      // Second row.
+      else if (fieldWithChips[1][0] != null && fieldWithChips[1][0]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[1][0]?.chipOfPlayerUid ==
               fieldWithChips[1][2]?.chipOfPlayerUid) {
-        return fieldWithChips[1][0]?.chipOfPlayerUid;
-      } else if (fieldWithChips[2][0]?.chipOfPlayerUid ==
+        return fieldWithChips[1][0]!.chipOfPlayerUid;
+      }
+      // Third row.
+      else if (fieldWithChips[2][0] != null && fieldWithChips[2][0]?.chipOfPlayerUid ==
               fieldWithChips[2][1]?.chipOfPlayerUid &&
           fieldWithChips[2][0]?.chipOfPlayerUid ==
               fieldWithChips[2][2]?.chipOfPlayerUid) {
-        return fieldWithChips[2][0]?.chipOfPlayerUid;
-      } else if (fieldWithChips[0][0]?.chipOfPlayerUid ==
+        return fieldWithChips[2][0]!.chipOfPlayerUid;
+      }
+      // First column.
+      else if (fieldWithChips[0][0] != null && fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[1][0]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[2][0]?.chipOfPlayerUid) {
-        return fieldWithChips[0][0]?.chipOfPlayerUid;
-      } else if (fieldWithChips[0][1]?.chipOfPlayerUid ==
+        return fieldWithChips[0][0]!.chipOfPlayerUid;
+      }
+      // Second column.
+      else if (fieldWithChips[0][1] != null && fieldWithChips[0][1]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[0][1]?.chipOfPlayerUid ==
               fieldWithChips[2][1]?.chipOfPlayerUid) {
-        return fieldWithChips[0][1]?.chipOfPlayerUid;
-      } else if (fieldWithChips[0][2]?.chipOfPlayerUid ==
+        return fieldWithChips[0][1]!.chipOfPlayerUid;
+      }
+      // Third column.
+      else if (fieldWithChips[0][2] != null && fieldWithChips[0][2]?.chipOfPlayerUid ==
               fieldWithChips[1][2]?.chipOfPlayerUid &&
           fieldWithChips[0][2]?.chipOfPlayerUid ==
               fieldWithChips[2][2]?.chipOfPlayerUid) {
-        return fieldWithChips[0][2]?.chipOfPlayerUid;
-      } else if (fieldWithChips[0][0]?.chipOfPlayerUid ==
+        return fieldWithChips[0][2]!.chipOfPlayerUid;
+      }
+      // Second diagonal.
+      else if (fieldWithChips[0][0] != null && fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[2][2]?.chipOfPlayerUid) {
-        return fieldWithChips[0][0]?.chipOfPlayerUid;
-      } else if (fieldWithChips[0][2]?.chipOfPlayerUid ==
+        return fieldWithChips[0][0]!.chipOfPlayerUid;
+      }
+      // Main diagonal.
+      else if (fieldWithChips[0][2] != null && fieldWithChips[0][2]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
-          fieldWithChips[0][2]?.chipOfPlayerUid == fieldWithChips[2][0]?.chipOfPlayerUid) {
-        return fieldWithChips[0][2]?.chipOfPlayerUid;
+          fieldWithChips[0][2]?.chipOfPlayerUid ==
+              fieldWithChips[2][0]?.chipOfPlayerUid) {
+        return fieldWithChips[0][2]!.chipOfPlayerUid;
       }
 
-      return winnerUid;
+      return null;
     } catch (exception) {
       throw GameRoomErrorUnknown(errorText: exception.toString());
     }

@@ -33,7 +33,8 @@ class OnlineFooter extends StatelessWidget {
 
     final bool turnOfPlayer = player.uid == gameRoom.turnOfPlayerUid;
 
-    final ChipsRowTheme chipsRowTheme = Theme.of(context).extension<ChipsRowTheme>()!;
+    final ChipsRowTheme chipsRowTheme =
+        Theme.of(context).extension<ChipsRowTheme>()!;
 
     return Container(
       height: 64.h,
@@ -41,7 +42,7 @@ class OnlineFooter extends StatelessWidget {
       color: chipsRowTheme.backgroundColor,
       child: Center(
         child: Opacity(
-          opacity: turnOfPlayer ? 1.0 : 0.65,
+          opacity: turnOfPlayer ? 1.0 : 0.5,
           child: RowWithChips(
             onTap: onTap,
             player: player,
@@ -72,13 +73,20 @@ class RowWithChips extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            if (player.chipsCount[Chips.chipSize3]! >= 0 && turnOfPlayer) {
+            if (player.chipsCount[Chips.chipSize3]! >= 0 &&
+                player.chipsCount[Chips.chipSize2]! < 3 &&
+                player.chipsCount[Chips.chipSize1]! < 3 &&
+                turnOfPlayer) {
               onTap(chipSize: Chips.chipSize3);
             }
           },
           behavior: HitTestBehavior.opaque,
           child: Opacity(
-            opacity: player.chipsCount[Chips.chipSize3]! >= 0 ? 1.0 : 0.65,
+            opacity: player.chipsCount[Chips.chipSize3]! >= 0 &&
+                    player.chipsCount[Chips.chipSize2]! < 3 &&
+                    player.chipsCount[Chips.chipSize1]! < 3
+                ? 1.0
+                : 0.5,
             child: PlayerChipsCountItem(
               chipsCount: player.chipsCount[Chips.chipSize3]!,
               svgPicture: SvgPicture.asset(
@@ -97,7 +105,7 @@ class RowWithChips extends StatelessWidget {
           },
           behavior: HitTestBehavior.opaque,
           child: Opacity(
-            opacity: player.chipsCount[Chips.chipSize2]! >= 0 ? 1.0 : 0.65,
+            opacity: player.chipsCount[Chips.chipSize2]! >= 0 ? 1.0 : 0.5,
             child: PlayerChipsCountItem(
               chipsCount: player.chipsCount[Chips.chipSize2] ?? 0,
               svgPicture: SvgPicture.asset(
@@ -116,7 +124,7 @@ class RowWithChips extends StatelessWidget {
           },
           behavior: HitTestBehavior.opaque,
           child: Opacity(
-            opacity: player.chipsCount[Chips.chipSize1]! >= 0 ? 1.0 : 0.65,
+            opacity: player.chipsCount[Chips.chipSize1]! >= 0 ? 1.0 : 0.5,
             child: PlayerChipsCountItem(
               chipsCount: player.chipsCount[Chips.chipSize1] ?? 0,
               svgPicture: SvgPicture.asset(

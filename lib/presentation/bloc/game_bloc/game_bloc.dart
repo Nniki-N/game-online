@@ -524,6 +524,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       final String? winnerUid = _gameRepository
           .checkCombinationsAndSelectWinner(fieldWithChips: fieldWithChips);
 
+      log('winner: $winnerUid');
+      log('fieldWithChips: $fieldWithChips');
+
       // Finishes the game if there is a winner.
       if (winnerUid != null) {
         add(FinishGameEvent(
