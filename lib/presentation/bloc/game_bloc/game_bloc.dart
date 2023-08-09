@@ -18,6 +18,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final GameRepository _gameRepository;
   final RoomRepository _roomRepository;
   final AccountRepository _accountRepository;
+  late StreamSubscription _streamSubscription;
 
   GameBloc({
     required GameRepository gameRepository,
@@ -31,6 +32,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<InitializeGameEvent>(_init, transformer: droppable());
     on<StartGameEvent>(_startGame);
     on<FinishGameEvent>(_finishGame);
+    on<FinishGameWithoutRestartPosibilityEvent>(
+        _finishGameWithoutRestartPosibility);
     on<RestartGameEvent>(_restartGame, transformer: droppable());
     on<GiveUpGameEvent>(_giveUp);
     on<MakeMoveGameEvent>(_makeMove);
@@ -50,7 +53,28 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           .asBroadcastStream();
 
       // Responds to the game room state changes.
-      await emit.onEach(
+      // await emit.onEach(
+      //   gameRoomStream,
+      //   onData: (gameRoom) {
+      //     // Continues game if the game state remains as in progress.
+      //     if (gameRoom.gameRoomState == GameRoomState.inGame) {
+      //       log('GameBloc ------------------ game is an "inGame" ');
+      //       emit(InProgressGameState(gameRoom: gameRoom.copyWith()));
+      //     }
+      //
+      //     // Finishes the game if the game state was changed to the result.
+      //     else if (gameRoom.gameRoomState == GameRoomState.result) {
+      //       log('GameBloc ------------------ game state is a "result"');
+      //       emit(ResultGameState(gameRoom: gameRoom));
+      //     }
+      //   },
+      //   // Closes the stream listening if any arror occurs.
+      //   onError: (error, stackTrace) {
+      //     log('RoomBloc ------------------ stream error: ${error.toString()}');
+      //   },
+      // );
+
+      await _listenStream(
         gameRoomStream,
         onData: (gameRoom) {
           // Continues game if the game state remains as in progress.
@@ -76,6 +100,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         gameRoom: state.gameRoom,
       ));
     }
+  }
+
+  Future<void> _listenStream<T>(
+    Stream<T> stream, {
+    required void Function(T data) onData,
+    required void Function(Object error, StackTrace stackTrace) onError,
+  }) {
+    final completer = Completer<void>();
+
+    _streamSubscription = stream.listen(
+      onData,
+      onDone: completer.complete,
+      onError: onError,
+      cancelOnError: false,
+    );
+
+    return completer.future.whenComplete(() {
+      _streamSubscription.cancel();
+    });
   }
 
   /// Starts the game.
@@ -216,6 +259,94 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
+  /// Finishes the game without restart posibility and sets the winner to the result.
+  ///
+  /// Updates players total and victory counts.
+  Future<void> _finishGameWithoutRestartPosibility(
+    FinishGameWithoutRestartPosibilityEvent event,
+    Emitter<GameState> emit,
+  ) async {
+    try {
+      // Shows loading.
+      // Probably not needed, but let it be here for a while.
+      emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
+
+      final String winnerUid = event.winnerUid;
+
+      // Changes the game state and sets the winner
+      GameRoom gameRoom = state.gameRoom.copyWith(
+        gameRoomState: GameRoomState.result,
+        winnerUid: winnerUid,
+      );
+
+      // Cancels a stream subscription that is used to change game bloc states.
+      await _streamSubscription.cancel();
+
+      // The length equals 1 only if the oponent left the game right before or
+      // in the process of calling FinishGameEvent.
+      if (gameRoom.players.length == 2) {
+        // Retrieves players user data.
+        UserAccount currentUserAccount =
+            await _accountRepository.getCurrentUserAccount();
+        UserAccount oponentUserAccount =
+            await _accountRepository.getUserAccount(
+          uid: gameRoom.players
+              .firstWhere((player) => player.uid != currentUserAccount.uid)
+              .uid,
+        );
+
+        // Sets total and victory counts to players according to the game result.
+        if (currentUserAccount.uid == winnerUid) {
+          currentUserAccount = currentUserAccount.copyWith(
+            gamesCount: currentUserAccount.gamesCount + 1,
+            victoriesCount: currentUserAccount.victoriesCount + 1,
+          );
+          oponentUserAccount = oponentUserAccount.copyWith(
+            gamesCount: oponentUserAccount.gamesCount + 1,
+          );
+        } else {
+          currentUserAccount = currentUserAccount.copyWith(
+            gamesCount: currentUserAccount.gamesCount + 1,
+          );
+          oponentUserAccount = oponentUserAccount.copyWith(
+            gamesCount: oponentUserAccount.gamesCount + 1,
+            victoriesCount: oponentUserAccount.victoriesCount + 1,
+          );
+        }
+
+        // Updates players total and victory counts.
+        _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+        _accountRepository.updateUserAccount(userAccount: oponentUserAccount);
+      } else {
+        // Retrieves the current user data.
+        UserAccount currentUserAccount =
+            await _accountRepository.getCurrentUserAccount();
+
+        // Sets total and victory counts of a current user according.
+        currentUserAccount = currentUserAccount.copyWith(
+          gamesCount: currentUserAccount.gamesCount + 1,
+          victoriesCount: currentUserAccount.victoriesCount + 1,
+        );
+
+        // Updates current user total and victory counts.
+        _accountRepository.updateUserAccount(userAccount: currentUserAccount);
+      }
+
+      // Indicates that the game has finished without a restart posibility and shows game results.
+      emit(ResultWithoutRestartPosibilityGameState(gameRoom: gameRoom));
+    } on GameRoomError catch (gameRoomError) {
+      emit(ErrorGameState(
+        gameRoomError: gameRoomError,
+        gameRoom: state.gameRoom,
+      ));
+    } catch (exception) {
+      emit(ErrorGameState(
+        gameRoomError: GameRoomErrorUnknown(errorTitle: exception.toString()),
+        gameRoom: state.gameRoom,
+      ));
+    }
+  }
+
   /// Restarts the game.
   ///
   /// Resets the chips count for both players, switches the turn of the first player,
@@ -330,7 +461,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     try {
       // Shows loading.
       emit(LoadingGameState(gameRoom: state.gameRoom.copyWith()));
-      log('start making move');
 
       GameRoom gameRoom = state.gameRoom;
 
@@ -346,13 +476,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         throw const GameRoomErrorInvalidPlayerMove();
       }
 
-      log('1');
-
       // Retrieves the current user data.
       UserAccount currentUserAccount =
           await _accountRepository.getCurrentUserAccount();
-
-      log('2');
 
       // Creates chip.
       final Chip chipToPutOnPositionIJ = Chip(
@@ -360,17 +486,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         chipOfPlayerUid: currentUserAccount.uid,
       );
 
-      log('3');
-
       // Insers the chip in the position [i] [j] of the field.
       fieldWithChips[event.indexI][event.indexJ] = chipToPutOnPositionIJ;
 
-      log('4');
-
       Player currentPlayer = gameRoom.players
           .firstWhere((player) => player.uid == currentUserAccount.uid);
-
-      log('5');
 
       // Removes one chip from the current player.
       currentPlayer = currentPlayer.copyWith(chipsCount: {
@@ -388,15 +508,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
                 : currentPlayer.chipsCount[Chips.chipSize3]!,
       });
 
-      log('6');
-
       // Changes a chips count of the current user.
       gameRoom = _gameRepository.changePlayerDataInGameRoom(
         gameRoom: gameRoom,
         player: currentPlayer,
       );
-
-      log('7');
 
       // Changes the field with chips.
       gameRoom = gameRoom.copyWith(fieldWithChips: fieldWithChips);
@@ -404,13 +520,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       // Changes the turn for a next player.
       gameRoom = _gameRepository.changeTurnForNextPlayer(gameRoom: gameRoom);
 
-      log('8');
-
       // Checks the field for a victory combination.
       final String? winnerUid = _gameRepository
           .checkCombinationsAndSelectWinner(fieldWithChips: fieldWithChips);
-
-      log('9');
 
       // Finishes the game if there is a winner.
       if (winnerUid != null) {
@@ -418,14 +530,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           gameRoom: gameRoom,
           winnerUid: winnerUid,
         ));
-        log('10 - winner');
       } else {
         // A next player to make a move.
         final Player playerToMakeMove = gameRoom.players.firstWhere(
           (player) => player.uid == gameRoom.turnOfPlayerUid,
         );
-
-        log('10');
 
         // Checks if a next move is possible.
         final bool moveIsPossible = _gameRepository.moveIsPossible(
@@ -433,15 +542,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           player: playerToMakeMove,
         );
 
-        log('11');
-
         // Continues the game if a next move is possible.
         // Finishes the game if a next move is impossible.
         if (moveIsPossible) {
           // Saves all changes.
           await _roomRepository.updateGameRoom(gameRoom: gameRoom);
-
-          log('12');
 
           // Indicates that the game can continue.
           emit(InProgressGameState(gameRoom: gameRoom));
@@ -450,12 +555,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             gameRoom: gameRoom,
             winnerUid: '',
           ));
-
-          log('12 - winner');
         }
       }
-
-      log('end making move');
     } on GameRoomError catch (gameRoomError) {
       emit(ErrorGameState(
         gameRoomError: gameRoomError,
@@ -467,5 +568,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         gameRoom: state.gameRoom,
       ));
     }
+  }
+
+  /// Closes the stream subscription.
+  @override
+  Future<void> close() async {
+    await _streamSubscription.cancel();
+    super.close();
   }
 }

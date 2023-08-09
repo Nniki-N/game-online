@@ -90,5 +90,6 @@
   "youDontHaveAnyNotifications": "You do not have any notifications",
   "waitingForSecondPlayer": "Waiting for a second player, please wait a bit...",
   "refusal": "Refusal",
-  "yourGameOfferWasDenied": "Your game offer was denied"
+  "yourGameOfferWasDenied": "Your game offer was denied",
+  "secondPlayerDoesNotRespondForALongTime": "Second player does not respond for a long time, so you win automatically."
 }

@@ -166,7 +166,7 @@ abstract class ThemeResources {
     color: CustomColors.timerColor,
   );
   static TimerTheme darkTimerTheme = TimerTheme(
-    color: CustomColors.timerColor,
+    color: CustomColors.darkTimerColor,
   );
 
   // Notification.

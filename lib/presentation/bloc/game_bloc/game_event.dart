@@ -29,6 +29,17 @@ class FinishGameEvent extends GameEvent {
 }
 
 @immutable
+class FinishGameWithoutRestartPosibilityEvent extends GameEvent {
+  final GameRoom gameRoom;
+  final String winnerUid;
+
+  const FinishGameWithoutRestartPosibilityEvent({
+    required this.gameRoom,
+    required this.winnerUid,
+  });
+}
+
+@immutable
 class RestartGameEvent extends GameEvent {
   const RestartGameEvent();
 }

@@ -40,6 +40,13 @@ class ResultGameState extends GameState {
 }
 
 @immutable
+class ResultWithoutRestartPosibilityGameState extends GameState {
+  const ResultWithoutRestartPosibilityGameState({
+    required GameRoom gameRoom,
+  }) : super(gameRoom: gameRoom);
+}
+
+@immutable
 class ErrorGameState extends GameState {
   final GameRoomError gameRoomError;
 

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:game/data/datasources/firebase_account_datasource.dart';
@@ -132,13 +131,9 @@ class FirestoreAccountRepository implements AccountRepository {
         victoriesCount: account.victoriesCount,
       );
 
-      log('notificationsUidList inside account repository 2: ${accountModel.notificationsUidList}');
-
       await _firebaseAccountDatasource.updateAccount(
         accountModel: accountModel,
       );
-
-      log('updated inside repository 2');
     } catch (exception) {
       rethrow;
     }

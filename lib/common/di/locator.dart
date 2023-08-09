@@ -6,6 +6,7 @@ import 'package:game/data/repositories/firestore_friends_repository.dart';
 import 'package:game/data/repositories/firestore_game_repository.dart';
 import 'package:game/data/repositories/firestore_notification_repository.dart';
 import 'package:game/data/repositories/firestore_room_repository.dart';
+import 'package:game/data/repositories/i_game_timer_repository.dart';
 import 'package:game/data/repositories/preferences_appearance_repository.dart';
 import 'package:game/data/repositories/preferences_language_repository.dart';
 import 'package:game/domain/repositories/account_repository.dart';
@@ -13,6 +14,7 @@ import 'package:game/domain/repositories/appearance_repository.dart';
 import 'package:game/domain/repositories/auth_repository.dart';
 import 'package:game/domain/repositories/friends_repository.dart';
 import 'package:game/domain/repositories/game_repository.dart';
+import 'package:game/domain/repositories/game_timer_repository.dart';
 import 'package:game/domain/repositories/images_repository.dart';
 import 'package:game/domain/repositories/language_repository.dart';
 import 'package:game/domain/repositories/notification_repository.dart';
@@ -54,6 +56,10 @@ Future<void> setUpLocator() async {
       firebaseAccountDatasource: getIt(),
       logger: getIt(),
     ),
+  );
+
+  getIt.registerLazySingleton<GameTimerRepository>(
+    () => const IGameTimerRepository(),
   );
 
   getIt.registerLazySingleton<FriendsRepository>(

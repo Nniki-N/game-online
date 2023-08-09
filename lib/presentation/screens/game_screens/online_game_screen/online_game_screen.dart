@@ -14,7 +14,11 @@ import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/bloc/game_bloc/game_bloc.dart';
 import 'package:game/presentation/bloc/game_bloc/game_event.dart';
 import 'package:game/presentation/bloc/game_bloc/game_state.dart';
+import 'package:game/presentation/bloc/game_timer_bloc/game_timer_bloc.dart';
+import 'package:game/presentation/bloc/game_timer_bloc/game_timer_event.dart';
+import 'package:game/presentation/bloc/game_timer_bloc/game_timer_state.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
+import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/screens/game_screens/online_game_screen/field.dart';
 import 'package:game/presentation/screens/game_screens/online_game_screen/leave_game_room.dart';
@@ -42,15 +46,25 @@ class OnlineGameScreen extends StatelessWidget {
     final BackgroundTheme backgroundTheme =
         Theme.of(context).extension<BackgroundTheme>()!;
 
-    return BlocProvider(
-      create: (context) => GameBloc(
-        gameRepository: getIt(),
-        roomRepository: getIt(),
-        accountRepository: getIt(),
-        gameRoom: (context.read<RoomBloc>().state as InFullRoomState).gameRoom,
-      )
-        ..add(const InitializeGameEvent())
-        ..add(const StartGameEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GameBloc(
+            gameRepository: getIt(),
+            roomRepository: getIt(),
+            accountRepository: getIt(),
+            gameRoom:
+                (context.read<RoomBloc>().state as InFullRoomState).gameRoom,
+          )
+            ..add(const InitializeGameEvent())
+            ..add(const StartGameEvent()),
+        ),
+        BlocProvider(
+          create: (context) => GameTimerBloc(
+            gameTimerRepository: getIt(),
+          ),
+        ),
+      ],
       child: BlocListener<RoomBloc, RoomState>(
         listener: (context, roomState) {
           // Navigates user back to the main screen if the user is outside the room.
@@ -112,11 +126,40 @@ class OnlineGameScreen extends StatelessWidget {
                 accountBloc.state.getUserAccount()!.uid !=
                     gameState.gameRoom.turnOfPlayerUid;
 
+            // Variables that are used by a game timer.
+            final GameTimerBloc gameTimerBloc = context.read<GameTimerBloc>();
+            final bool turnOfCurrenUser = !turnOfSecondPlayer;
+            final bool startGameTimer =
+                (gameTimerBloc.state is InitialGameTimerState ||
+                    gameTimerBloc.state is StoppedGameTimerState);
+            final bool stopGameTimer =
+                gameTimerBloc.state is InProgressGameTimerState;
+
+            // Stops the game timer for a second player when it is the turn of a current user.
+            // Starts the game timer for a current user when it is the turn of a current user.
+            if (turnOfCurrenUser && startGameTimer) {
+              gameTimerBloc
+                  .add(const StopCooldownForSecondPlayerGameTimerEvent());
+              gameTimerBloc.add(const StartCooldownGameTimerEvent());
+            }
+
+            // Stops the game timer for a current user when it is the turn of a second player.
+            // Starts the game timer for a current user when it is the turn of a second player.
+            if (turnOfSecondPlayer && stopGameTimer) {
+              gameTimerBloc.add(const StopCooldownGameTimerEvent());
+              gameTimerBloc
+                  .add(const StartCooldownForSecondPlayerGameTimerEvent());
+            }
+
+            // Sets the chip size to make a move as null if it is the turn of a second player.
             if (turnOfSecondPlayer) chipStreamController.add(null);
 
             // Notifies that the game ended and offers to restart the game.
             if (gameState is ResultGameState) {
               log('online game room ------------------ show result of the game');
+
+              // Stops the game timer.
+              gameTimerBloc.add(const StopCooldownGameTimerEvent());
 
               final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
 
@@ -135,7 +178,7 @@ class OnlineGameScreen extends StatelessWidget {
                   context: context,
                   dialogTitle: AppLocalizations.of(context)!.gameFinished,
                   dialogContent:
-                      '$winnerUsername won. Do you want to restart the game with the same player?',
+                      '$winnerUsername ${AppLocalizations.of(context)!.wonDoYouWantToRestartGame}',
                   buttonAcceptText: AppLocalizations.of(context)!.restart,
                   buttonDenyText: AppLocalizations.of(context)!.leave,
                 ).then((restartGame) {
@@ -147,6 +190,26 @@ class OnlineGameScreen extends StatelessWidget {
                       leaveWithLoose: false,
                     );
                   }
+                });
+              }
+            }
+
+            // Notifies that the second player does not respond and that the game ended without restart ability.
+            else if (gameState is ResultWithoutRestartPosibilityGameState) {
+              final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
+
+              // Shows a popup if another popup is not opened.
+              if (!isPopUpShown) {
+                showNotificationPopUp(
+                  context: context,
+                  dialogTitle: AppLocalizations.of(context)!.gameFinished,
+                  dialogContent: AppLocalizations.of(context)!
+                      .secondPlayerDoesNotRespondForALongTime,
+                  buttonText: AppLocalizations.of(context)!.ok,
+                ).then((_) {
+                  // Leaves and deletes a game room.
+                  context.read<RoomBloc>().add(
+                      LeaveAndDeleteRoomEvent(gameRoom: gameState.gameRoom));
                 });
               }
             }
@@ -190,41 +253,64 @@ class OnlineGameScreen extends StatelessWidget {
             }
           },
           builder: (context, gameState) {
-            // Layout of the game sceen.
-            return Scaffold(
-              backgroundColor: backgroundTheme.color,
-              body: Column(
-                children: [
-                  const OnlineHeader(),
-                  StreamBuilder(
-                    stream: chipStream,
-                    builder: (context, snapshot) {
-                      return Field(
-                        chipSize: snapshot.data,
-                        // Sets the chip size to make a move as null in case it was not changed.
-                        setChipSizeAsZero: () {
-                          chipStreamController.add(null);
-                          log('chipSize: null was added to the stream');
-                        },
-                      );
-                    },
-                  ),
-                  const RowWithButtons(),
-                  SizedBox(height: 20.h),
-                  OnlineFooter(
-                    // Selects the chip size to make a move if it is the turn of the current user.
-                    onTap: ({required Chips chipSize}) {
-                      final bool chipSelectingIsAllowed =
-                          accountBloc.state.getUserAccount()!.uid ==
-                              gameState.gameRoom.turnOfPlayerUid;
+            return BlocListener<GameTimerBloc, GameTimerState>(
+              listener: (context, gameTimerState) {
+                // Sets defeat to the current user if time is out.
+                if (gameTimerState is InProgressGameTimerState &&
+                    gameTimerState.secondsLeft == 0) {
+                  context.read<GameBloc>().add(const GiveUpGameEvent());
+                  context
+                      .read<GameTimerBloc>()
+                      .add(const StopCooldownGameTimerEvent());
+                }
 
-                      if (chipSelectingIsAllowed) {
-                        chipStreamController.add(chipSize);
-                        log('chipSize: $chipSize was added to the stream');
-                      }
-                    },
-                  ),
-                ],
+                // Notifies that second player does not responce for a logn time.
+                if (gameTimerState is StoppedSecondGameTimerState) {
+                  context
+                      .read<GameBloc>()
+                      .add(FinishGameWithoutRestartPosibilityEvent(
+                        gameRoom: gameState.gameRoom,
+                        winnerUid: gameState.gameRoom.winnerUid,
+                      ));
+                }
+              },
+
+              // Layout of the game sceen.
+              child: Scaffold(
+                backgroundColor: backgroundTheme.color,
+                body: Column(
+                  children: [
+                    const OnlineHeader(),
+                    StreamBuilder(
+                      stream: chipStream,
+                      builder: (context, snapshot) {
+                        return Field(
+                          chipSize: snapshot.data,
+                          // Sets the chip size to make a move as null in case it was not changed.
+                          setChipSizeAsZero: () {
+                            chipStreamController.add(null);
+                            log('chipSize: null was added to the stream');
+                          },
+                        );
+                      },
+                    ),
+                    const RowWithButtons(),
+                    SizedBox(height: 20.h),
+                    OnlineFooter(
+                      // Selects the chip size to make a move if it is the turn of the current user.
+                      onTap: ({required Chips chipSize}) {
+                        final bool chipSelectingIsAllowed =
+                            accountBloc.state.getUserAccount()!.uid ==
+                                gameState.gameRoom.turnOfPlayerUid;
+
+                        if (chipSelectingIsAllowed) {
+                          chipStreamController.add(chipSize);
+                          log('chipSize:  was added to the stream');
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           },

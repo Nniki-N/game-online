@@ -15,7 +15,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final NotificationRepository _notificationRepository;
   final AccountRepository _accountRepository;
   final RoomRepository _roomRepository;
-  late StreamSubscription streamSubscription;
+  late StreamSubscription _streamSubscription;
 
   NotificationBloc({
     required NotificationRepository notificationRepository,
@@ -87,7 +87,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           }
         },
         onError: (error, stackTrace) async {
-          await streamSubscription.cancel();
+          await _streamSubscription.cancel();
 
           emit(ErrorNotificationState(
             lastSentNotification: state.lastSentNotification,
@@ -114,7 +114,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   }) {
     final completer = Completer<void>();
 
-    streamSubscription = stream.listen(
+    _streamSubscription = stream.listen(
       onData,
       onDone: completer.complete,
       onError: onError,
@@ -122,7 +122,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     );
 
     return completer.future.whenComplete(() {
-      streamSubscription.cancel();
+      _streamSubscription.cancel();
     });
   }
 
@@ -312,14 +312,14 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     StopListenUpdatesNotificationEvent event,
     Emitter<NotificationState> emit,
   ) async {
-    await streamSubscription.cancel();
+    await _streamSubscription.cancel();
     emit(const UnlistenedNotificationState());
   }
 
   /// Closes the stream subscription.
   @override
   Future<void> close() async {
-    await streamSubscription.cancel();
+    await _streamSubscription.cancel();
     super.close();
   }
 }

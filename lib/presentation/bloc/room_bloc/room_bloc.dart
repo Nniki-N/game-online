@@ -17,8 +17,8 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   final RoomRepository _roomRepository;
   final AccountRepository _accountRepository;
 
-  StreamSubscription<GameRoom>? gameRoomStreamSubscription;
-  Stream<GameRoom>? gameRoomStream;
+  StreamSubscription<GameRoom>? _gameRoomStreamSubscription;
+  Stream<GameRoom>? _gameRoomStream;
 
   RoomBloc({
     required RoomRepository roomRepository,
@@ -31,6 +31,7 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     on<CreateRoomEvent>(_createGameRoom);
     on<JoinRoomEvent>(_joinGameRoom);
     on<LeaveRoomEvent>(_leaveGameRoom);
+    on<LeaveAndDeleteRoomEvent>(_leaveAndDeleteGameRoom);
   }
 
   /// later implement leaving here when internet connection is down
@@ -46,27 +47,27 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
         // the current user left the game.
         if (roomState is OutsideRoomState) {
           log('RoomBloc ------------------ state OutsideRoomState -> cancel subscription');
-          await gameRoomStreamSubscription?.cancel();
-          gameRoomStreamSubscription = null;
-          gameRoomStream = null;
+          await _gameRoomStreamSubscription?.cancel();
+          _gameRoomStreamSubscription = null;
+          _gameRoomStream = null;
         }
 
         // Indicates that two players are in the room.
         // Indicates that only one player is in the room.
         else if (roomState is InRoomState || roomState is InFullRoomState) {
-          if (gameRoomStreamSubscription != null && gameRoomStream != null) {
+          if (_gameRoomStreamSubscription != null && _gameRoomStream != null) {
             return;
           }
 
           log('RoomBloc ------------------ state InRoomState -> new subscription');
 
           // Retrieves a stream of game room data changes.
-          gameRoomStream = _roomRepository
+          _gameRoomStream = _roomRepository
               .getGameRoomStream(gameRoomId: roomState.getGameRoom()!.uid)
               .asBroadcastStream();
 
           // Changes state base on the number of players.
-          gameRoomStreamSubscription = gameRoomStream?.listen(
+          _gameRoomStreamSubscription = _gameRoomStream?.listen(
             (gameRoom) async {
               if (gameRoom.players.length == 1) {
                 log('RoomBloc ------------------ state $roomState -> 1 player');
@@ -79,9 +80,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
             // Closes the stream listening if any arror occurs.
             onError: (error) {
               log('RoomBloc ------------------ stream error: ${error.toString()}');
-              gameRoomStreamSubscription?.cancel();
-              gameRoomStreamSubscription = null;
-              gameRoomStream = null;
+              _gameRoomStreamSubscription?.cancel();
+              _gameRoomStreamSubscription = null;
+              _gameRoomStream = null;
             },
           );
         }
@@ -247,9 +248,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
 
       // Cancels game room stream subscription and removes stream;
       log('RoomBloc ------------------ leave event -> cancel subscription');
-      await gameRoomStreamSubscription?.cancel();
-      gameRoomStreamSubscription = null;
-      gameRoomStream = null;
+      await _gameRoomStreamSubscription?.cancel();
+      _gameRoomStreamSubscription = null;
+      _gameRoomStream = null;
 
       GameRoom gameRoom = event.gameRoom.copyWith(
         gameRoomState: GameRoomState.result,
@@ -287,5 +288,51 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     } catch (exception) {
       emit(const OutsideRoomState());
     }
+  }
+
+  /// Removes the current user from the game room, changes the user status to "not in the game" 
+  /// and deletes the game room.
+  Future<void> _leaveAndDeleteGameRoom(
+    LeaveAndDeleteRoomEvent event,
+    Emitter<RoomState> emit,
+  ) async {
+    try {
+      // Shows loading.
+      emit(const LoadingRoomState());
+
+      // Cancels game room stream subscription and removes stream;
+      log('RoomBloc ------------------ leave event -> cancel subscription');
+      await _gameRoomStreamSubscription?.cancel();
+      _gameRoomStreamSubscription = null;
+      _gameRoomStream = null;
+
+      Account currentAccount = await _accountRepository.getCurrentAccount();
+
+      // Changes the current user account data to show that the user is not in a game.
+      currentAccount = currentAccount.copyWith(
+        isInGame: false,
+        inGameRoomId: '',
+      );
+
+      // Updates the user data according to leaving the game room.
+      await _accountRepository.updateAccount(
+        account: currentAccount,
+      );
+
+      // Deletes the game room.
+      await _roomRepository.deleteGameRoom(gameRoomId: event.gameRoom.uid);
+
+      // Indicates that the user has leaved the game and no game screens needed to be shown.
+      emit(const OutsideRoomState());
+    } catch (exception) {
+      emit(const OutsideRoomState());
+    }
+  }
+
+  /// Closes the stream subscription.
+  @override
+  Future<void> close() async {
+    await _gameRoomStreamSubscription?.cancel();
+    super.close();
   }
 }

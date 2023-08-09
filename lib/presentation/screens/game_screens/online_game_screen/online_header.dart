@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide IconTheme;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +9,7 @@ import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/bloc/game_bloc/game_bloc.dart';
 import 'package:game/presentation/screens/game_screens/player_chips_count_item.dart';
 import 'package:game/presentation/theme/extensions/chips_row_theme.dart';
-import 'package:game/presentation/theme/extensions/icon_theme.dart';
+import 'package:game/presentation/widgets/custom_avatar.dart';
 import 'package:game/resources/resources.dart';
 
 class OnlineHeader extends StatelessWidget {
@@ -19,8 +19,8 @@ class OnlineHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ChipsRowTheme chipsRowTheme = Theme.of(context).extension<ChipsRowTheme>()!;
-    final IconTheme iconTheme = Theme.of(context).extension<IconTheme>()!;
+    final ChipsRowTheme chipsRowTheme =
+        Theme.of(context).extension<ChipsRowTheme>()!;
 
     return Container(
       height: 64.h,
@@ -29,31 +29,10 @@ class OnlineHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.w),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: SvgPicture.asset(
-              Svgs.avatarGreen,
-              width: 40.w,
-              height: 40.w,
-            ),
+          CustomAvatar(
+            size: 40.w,
           ),
           const RowWithOponentChips(),
-          GestureDetector(
-            onTap: () {
-              //
-            },
-            child: SvgPicture.asset(
-              Svgs.dots,
-              height: 17.h,
-              colorFilter: ColorFilter.mode(
-                iconTheme.color,
-                BlendMode.srcIn,
-              ),
-            ),
-          )
         ],
       ),
     );

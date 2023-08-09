@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/presentation/bloc/game_bloc/game_bloc.dart';
 import 'package:game/presentation/bloc/game_bloc/game_event.dart';
+import 'package:game/presentation/bloc/game_timer_bloc/game_timer_bloc.dart';
+import 'package:game/presentation/bloc/game_timer_bloc/game_timer_state.dart';
 import 'package:game/presentation/screens/game_screens/online_game_screen/leave_game_room.dart';
 import 'package:game/presentation/theme/extensions/timer_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
@@ -76,12 +78,16 @@ class RowWithButtons extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.w),
             ),
             alignment: Alignment.center,
-            child: CustomText(
-              text: '56:00',
-              color: timerTheme.color,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              textAlign: TextAlign.center,
+            child: BlocBuilder<GameTimerBloc, GameTimerState>(
+              builder: (context, gameTimerState) {
+                return CustomText(
+                  text: '${gameTimerState.secondsLeft}:00',
+                  color: timerTheme.color,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  textAlign: TextAlign.center,
+                );
+              },
             ),
           )
         ],

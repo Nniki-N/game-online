@@ -10,7 +10,7 @@ class FirestoreGameRepository implements GameRepository {
   /// Checks if a player can make a move.
   ///
   /// Returns true if the move is possible and false if not.
-  /// 
+  ///
   /// Throws [GameRoomErrorUnknown] when any error occurs.
   @override
   bool moveIsPossible({
@@ -84,7 +84,7 @@ class FirestoreGameRepository implements GameRepository {
   /// Changes the turn of a player to the next one.
   ///
   /// Return [GameRoom] with the changed turn of a player.
-  /// 
+  ///
   /// Throws [GameRoomErrorUnknown] when any error occurs.
   @override
   GameRoom changeTurnForNextPlayer({
@@ -109,7 +109,7 @@ class FirestoreGameRepository implements GameRepository {
   /// Returns a uid of a winner if there is a victory combination.
   ///
   /// Returns null if there is no winner.
-  /// 
+  ///
   /// Throws [GameRoomErrorUnknown] when any error occurs.
   @override
   String? checkCombinationsAndSelectWinner({
@@ -117,218 +117,46 @@ class FirestoreGameRepository implements GameRepository {
   }) {
     try {
       String? winnerUid;
-      // const int numberOfChipsNeededForVictory = 3;
 
       if (fieldWithChips[0][0]?.chipOfPlayerUid == fieldWithChips[0][1]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[0][2]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[0][0]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[1][0]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[1][0]?.chipOfPlayerUid ==
               fieldWithChips[1][2]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[1][0]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[2][0]?.chipOfPlayerUid ==
               fieldWithChips[2][1]?.chipOfPlayerUid &&
           fieldWithChips[2][0]?.chipOfPlayerUid ==
               fieldWithChips[2][2]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[2][0]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[1][0]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[2][0]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[0][0]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[0][1]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[0][1]?.chipOfPlayerUid ==
               fieldWithChips[2][1]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[0][1]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[0][2]?.chipOfPlayerUid ==
               fieldWithChips[1][2]?.chipOfPlayerUid &&
           fieldWithChips[0][2]?.chipOfPlayerUid ==
               fieldWithChips[2][2]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[0][2]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[0][0]?.chipOfPlayerUid ==
               fieldWithChips[2][2]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[0][0]?.chipOfPlayerUid;
-        //
       } else if (fieldWithChips[0][2]?.chipOfPlayerUid ==
               fieldWithChips[1][1]?.chipOfPlayerUid &&
           fieldWithChips[0][2]?.chipOfPlayerUid == fieldWithChips[2][0]?.chipOfPlayerUid) {
-        //
         return fieldWithChips[0][2]?.chipOfPlayerUid;
-        //
       }
-
-      // // Checks all victory combinations.
-      // for (int i = 0; i < fieldWithChips.length; i++) {
-      //   for (var j = 0; j < fieldWithChips[i].length; j++) {
-      //     final String? chipOfPlayerUid = fieldWithChips[i][j]?.chipOfPlayerUid;
-      //
-      //     // Checks if a field is empty.
-      //     if (chipOfPlayerUid == null) continue;
-      //
-      //     int chipsInLine = 1;
-      //
-      //     // Checks chips in a row [i] before [j] index if [j] is greater than 0.
-      //     for (int rowCellIndex = j - 1; rowCellIndex >= 0; rowCellIndex--) {
-      //       if (fieldWithChips[i][rowCellIndex]?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //     }
-      //
-      //     // Checks chips in row [i] after [j] index if [j] is lesser than row lenght.
-      //     for (int rowCellIndex = j + 1;
-      //         rowCellIndex < fieldWithChips[i].length;
-      //         rowCellIndex++) {
-      //       if (fieldWithChips[i][rowCellIndex]?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //     }
-      //
-      //     // Checks if a row combination exists.
-      //     if (chipsInLine >= numberOfChipsNeededForVictory) {
-      //       winnerUid = chipOfPlayerUid;
-      //       break;
-      //     } else {
-      //       chipsInLine = 1;
-      //     }
-      //
-      //     // Checks chips in column [j] before [i] index if [i] is greater than 0.
-      //     for (int columnCellIndex = i - 1;
-      //         columnCellIndex >= 0;
-      //         columnCellIndex--) {
-      //       if (fieldWithChips[columnCellIndex][j]?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //     }
-      //
-      //     // Checks chips in column [j] after [i] index if [i] is lesser then column lenght.
-      //     for (int columnCellIndex = i + 1;
-      //         columnCellIndex < fieldWithChips.length;
-      //         columnCellIndex++) {
-      //       if (fieldWithChips[columnCellIndex][j]?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //     }
-      //
-      //     // Checks if a column combination exists.
-      //     if (chipsInLine >= numberOfChipsNeededForVictory) {
-      //       winnerUid = chipOfPlayerUid;
-      //       break;
-      //     } else {
-      //       chipsInLine = 1;
-      //     }
-      //
-      //     // Checks chips in main diagonals before [i] and [j] indexes.
-      //     int rowCellIndex = i - 1;
-      //     int collumnCellIndex = j - 1;
-      //     while (rowCellIndex >= 0 && collumnCellIndex >= 0) {
-      //       if (fieldWithChips[rowCellIndex][collumnCellIndex]
-      //               ?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //
-      //       rowCellIndex--;
-      //       collumnCellIndex--;
-      //     }
-      //
-      //     // Checks chips in main diagonals after [i] and [j] indexes.
-      //     rowCellIndex = i + 1;
-      //     collumnCellIndex = j + 1;
-      //     while (rowCellIndex < fieldWithChips.length &&
-      //         collumnCellIndex < fieldWithChips[rowCellIndex].length) {
-      //       if (fieldWithChips[rowCellIndex][collumnCellIndex]
-      //               ?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //
-      //       rowCellIndex--;
-      //       collumnCellIndex--;
-      //     }
-      //
-      //     // Checks if a main diagonal combination exists.
-      //     if (chipsInLine >= numberOfChipsNeededForVictory) {
-      //       winnerUid = chipOfPlayerUid;
-      //       break;
-      //     } else {
-      //       chipsInLine = 1;
-      //     }
-      //
-      //     // Checks chips in second diagonals before [i] and after [j] indexes.
-      //     rowCellIndex = i - 1;
-      //     collumnCellIndex = j + 1;
-      //     while (rowCellIndex >= 0 &&
-      //         collumnCellIndex < fieldWithChips[rowCellIndex].length) {
-      //       if (fieldWithChips[rowCellIndex][collumnCellIndex]
-      //               ?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //
-      //       rowCellIndex--;
-      //       collumnCellIndex++;
-      //     }
-      //
-      //     // Checks chips in second diagonals after [i] and before [j] indexes.
-      //     rowCellIndex = i + 1;
-      //     collumnCellIndex = j - 1;
-      //     while (
-      //         rowCellIndex < fieldWithChips.length && collumnCellIndex >= 0) {
-      //       if (fieldWithChips[rowCellIndex][collumnCellIndex]
-      //               ?.chipOfPlayerUid ==
-      //           chipOfPlayerUid) {
-      //         chipsInLine + 1;
-      //       } else {
-      //         break;
-      //       }
-      //
-      //       rowCellIndex++;
-      //       collumnCellIndex--;
-      //     }
-      //
-      //     // Checks if a second diagonal combination exists.
-      //     if (chipsInLine >= numberOfChipsNeededForVictory) {
-      //       winnerUid = chipOfPlayerUid;
-      //       break;
-      //     }
-      //   }
-      // }
 
       return winnerUid;
     } catch (exception) {

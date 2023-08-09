@@ -11,7 +11,7 @@ import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 
 class AccountBloc extends Bloc<AccountEvent, AccountState> {
   final AccountRepository _accountRepository;
-  late StreamSubscription streamSubscription;
+  late StreamSubscription _streamSubscription;
 
   AccountBloc({
     required AccountRepository accountRepository,
@@ -67,7 +67,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
   }) {
     final completer = Completer<void>();
 
-    streamSubscription = stream.listen(
+    _streamSubscription = stream.listen(
       onData,
       onDone: completer.complete,
       onError: onError,
@@ -75,7 +75,7 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     );
 
     return completer.future.whenComplete(() {
-      streamSubscription.cancel();
+      _streamSubscription.cancel();
     });
   }
 
@@ -173,14 +173,14 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
     LogOutAccountEvent event,
     Emitter<AccountState> emit,
   ) async {
-    await streamSubscription.cancel();
+    await _streamSubscription.cancel();
     emit(const EmptyAccountState());
   }
 
   /// Closes the stream subscription.
   @override
   Future<void> close() async {
-    await streamSubscription.cancel();
+    await _streamSubscription.cancel();
     super.close();
   }
 }

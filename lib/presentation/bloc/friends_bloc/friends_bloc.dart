@@ -14,7 +14,7 @@ import 'package:game/presentation/bloc/friends_bloc/friends_state.dart';
 class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
   final FriendsRepository _friendsRepository;
   final AccountRepository _accountRepository;
-  late StreamSubscription streamSubscription;
+  late StreamSubscription _streamSubscription;
 
   FriendsBloc({
     required FriendsRepository friendsRepository,
@@ -61,7 +61,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
           }
         },
         onError: (error, stackTrace) async {
-          await streamSubscription.cancel();
+          await _streamSubscription.cancel();
         },
       );
     } on FriendsError catch (exeption) {
@@ -79,7 +79,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
   }) {
     final completer = Completer<void>();
 
-    streamSubscription = stream.listen(
+    _streamSubscription = stream.listen(
       onData,
       onDone: completer.complete,
       onError: onError,
@@ -87,7 +87,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     );
 
     return completer.future.whenComplete(() {
-      streamSubscription.cancel();
+      _streamSubscription.cancel();
     });
   }
 
@@ -202,7 +202,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
     StopListenUpdatesFriendsEvent event,
     Emitter<FriendsState> emit,
   ) async {
-    await streamSubscription.cancel();
+    await _streamSubscription.cancel();
     emit(const UnlistenedFriendsState());
   }
 
@@ -210,7 +210,7 @@ class FriendsBloc extends Bloc<FriendsEvent, FriendsState> {
   /// Closes the stream subscription.
   @override
   Future<void> close() async {
-    await streamSubscription.cancel();
+    await _streamSubscription.cancel();
     super.close();
   }
 }

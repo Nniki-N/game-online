@@ -90,5 +90,6 @@
   "youDontHaveAnyNotifications": "У вас немає сповіщень",
   "waitingForSecondPlayer": "В очікуванні на другого гравця, зачекайте трохи...",
   "refusal": "Відмова",
-  "yourGameOfferWasDenied": "Ваше запрошення до гри було відхилено"
+  "yourGameOfferWasDenied": "Ваше запрошення до гри було відхилено",
+  "secondPlayerDoesNotRespondForALongTime": "Другий гравець довго не відповідає, тому ви автоматично перемогли."
 }
