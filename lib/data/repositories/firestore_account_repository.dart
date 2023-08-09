@@ -105,14 +105,9 @@ class FirestoreAccountRepository implements AccountRepository {
       final AccountModel accountModel = AccountModel.fromUserAccountEntity(
         userAccount: userAccount,
       );
-
-      log('notificationsUidList inside account repository: ${accountModel.notificationsUidList}');
-
       await _firebaseAccountDatasource.updateAccount(
         accountModel: accountModel,
       );
-
-      log('updated inside repository');
     } catch (exception) {
       rethrow;
     }

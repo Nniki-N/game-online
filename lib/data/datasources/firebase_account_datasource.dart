@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,13 +91,9 @@ class FirebaseAccountDatasource {
   /// Rethrows [AccountError] when the error occurs.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
-      log('notificationsUidList inside account datasource: ${accountModel.notificationsUidList}');
-
       await _firebaseAccountDatasourceHelper.updateAccount(
         accountModel: accountModel,
       );
-
-      log('updated inside datasource');
     } catch (exception) {
       rethrow;
     }

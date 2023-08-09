@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/errors/game_room_error.dart';
-import 'package:game/common/utils/avatar_selecting.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
@@ -16,6 +15,7 @@ import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/theme/extensions/popup_menu_theme.dart';
+import 'package:game/presentation/widgets/custom_avatar.dart';
 import 'package:game/presentation/widgets/custom_popup_menu_divider/custom_popup_menu_divider.dart';
 import 'package:game/presentation/widgets/custom_popups/show_accept_or_deny_popup.dart';
 import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
@@ -39,22 +39,9 @@ class ConnectionsFriendItem extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.w),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: account.avatarLink != null
-              ? Image.network(
-                  account.avatarLink!,
-                  width: 50.w,
-                  height: 50.w,
-                )
-              : SvgPicture.asset(
-                  selectRandomBasicAvatar(),
-                  width: 50.w,
-                  height: 50.w,
-                ),
+        CustomAvatar(
+          avatarLink: account.avatarLink,
+          size: 50.w,
         ),
         SizedBox(width: 12.w),
         Expanded(

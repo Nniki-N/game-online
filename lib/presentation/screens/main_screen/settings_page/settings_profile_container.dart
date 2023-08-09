@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:game/common/utils/avatar_selecting.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
 import 'package:game/presentation/theme/extensions/settings_item_theme.dart';
+import 'package:game/presentation/widgets/custom_avatar.dart';
 import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 
@@ -42,22 +42,9 @@ class ProfileDetailsContainer extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.w),
-                    ),
-                    clipBehavior: Clip.hardEdge,
-                    child: userAccount.avatarLink != null
-                        ? Image.network(
-                            userAccount.avatarLink!,
-                            width: 61.w,
-                            height: 61.w,
-                          )
-                        : SvgPicture.asset(
-                            randomUserAvatar,
-                            width: 61.w,
-                            height: 61.w,
-                          ),
+                  CustomAvatar(
+                    avatarLink: userAccount.avatarLink,
+                    size: 61.w,
                   ),
                   SizedBox(width: 17.w),
                   Column(

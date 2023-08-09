@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show immutable;
@@ -93,14 +92,10 @@ class FirebaseAccountDatasourceHelper {
   /// Throws [AccountErrorUpdatingAccount] when the error occurs.
   Future<void> updateAccount({required AccountModel accountModel}) async {
     try {
-      log('notificationsUidList inside account helper: ${accountModel.notificationsUidList}');
-
       await _firebaseFirestore
           .collection(FirebaseConstants.accounts)
           .doc(accountModel.uid)
           .update(accountModel.toJson());
-          
-      log('updated inside helper');
     } catch (exception) {
       _logger.e(exception);
       throw const AccountErrorUpdatingAccount();
