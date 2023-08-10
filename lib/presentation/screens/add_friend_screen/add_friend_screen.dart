@@ -10,6 +10,8 @@ import 'package:game/presentation/bloc/form_validation_bloc/form_validation_stat
 import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_state.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_bloc.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_state.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/theme/extensions/text_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
@@ -36,12 +38,6 @@ class AddFriendScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => FormValidationBloc(),
         ),
-        // BlocProvider(
-        //   create: (context) => FriendsBloc(
-        //     friendsRepository: getIt(),
-        //     accountRepository: getIt(),
-        //   ),
-        // ),
       ],
       child: BlocListener<FormValidationBloc, FormValidationState>(
         listener: (context, validationState) {
@@ -59,14 +55,14 @@ class AddFriendScreen extends StatelessWidget {
 
               final isPopUpShown = ModalRoute.of(context)?.isCurrent != true;
 
-              if(!isPopUpShown) {
+              if (!isPopUpShown) {
                 showNotificationPopUp(
-                context: context,
-                dialogTitle: AppLocalizations.of(context)!.friendWasAdded,
-                dialogContent: AppLocalizations.of(context)!
-                    .thisUserWasAddedToYourConnections,
-                buttonText: AppLocalizations.of(context)!.ok,
-              );
+                  context: context,
+                  dialogTitle: AppLocalizations.of(context)!.friendWasAdded,
+                  dialogContent: AppLocalizations.of(context)!
+                      .thisUserWasAddedToYourConnections,
+                  buttonText: AppLocalizations.of(context)!.ok,
+                );
               }
             }
 
@@ -148,28 +144,44 @@ class AddFriendScreen extends StatelessWidget {
                             CustomButton(
                               text: AppLocalizations.of(context)!.wordAdd,
                               onTap: () {
-                                final String login = loginController.text;
+                                final bool isInternetConnected = context
+                                    .read<InternetConnectionBloc>()
+                                    .state is ConnectedInternetConnectionState;
 
-                                const int minSymbols = 3;
-                                const int maxSymbols = 15;
+                                if (isInternetConnected) {
+                                  final String login = loginController.text;
 
-                                // Validates a login.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(TextFormValidationEvent(
-                                      text: login,
-                                      maxSymbols: maxSymbols,
-                                      minSymbols: minSymbols,
-                                      lastValidation: true,
-                                      validationForbiddenSymbolsText:
-                                          '//${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.login.toLowerCase()}',
-                                      validationEmptyText:
-                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.login}',
-                                      validationToManySymbolsText:
-                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
-                                      validationNotEnoughtSymbolsText:
-                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
-                                    ));
+                                  const int minSymbols = 3;
+                                  const int maxSymbols = 15;
+
+                                  // Validates a login.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(TextFormValidationEvent(
+                                        text: login,
+                                        maxSymbols: maxSymbols,
+                                        minSymbols: minSymbols,
+                                        lastValidation: true,
+                                        validationForbiddenSymbolsText:
+                                            '//${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.login.toLowerCase()}',
+                                        validationEmptyText:
+                                            '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.login}',
+                                        validationToManySymbolsText:
+                                            '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
+                                        validationNotEnoughtSymbolsText:
+                                            '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
+                                      ));
+                                } else {
+                                  showNotificationPopUp(
+                                    context: context,
+                                    dialogTitle: AppLocalizations.of(context)!
+                                        .disconnected,
+                                    dialogContent: AppLocalizations.of(context)!
+                                        .thereIsNoInternetConnection,
+                                    buttonText:
+                                        AppLocalizations.of(context)!.ok,
+                                  );
+                                }
                               },
                             )
                           ],

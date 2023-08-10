@@ -4,12 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_bloc.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_state.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
 import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:game/presentation/theme/extensions/button_theme.dart';
 import 'package:game/presentation/theme/extensions/icon_theme.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_button.dart';
 import 'package:game/presentation/widgets/custom_buttons/custom_icon_text_button.dart';
+import 'package:game/presentation/widgets/custom_popups/show_notification_popup.dart';
 import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:game/resources/resources.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,18 +51,46 @@ class HomePage extends StatelessWidget {
               CustomButton(
                 text: AppLocalizations.of(context)!.playWithRandomPlayer,
                 onTap: () {
-                  // Searches for a room.
-                  // Creates a room if there are no rooms.
-                  final RoomBloc roomBloc = context.read<RoomBloc>();
-                  roomBloc.add(const SearchRoomEvent());
+                  final bool isInternetConnected = context
+                      .read<InternetConnectionBloc>()
+                      .state is ConnectedInternetConnectionState;
+
+                  if (isInternetConnected) {
+                    // Searches for a room.
+                    // Creates a room if there are no rooms.
+                    final RoomBloc roomBloc = context.read<RoomBloc>();
+                    roomBloc.add(const SearchRoomEvent());
+                  } else {
+                    showNotificationPopUp(
+                      context: context,
+                      dialogTitle: AppLocalizations.of(context)!.disconnected,
+                      dialogContent: AppLocalizations.of(context)!
+                          .thereIsNoInternetConnection,
+                      buttonText: AppLocalizations.of(context)!.ok,
+                    );
+                  }
                 },
               ),
               SizedBox(height: 25.h),
               CustomButton(
                 text: AppLocalizations.of(context)!.playWithFriend,
                 onTap: () {
-                  AutoRouter.of(context)
-                      .push(const ChoosefriendForGameRouter());
+                  final bool isInternetConnected = context
+                      .read<InternetConnectionBloc>()
+                      .state is ConnectedInternetConnectionState;
+
+                  if (isInternetConnected) {
+                    AutoRouter.of(context)
+                        .push(const ChoosefriendForGameRouter());
+                  } else {
+                    showNotificationPopUp(
+                      context: context,
+                      dialogTitle: AppLocalizations.of(context)!.disconnected,
+                      dialogContent: AppLocalizations.of(context)!
+                          .thereIsNoInternetConnection,
+                      buttonText: AppLocalizations.of(context)!.ok,
+                    );
+                  }
                 },
               ),
               SizedBox(height: 35.h),

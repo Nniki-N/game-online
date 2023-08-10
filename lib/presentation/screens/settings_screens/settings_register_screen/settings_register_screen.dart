@@ -14,6 +14,8 @@ import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_event.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_bloc.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_state.dart';
 import 'package:game/presentation/screens/loading_screen.dart/loading_screen.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
 import 'package:game/presentation/theme/extensions/text_theme.dart';
@@ -181,92 +183,111 @@ class SettingsRegisterScreen extends StatelessWidget {
                               text: AppLocalizations.of(context)!.register,
                               onTap: () {
                                 log('registration ------------------ register button is pressed');
-                                final String username = usernameController.text;
-                                final String login = loginController.text;
-                                final String email = emailController.text;
-                                final String password = passwordController.text;
-                                final String repeatPassword =
-                                    repeatPasswordController.text;
 
-                                const int minSymbols = 3;
-                                const int maxSymbols = 15;
-                                const int minSymbolsForPassword = 6;
-                                const int maxSymbolsForPasswor = 55;
+                                final bool isInternetConnected = context
+                                    .read<InternetConnectionBloc>()
+                                    .state is ConnectedInternetConnectionState;
 
-                                // Validates a username.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(TextFormValidationEvent(
-                                      text: username,
-                                      maxSymbols: maxSymbols,
-                                      minSymbols: minSymbols,
-                                      validationForbiddenSymbolsText:
-                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.username.toLowerCase()}',
-                                      validationEmptyText:
-                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.username}',
-                                      validationToManySymbolsText:
-                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.username} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
-                                      validationNotEnoughtSymbolsText:
-                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.username} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
-                                    ));
+                                if (isInternetConnected) {
+                                  final String username =
+                                      usernameController.text;
+                                  final String login = loginController.text;
+                                  final String email = emailController.text;
+                                  final String password =
+                                      passwordController.text;
+                                  final String repeatPassword =
+                                      repeatPasswordController.text;
 
-                                // Validates a login.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(TextFormValidationEvent(
-                                      text: login,
-                                      maxSymbols: maxSymbols,
-                                      minSymbols: minSymbols,
-                                      validationForbiddenSymbolsText:
-                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.login.toLowerCase()}',
-                                      validationEmptyText:
-                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.login}',
-                                      validationToManySymbolsText:
-                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
-                                      validationNotEnoughtSymbolsText:
-                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
-                                    ));
+                                  const int minSymbols = 3;
+                                  const int maxSymbols = 15;
+                                  const int minSymbolsForPassword = 6;
+                                  const int maxSymbolsForPasswor = 55;
 
-                                // Validates an email.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(EmailFormValidationEvent(
-                                      email: email,
-                                      validationEmptyEmail:
-                                          AppLocalizations.of(context)!
-                                              .pleaseEnterYourEmailAddress,
-                                      validationIncorrectEmail:
-                                          AppLocalizations.of(context)!
-                                              .emailAddressIsIncorrect,
-                                    ));
+                                  // Validates a username.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(TextFormValidationEvent(
+                                        text: username,
+                                        maxSymbols: maxSymbols,
+                                        minSymbols: minSymbols,
+                                        validationForbiddenSymbolsText:
+                                            '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.username.toLowerCase()}',
+                                        validationEmptyText:
+                                            '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.username}',
+                                        validationToManySymbolsText:
+                                            '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.username} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
+                                        validationNotEnoughtSymbolsText:
+                                            '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.username} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
+                                      ));
 
-                                // Validates a password.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(TextFormValidationEvent(
-                                      text: password,
-                                      minSymbols: minSymbolsForPassword,
-                                      maxSymbols: maxSymbolsForPasswor,
-                                      validationForbiddenSymbolsText:
-                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.password.toLowerCase()}',
-                                      validationEmptyText:
-                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.password}',
-                                      validationToManySymbolsText:
-                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $maxSymbolsForPasswor ${AppLocalizations.of(context)!.symbols}',
-                                      validationNotEnoughtSymbolsText:
-                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $minSymbolsForPassword ${AppLocalizations.of(context)!.symbols}',
-                                    ));
+                                  // Validates a login.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(TextFormValidationEvent(
+                                        text: login,
+                                        maxSymbols: maxSymbols,
+                                        minSymbols: minSymbols,
+                                        validationForbiddenSymbolsText:
+                                            '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.login.toLowerCase()}',
+                                        validationEmptyText:
+                                            '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.login}',
+                                        validationToManySymbolsText:
+                                            '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
+                                        validationNotEnoughtSymbolsText:
+                                            '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.login} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
+                                      ));
 
-                                // Validates a repeated password.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(SimilarityTextFormValidationEvent(
-                                      texts: [password, repeatPassword],
-                                      lastValidation: true,
-                                      validationFailureText:
-                                          AppLocalizations.of(context)!
-                                              .passordsAreNotEqual,
-                                    ));
+                                  // Validates an email.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(EmailFormValidationEvent(
+                                        email: email,
+                                        validationEmptyEmail:
+                                            AppLocalizations.of(context)!
+                                                .pleaseEnterYourEmailAddress,
+                                        validationIncorrectEmail:
+                                            AppLocalizations.of(context)!
+                                                .emailAddressIsIncorrect,
+                                      ));
+
+                                  // Validates a password.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(TextFormValidationEvent(
+                                        text: password,
+                                        minSymbols: minSymbolsForPassword,
+                                        maxSymbols: maxSymbolsForPasswor,
+                                        validationForbiddenSymbolsText:
+                                            '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.password.toLowerCase()}',
+                                        validationEmptyText:
+                                            '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.password}',
+                                        validationToManySymbolsText:
+                                            '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $maxSymbolsForPasswor ${AppLocalizations.of(context)!.symbols}',
+                                        validationNotEnoughtSymbolsText:
+                                            '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $minSymbolsForPassword ${AppLocalizations.of(context)!.symbols}',
+                                      ));
+
+                                  // Validates a repeated password.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(SimilarityTextFormValidationEvent(
+                                        texts: [password, repeatPassword],
+                                        lastValidation: true,
+                                        validationFailureText:
+                                            AppLocalizations.of(context)!
+                                                .passordsAreNotEqual,
+                                      ));
+                                } else {
+                                  showNotificationPopUp(
+                                    context: context,
+                                    dialogTitle: AppLocalizations.of(context)!
+                                        .disconnected,
+                                    dialogContent: AppLocalizations.of(context)!
+                                        .thereIsNoInternetConnection,
+                                    buttonText:
+                                        AppLocalizations.of(context)!.ok,
+                                  );
+                                }
                               },
                             ),
                           ],

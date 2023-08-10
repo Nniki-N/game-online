@@ -91,5 +91,7 @@
   "waitingForSecondPlayer": "В очікуванні на другого гравця, зачекайте трохи...",
   "refusal": "Відмова",
   "yourGameOfferWasDenied": "Ваше запрошення до гри було відхилено",
-  "secondPlayerDoesNotRespondForALongTime": "Другий гравець довго не відповідає, тому ви автоматично перемогли."
+  "secondPlayerDoesNotRespondForALongTime": "Другий гравець довго не відповідає, тому ви автоматично перемогли.",
+  "thereIsNoInternetConnection": "Інтернет з'єднання відсутнє",
+  "disconnected": "З'єднання відсутнє"
 }

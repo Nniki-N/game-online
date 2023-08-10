@@ -9,7 +9,10 @@ import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:game/presentation/bloc/auth_bloc/auth_state.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_bloc.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_state.dart';
 import 'package:game/presentation/bloc/room_bloc/room_bloc.dart';
+import 'package:game/presentation/bloc/room_bloc/room_event.dart';
 import 'package:game/presentation/bloc/room_bloc/room_state.dart';
 import 'package:game/presentation/screens/main_screen/custom_bottom_navigation_bar.dart';
 import 'package:game/presentation/theme/extensions/background_theme.dart';
@@ -29,10 +32,24 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    final RoomBloc roomBloc = context.read<RoomBloc>();
+    final RoomState roomState = context.read<RoomBloc>().state;
+
+    final InternetConnectionState internetConnectionState =
+        context.read<InternetConnectionBloc>().state;
+
+    // Leaves a game room if there is no Internet connection and the current user was in a game.
+    if (internetConnectionState is DisconnectedInternetConnectionState &&
+        (roomState is InRoomState || roomState is InFullRoomState)) {
+      roomBloc.add(LeaveRoomEvent(
+        gameRoom: roomBloc.state.getGameRoom()!,
+        leaveWithLoose: false,
+      ));
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Displays an error message if needed after loading the page.
-      if (context.read<RoomBloc>().state is ErrorRoomState) {
-        final roomState = context.read<RoomBloc>().state as ErrorRoomState;
+      if (roomState is ErrorRoomState) {
         log('roomError in the main screen');
 
         // Checks if error message has to be shown.
@@ -106,7 +123,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
           }
 
           // Navigates to the online game room screen if the game room is full.
-          else if (roomState  is InFullRoomState) {
+          else if (roomState is InFullRoomState) {
             log('main screen ------------------ go to the online game room screen');
             AutoRouter.of(context).replaceAll(const [OnlineGameRouter()]);
           }

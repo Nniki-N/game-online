@@ -47,9 +47,11 @@ class GameTimerBloc extends Bloc<GameTimerEvent, GameTimerState> {
     Emitter<GameTimerState> emit,
   ) async {
     try {
+
       // Indicates that the cooldown started.
       emit(const InProgressGameTimerState(
-        secondsLeft: GameTimerRepository.gameTimerDurationForCurrentUserInSeconds,
+        secondsLeft:
+            GameTimerRepository.gameTimerDurationForCurrentUserInSeconds,
       ));
 
       // Changes state base on how many seconds are left for a move.
@@ -79,6 +81,7 @@ class GameTimerBloc extends Bloc<GameTimerEvent, GameTimerState> {
     Emitter<GameTimerState> emit,
   ) async {
     try {
+
       // Stops cooldown for a current user.
       await _streamSubscription.cancel();
 
@@ -98,14 +101,17 @@ class GameTimerBloc extends Bloc<GameTimerEvent, GameTimerState> {
     Emitter<GameTimerState> emit,
   ) async {
     try {
+
       // Changes state base on how many seconds are left for a second player's move.
       await _listenStream(
         _gameTimerRepository.gameTimerStreamForSecondPlayer(),
         onData: (secondsLeft) {
+
           // Indicates that second player is not in the game.
           if (secondsLeft == 0) {
             emit(const StoppedSecondGameTimerState(
-              secondsLeft: GameTimerRepository.gameTimerDurationForCurrentUserInSeconds,
+              secondsLeft:
+                  GameTimerRepository.gameTimerDurationForCurrentUserInSeconds,
             ));
           }
         },
@@ -130,6 +136,7 @@ class GameTimerBloc extends Bloc<GameTimerEvent, GameTimerState> {
     Emitter<GameTimerState> emit,
   ) async {
     try {
+
       // Stops cooldown for a second player.
       await _streamSubscription.cancel();
     } catch (exeption) {

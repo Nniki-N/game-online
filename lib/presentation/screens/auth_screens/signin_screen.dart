@@ -18,6 +18,8 @@ import 'package:game/presentation/bloc/form_validation_bloc/form_validation_even
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_state.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_bloc.dart';
 import 'package:game/presentation/bloc/friends_bloc/friends_event.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_bloc.dart';
+import 'package:game/presentation/bloc/internet_connection_bloc/internet_connection_state.dart';
 import 'package:game/presentation/bloc/notification_bloc/notification_bloc.dart';
 import 'package:game/presentation/bloc/notification_bloc/notification_event.dart';
 import 'package:game/presentation/screens/auth_screens/signin_form_separator.dart';
@@ -101,7 +103,9 @@ class SignInScreen extends StatelessWidget {
               log('signin ------------------ go to the main');
               context.read<AccountBloc>().add(const InitializeAccountEvent());
               context.read<FriendsBloc>().add(const InitializeFriendsEvent());
-              context.read<NotificationBloc>().add(const InitializeNotificationEvent());
+              context
+                  .read<NotificationBloc>()
+                  .add(const InitializeNotificationEvent());
               AutoRouter.of(context).replace(const MainRouter());
             }
           },
@@ -170,42 +174,59 @@ class SignInScreen extends StatelessWidget {
                               onTap: () {
                                 log('signin ------------------ sign in button pressed');
 
-                                final String email = emailController.text;
-                                final String password = passwordController.text;
+                                final bool isInternetConnected = context
+                                    .read<InternetConnectionBloc>()
+                                    .state is ConnectedInternetConnectionState;
 
-                                const int minSymbols = 6;
-                                const int maxSymbols = 55;
+                                if (isInternetConnected) {
+                                  final String email = emailController.text;
+                                  final String password =
+                                      passwordController.text;
 
-                                // Validates an email.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(EmailFormValidationEvent(
-                                      email: email,
-                                      validationEmptyEmail:
-                                          AppLocalizations.of(context)!
-                                              .pleaseEnterYourEmailAddress,
-                                      validationIncorrectEmail:
-                                          AppLocalizations.of(context)!
-                                              .emailAddressIsIncorrect,
-                                    ));
+                                  const int minSymbols = 6;
+                                  const int maxSymbols = 55;
 
-                                // Validates a password.
-                                context
-                                    .read<FormValidationBloc>()
-                                    .add(TextFormValidationEvent(
-                                      text: password,
-                                      lastValidation: true,
-                                      minSymbols: minSymbols,
-                                      maxSymbols: maxSymbols,
-                                      validationForbiddenSymbolsText:
-                                          '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.password.toLowerCase()}',
-                                      validationEmptyText:
-                                          '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.password}',
-                                      validationToManySymbolsText:
-                                          '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
-                                      validationNotEnoughtSymbolsText:
-                                          '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
-                                    ));
+                                  // Validates an email.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(EmailFormValidationEvent(
+                                        email: email,
+                                        validationEmptyEmail:
+                                            AppLocalizations.of(context)!
+                                                .pleaseEnterYourEmailAddress,
+                                        validationIncorrectEmail:
+                                            AppLocalizations.of(context)!
+                                                .emailAddressIsIncorrect,
+                                      ));
+
+                                  // Validates a password.
+                                  context
+                                      .read<FormValidationBloc>()
+                                      .add(TextFormValidationEvent(
+                                        text: password,
+                                        lastValidation: true,
+                                        minSymbols: minSymbols,
+                                        maxSymbols: maxSymbols,
+                                        validationForbiddenSymbolsText:
+                                            '${AppLocalizations.of(context)!.symbols.capitalize()} [] ${AppLocalizations.of(context)!.areForbiddenToUseInThe} ${AppLocalizations.of(context)!.password.toLowerCase()}',
+                                        validationEmptyText:
+                                            '${AppLocalizations.of(context)!.pleaseEnter} ${AppLocalizations.of(context)!.password}',
+                                        validationToManySymbolsText:
+                                            '${AppLocalizations.of(context)!.maximalLengthOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $maxSymbols ${AppLocalizations.of(context)!.symbols}',
+                                        validationNotEnoughtSymbolsText:
+                                            '${AppLocalizations.of(context)!.minimalLenghtOf} ${AppLocalizations.of(context)!.password} ${AppLocalizations.of(context)!.wordIs} $minSymbols ${AppLocalizations.of(context)!.symbols}',
+                                      ));
+                                } else {
+                                  showNotificationPopUp(
+                                    context: context,
+                                    dialogTitle: AppLocalizations.of(context)!
+                                        .disconnected,
+                                    dialogContent: AppLocalizations.of(context)!
+                                        .thereIsNoInternetConnection,
+                                    buttonText:
+                                        AppLocalizations.of(context)!.ok,
+                                  );
+                                }
                               },
                             ),
                             SizedBox(height: 35.h),
@@ -218,9 +239,26 @@ class SignInScreen extends StatelessWidget {
                               border: buttonTheme.border2,
                               onTap: () {
                                 log('signin ------------------ sign in anonymously button pressed');
-                                context
-                                    .read<AuthBloc>()
-                                    .add(const LogInAnonymouslyAuthEvent());
+
+                                final bool isInternetConnected = context
+                                    .read<InternetConnectionBloc>()
+                                    .state is ConnectedInternetConnectionState;
+
+                                if (isInternetConnected) {
+                                  context
+                                      .read<AuthBloc>()
+                                      .add(const LogInAnonymouslyAuthEvent());
+                                } else {
+                                  showNotificationPopUp(
+                                    context: context,
+                                    dialogTitle: AppLocalizations.of(context)!
+                                        .disconnected,
+                                    dialogContent: AppLocalizations.of(context)!
+                                        .thereIsNoInternetConnection,
+                                    buttonText:
+                                        AppLocalizations.of(context)!.ok,
+                                  );
+                                }
                               },
                             ),
                             SizedBox(height: 20.h),
@@ -236,9 +274,26 @@ class SignInScreen extends StatelessWidget {
                               ),
                               onTap: () {
                                 log('signin ------------------ sign in with google button pressed');
-                                context
-                                    .read<AuthBloc>()
-                                    .add(const LogInWithGoogleAuthEvent());
+
+                                final bool isInternetConnected = context
+                                    .read<InternetConnectionBloc>()
+                                    .state is ConnectedInternetConnectionState;
+
+                                if (isInternetConnected) {
+                                  context
+                                      .read<AuthBloc>()
+                                      .add(const LogInWithGoogleAuthEvent());
+                                } else {
+                                  showNotificationPopUp(
+                                    context: context,
+                                    dialogTitle: AppLocalizations.of(context)!
+                                        .disconnected,
+                                    dialogContent: AppLocalizations.of(context)!
+                                        .thereIsNoInternetConnection,
+                                    buttonText:
+                                        AppLocalizations.of(context)!.ok,
+                                  );
+                                }
                               },
                             ),
                           ],

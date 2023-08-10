@@ -24,25 +24,27 @@ class InitialScreen extends StatelessWidget {
         Theme.of(context).extension<BackgroundTheme>()!;
 
     return BlocListener<AuthBloc, AuthState>(
-      listener: (content, state) {
+      listener: (content, authState) {
         // Navigates to the login screen if an error occurs.
-        final authError = state.error;
+        final authError = authState.error;
         if (authError != null) {
           log('error signin');
           AutoRouter.of(context).replace(const SignInRouter());
         }
 
         // Navigates to the main screen if the user is logged in.
-        if (state is LoggedInAuthState) {
+        if (authState is LoggedInAuthState) {
           log('initial ------------------ go to main');
           context.read<AccountBloc>().add(const InitializeAccountEvent());
           context.read<FriendsBloc>().add(const InitializeFriendsEvent());
-          context.read<NotificationBloc>().add(const InitializeNotificationEvent());
+          context
+              .read<NotificationBloc>()
+              .add(const InitializeNotificationEvent());
           AutoRouter.of(context).replace(const MainRouter());
         }
 
         // Navigates to the login screen if the user is logged out.
-        if (state is LoggedOutAuthState) {
+        if (authState is LoggedOutAuthState) {
           log('initial ------------------ go to signin');
           AutoRouter.of(context).replace(const SignInRouter());
         }
