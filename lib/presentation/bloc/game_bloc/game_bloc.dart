@@ -52,28 +52,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           .getGameRoomStream(gameRoomId: state.gameRoom.uid)
           .asBroadcastStream();
 
-      // Responds to the game room state changes.
-      // await emit.onEach(
-      //   gameRoomStream,
-      //   onData: (gameRoom) {
-      //     // Continues game if the game state remains as in progress.
-      //     if (gameRoom.gameRoomState == GameRoomState.inGame) {
-      //       log('GameBloc ------------------ game is an "inGame" ');
-      //       emit(InProgressGameState(gameRoom: gameRoom.copyWith()));
-      //     }
-      //
-      //     // Finishes the game if the game state was changed to the result.
-      //     else if (gameRoom.gameRoomState == GameRoomState.result) {
-      //       log('GameBloc ------------------ game state is a "result"');
-      //       emit(ResultGameState(gameRoom: gameRoom));
-      //     }
-      //   },
-      //   // Closes the stream listening if any arror occurs.
-      //   onError: (error, stackTrace) {
-      //     log('RoomBloc ------------------ stream error: ${error.toString()}');
-      //   },
-      // );
-
       await _listenStream(
         gameRoomStream,
         onData: (gameRoom) {
@@ -523,9 +501,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       // Checks the field for a victory combination.
       final String? winnerUid = _gameRepository
           .checkCombinationsAndSelectWinner(fieldWithChips: fieldWithChips);
-
-      log('winner: $winnerUid');
-      log('fieldWithChips: $fieldWithChips');
 
       // Finishes the game if there is a winner.
       if (winnerUid != null) {

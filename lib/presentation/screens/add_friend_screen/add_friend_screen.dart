@@ -133,7 +133,7 @@ class AddFriendScreen extends StatelessWidget {
                             SizedBox(height: 5.h),
                             CustomText(
                               text: AppLocalizations.of(context)!
-                                  .enterUsernameOfPlayerYouWantToAddAsFriends,
+                                  .enterLoginOfPlayerYouWantToAddAsFriends,
                               color: textTheme.color3,
                               maxLines: 4,
                               textAlign: TextAlign.center,

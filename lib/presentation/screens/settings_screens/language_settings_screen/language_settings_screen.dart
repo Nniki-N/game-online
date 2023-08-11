@@ -59,7 +59,7 @@ class LanguageSettingsScreen extends StatelessWidget {
                         );
                       },
                       separatorBuilder: (context, index) =>
-                          SizedBox(height: 20.h),
+                          SizedBox(height: 10.h),
                     ),
                   ),
                 ),

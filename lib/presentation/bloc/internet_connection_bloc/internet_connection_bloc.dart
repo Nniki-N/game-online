@@ -22,7 +22,7 @@ class InternetConnectionBloc
   ) async {
     try {
       final Connectivity connectivity = Connectivity();
-      log('init internet connection state');
+      log('initialize internet connection state');
 
       final ConnectivityResult initialConnectivityResult = await connectivity.checkConnectivity();
 

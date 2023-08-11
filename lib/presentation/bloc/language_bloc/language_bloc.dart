@@ -21,7 +21,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     InitializeLanguageEvent event,
     Emitter<LanguageState> emit,
   ) async {
-    log('start language initialize');
+    log('start language initializing');
     // Retrieves a language.
     final Language language = await _languageRepository.language;
 

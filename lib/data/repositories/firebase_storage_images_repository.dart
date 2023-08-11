@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,15 +34,11 @@ class FirebaseStorageImageRepository implements ImagesRepository {
       final XFile? image =
           await ImagePicker().pickImage(source: ImageSource.gallery);
 
-      log('selected image');
-
       // Returns if image was not selected
       if (image == null) return;
 
       // Converts image in the file.
       final File imageFile = File(image.path);
-
-      log('converted image into file');
 
       // Retrieves a storage avatars reference.
       final Reference storageAvatarsRef =
@@ -53,13 +49,9 @@ class FirebaseStorageImageRepository implements ImagesRepository {
       // Saves avatar.
       await storageAvatarsRef.child(uid).putFile(imageFile);
 
-      log('saved image');
-
       // Retrieves saved avatar url.
       final String avatarUrl =
           await storageAvatarsRef.child(uid).getDownloadURL();
-      
-      log('loaded image url');
 
       // Retrieves a current user account model.
       AccountModel currentAccountModel =
@@ -74,8 +66,6 @@ class FirebaseStorageImageRepository implements ImagesRepository {
       await _firebaseAccountDatasource.updateAccount(
         accountModel: currentAccountModel,
       );
-
-      log('saved user image url');
     } catch (exeption) {
       _logger.e(exeption);
       rethrow;

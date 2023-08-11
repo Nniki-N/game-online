@@ -18,11 +18,13 @@ void main() {
     expect(File(Svgs.chipCyan).existsSync(), true);
     expect(File(Svgs.chipRed).existsSync(), true);
     expect(File(Svgs.connection).existsSync(), true);
+    expect(File(Svgs.darkThemeMode).existsSync(), true);
     expect(File(Svgs.dots).existsSync(), true);
     expect(File(Svgs.game).existsSync(), true);
     expect(File(Svgs.gear).existsSync(), true);
     expect(File(Svgs.gogle).existsSync(), true);
     expect(File(Svgs.inform).existsSync(), true);
+    expect(File(Svgs.lightThemeMode).existsSync(), true);
     expect(File(Svgs.logoIngame).existsSync(), true);
     expect(File(Svgs.logo).existsSync(), true);
     expect(File(Svgs.signInSeparator).existsSync(), true);

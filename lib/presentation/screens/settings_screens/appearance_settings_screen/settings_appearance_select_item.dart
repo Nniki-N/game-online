@@ -1,24 +1,27 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/presentation/theme/extensions/radio_button_theme.dart';
 import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 
 class SettingsAppearanceSelectItem extends StatelessWidget {
   final String text;
   final bool isSelected;
+  final SvgPicture svgPicture;
   final VoidCallback? onTap;
 
   const SettingsAppearanceSelectItem({
     super.key,
     required this.text,
     required this.isSelected,
+    required this.svgPicture,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final RadioButtonTheme radioButtonTheme = Theme.of(context).extension<RadioButtonTheme>()!;
+    final RadioButtonTheme radioButtonTheme =
+        Theme.of(context).extension<RadioButtonTheme>()!;
 
     return GestureDetector(
       onTap: onTap,
@@ -26,14 +29,7 @@ class SettingsAppearanceSelectItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 95.w,
-            height: 122.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.w),
-              color: Colors.grey,
-            ),
-          ),
+          svgPicture,
           SizedBox(height: 6.h),
           CustomText(
             text: text,

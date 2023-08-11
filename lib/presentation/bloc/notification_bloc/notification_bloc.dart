@@ -245,15 +245,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
       currentUserAccount.copyWith(notificationsUidList: notificationsUidList);
 
-      log(currentUserAccount.uid.toString());
-      log(currentUserAccount.notificationsUidList.toString());
-
       // Saves updated notification list.
       await _accountRepository.updateUserAccount(
         userAccount: currentUserAccount,
       );
-
-      log('${event.notificationUid} to delete');
 
       // Deletes notification
       await _notificationRepository.deleteNotification(
@@ -290,8 +285,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       await _accountRepository.updateUserAccount(
         userAccount: userAccount,
       );
-
-      log('${event.notificationUid} to delete');
 
       // Deletes notification
       await _notificationRepository.deleteNotification(

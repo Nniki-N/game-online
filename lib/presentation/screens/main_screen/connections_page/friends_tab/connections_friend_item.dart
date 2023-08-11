@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart' hide IconTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,7 +113,6 @@ class ConnectionsFriendItem extends StatelessWidget {
                   buttonAcceptText: AppLocalizations.of(context)!.remove,
                   buttonDenyText: AppLocalizations.of(context)!.cancel,
                 ).then((remove) {
-                  log('$remove');
                   if (remove) {
                     context
                         .read<FriendsBloc>()

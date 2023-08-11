@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/presentation/bloc/appearance_bloc/appearance_bloc.dart';
 import 'package:game/presentation/bloc/appearance_bloc/appearance_event.dart';
 import 'package:game/presentation/bloc/appearance_bloc/appearance_state.dart';
@@ -12,6 +13,7 @@ import 'package:game/presentation/widgets/custom_buttons/custom_button_back.dart
 import 'package:game/presentation/widgets/custom_switches/custom_switch.dart';
 import 'package:game/presentation/widgets/custom_texts/custom_text.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game/resources/resources.dart';
 
 class AppearanceSettingsScreen extends StatelessWidget {
   const AppearanceSettingsScreen({super.key});
@@ -56,6 +58,10 @@ class AppearanceSettingsScreen extends StatelessWidget {
                   children: [
                     SettingsAppearanceSelectItem(
                       text: AppLocalizations.of(context)!.light,
+                      svgPicture: SvgPicture.asset(
+                        Svgs.lightThemeMode,
+                        width: 95.w,
+                      ),
                       isSelected:
                           !(appearanceState as LoadedAppearanceState).isDark,
                       onTap: () {
@@ -67,6 +73,10 @@ class AppearanceSettingsScreen extends StatelessWidget {
                     SizedBox(width: 40.w),
                     SettingsAppearanceSelectItem(
                       text: AppLocalizations.of(context)!.dark,
+                      svgPicture: SvgPicture.asset(
+                        Svgs.darkThemeMode,
+                        width: 95.w,
+                      ),
                       isSelected: appearanceState.isDark,
                       onTap: () {
                         context

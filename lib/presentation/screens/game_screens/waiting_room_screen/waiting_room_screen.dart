@@ -35,7 +35,7 @@ class WaitingRoomScreen extends StatelessWidget {
 
     return BlocListener<InternetConnectionBloc, InternetConnectionState>(
       listener: (context, internetConnectionState) {
-        log('interne connection changed');
+        log('internet connection changed');
         // Navigates user back to the main screen if there is not inrenet connection.
         if (internetConnectionState is DisconnectedInternetConnectionState) {
           showNotificationPopUp(

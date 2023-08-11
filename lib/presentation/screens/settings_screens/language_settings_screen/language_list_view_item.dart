@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:game/domain/entities/language.dart';
 import 'package:game/presentation/bloc/language_bloc/language_bloc.dart';
@@ -25,7 +26,6 @@ class LanguageListViewItem extends StatelessWidget {
 
     final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
 
-
     return GestureDetector(
       onTap: () {
         context.read<LanguageBloc>().add(ChangeLanguageEvent(
@@ -33,20 +33,23 @@ class LanguageListViewItem extends StatelessWidget {
             ));
       },
       behavior: HitTestBehavior.opaque,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CustomText(text: text),
-          !isSelected
-              ? const SizedBox.shrink()
-              : SvgPicture.asset(
-                  Svgs.arrowDown,
-                  colorFilter: ColorFilter.mode(
-                    textTheme.color,
-                    BlendMode.srcIn,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomText(text: text),
+            !isSelected
+                ? const SizedBox.shrink()
+                : SvgPicture.asset(
+                    Svgs.arrowDown,
+                    colorFilter: ColorFilter.mode(
+                      textTheme.color,
+                      BlendMode.srcIn,
+                    ),
                   ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

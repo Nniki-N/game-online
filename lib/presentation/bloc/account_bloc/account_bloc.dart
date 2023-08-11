@@ -52,7 +52,6 @@ class AccountBloc extends Bloc<AccountEvent, AccountState> {
         },
         onError: (error, stackTrace) {
           emit(const EmptyAccountState());
-          // log('AccountBloc: account stream error');
         },
       );
     } catch (exception) {
