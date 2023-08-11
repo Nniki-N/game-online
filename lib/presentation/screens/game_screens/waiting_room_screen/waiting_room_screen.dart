@@ -40,8 +40,8 @@ class WaitingRoomScreen extends StatelessWidget {
         if (internetConnectionState is DisconnectedInternetConnectionState) {
           showNotificationPopUp(
             context: context,
-            dialogTitle: AppLocalizations.of(context)!.disconnected,
-            dialogContent:
+            popUpTitle: AppLocalizations.of(context)!.disconnected,
+            popUpText:
                 AppLocalizations.of(context)!.thereIsNoInternetConnection,
             buttonText: AppLocalizations.of(context)!.ok,
           ).then((value) {
@@ -105,8 +105,8 @@ class WaitingRoomScreen extends StatelessWidget {
               if (hasDenialNotification && roomState is InRoomState) {
                 showNotificationPopUp(
                   context: context,
-                  dialogTitle: AppLocalizations.of(context)!.refusal,
-                  dialogContent:
+                  popUpTitle: AppLocalizations.of(context)!.refusal,
+                  popUpText:
                       AppLocalizations.of(context)!.yourGameOfferWasDenied,
                   buttonText: AppLocalizations.of(context)!.ok,
                 ).then((_) {

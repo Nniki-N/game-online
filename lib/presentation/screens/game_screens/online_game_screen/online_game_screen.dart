@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/di/locator.dart';
 import 'package:game/common/errors/game_room_error.dart';
 import 'package:game/common/navigation/app_router.gr.dart';
+import 'package:game/common/utils/error_localization_convertor.dart';
 import 'package:game/domain/entities/chip.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_state.dart';
@@ -73,8 +74,8 @@ class OnlineGameScreen extends StatelessWidget {
           if (internetConnectionState is DisconnectedInternetConnectionState) {
             showNotificationPopUp(
               context: context,
-              dialogTitle: AppLocalizations.of(context)!.disconnected,
-              dialogContent:
+              popUpTitle: AppLocalizations.of(context)!.disconnected,
+              popUpText:
                   AppLocalizations.of(context)!.thereIsNoInternetConnection,
               buttonText: AppLocalizations.of(context)!.ok,
             ).then((value) {
@@ -100,8 +101,8 @@ class OnlineGameScreen extends StatelessWidget {
               if (!isPopUpShown) {
                 showAcceptOrDenyPopUp(
                   context: context,
-                  dialogTitle: AppLocalizations.of(context)!.secondPlayerLeft,
-                  dialogContent:
+                  popUpTitle: AppLocalizations.of(context)!.secondPlayerLeft,
+                  popUpText:
                       AppLocalizations.of(context)!.doYouWantToWaitForNewPlayer,
                   buttonAcceptText: AppLocalizations.of(context)!.wait,
                   buttonDenyText: AppLocalizations.of(context)!.leave,
@@ -194,8 +195,8 @@ class OnlineGameScreen extends StatelessWidget {
 
                   showAcceptOrDenyPopUp(
                     context: context,
-                    dialogTitle: AppLocalizations.of(context)!.gameFinished,
-                    dialogContent:
+                    popUpTitle: AppLocalizations.of(context)!.gameFinished,
+                    popUpText:
                         '$winnerUsername ${AppLocalizations.of(context)!.wonDoYouWantToRestartGame}',
                     buttonAcceptText: AppLocalizations.of(context)!.restart,
                     buttonDenyText: AppLocalizations.of(context)!.leave,
@@ -220,8 +221,8 @@ class OnlineGameScreen extends StatelessWidget {
                 if (!isPopUpShown) {
                   showNotificationPopUp(
                     context: context,
-                    dialogTitle: AppLocalizations.of(context)!.gameFinished,
-                    dialogContent: AppLocalizations.of(context)!
+                    popUpTitle: AppLocalizations.of(context)!.gameFinished,
+                    popUpText: AppLocalizations.of(context)!
                         .secondPlayerDoesNotRespondForALongTime,
                     buttonText: AppLocalizations.of(context)!.ok,
                   ).then((_) {
@@ -245,8 +246,12 @@ class OnlineGameScreen extends StatelessWidget {
                 if (wrongMoveError) {
                   showNotificationPopUp(
                     context: context,
-                    dialogTitle: gameRoomError.errorTitle,
-                    dialogContent: gameRoomError.errorText,
+                    popUpTitle:
+                        getLocalizatedError(context, error: gameRoomError)
+                            .errorTitle,
+                    popUpText:
+                        getLocalizatedError(context, error: gameRoomError)
+                            .errorText,
                     buttonText: AppLocalizations.of(context)!.ok,
                   );
                 }
@@ -257,8 +262,8 @@ class OnlineGameScreen extends StatelessWidget {
 
                   showNotificationPopUp(
                     context: context,
-                    dialogTitle: AppLocalizations.of(context)!.gameError,
-                    dialogContent: AppLocalizations.of(context)!
+                    popUpTitle: AppLocalizations.of(context)!.gameError,
+                    popUpText: AppLocalizations.of(context)!
                         .someKindOfGameErrorHasOccured,
                     buttonText: AppLocalizations.of(context)!.ok,
                   ).then((_) {

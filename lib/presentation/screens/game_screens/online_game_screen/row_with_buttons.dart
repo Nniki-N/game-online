@@ -31,8 +31,8 @@ class RowWithButtons extends StatelessWidget {
             onTap: () {
               showAcceptOrDenyPopUp(
                 context: context,
-                dialogTitle: AppLocalizations.of(context)!.giveUp,
-                dialogContent: AppLocalizations.of(context)!.areYouSure,
+                popUpTitle: AppLocalizations.of(context)!.giveUp,
+                popUpText: AppLocalizations.of(context)!.areYouSure,
                 buttonAcceptText: AppLocalizations.of(context)!.giveUp,
                 buttonDenyText: AppLocalizations.of(context)!.cancel,
               ).then((giveUp) {
@@ -50,8 +50,8 @@ class RowWithButtons extends StatelessWidget {
             onTap: () {
               showAcceptOrDenyPopUp(
                 context: context,
-                dialogTitle: AppLocalizations.of(context)!.leaveTheGame,
-                dialogContent: AppLocalizations.of(context)!.areYouSure,
+                popUpTitle: AppLocalizations.of(context)!.leaveTheGame,
+                popUpText: AppLocalizations.of(context)!.areYouSure,
                 buttonAcceptText: AppLocalizations.of(context)!.leave,
                 buttonDenyText: AppLocalizations.of(context)!.cancel,
               ).then((leave) {

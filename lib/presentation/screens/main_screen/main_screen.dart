@@ -62,8 +62,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         if (showPopupWithBasicSentences) {
           showNotificationPopUp(
             context: context,
-            dialogTitle: AppLocalizations.of(context)!.roomError,
-            dialogContent:
+            popUpTitle: AppLocalizations.of(context)!.roomError,
+            popUpText:
                 AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
             buttonText: AppLocalizations.of(context)!.ok,
           );
@@ -142,8 +142,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
             if (showPopupWithBasicSentences) {
               showNotificationPopUp(
                 context: context,
-                dialogTitle: AppLocalizations.of(context)!.roomError,
-                dialogContent:
+                popUpTitle: AppLocalizations.of(context)!.roomError,
+                popUpText:
                     AppLocalizations.of(context)!.someKindOfRoomErrorHasOccured,
                 buttonText: AppLocalizations.of(context)!.ok,
               );

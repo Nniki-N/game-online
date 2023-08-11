@@ -108,8 +108,8 @@ class ConnectionsFriendItem extends StatelessWidget {
               case 1:
                 showAcceptOrDenyPopUp(
                   context: context,
-                  dialogTitle: AppLocalizations.of(context)!.removeFromFriends,
-                  dialogContent: AppLocalizations.of(context)!.areYouSure,
+                  popUpTitle: AppLocalizations.of(context)!.removeFromFriends,
+                  popUpText: AppLocalizations.of(context)!.areYouSure,
                   buttonAcceptText: AppLocalizations.of(context)!.remove,
                   buttonDenyText: AppLocalizations.of(context)!.cancel,
                 ).then((remove) {

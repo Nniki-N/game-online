@@ -52,14 +52,19 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;
-    
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
         height: height ?? 50.h,
-        width: width ?? double.infinity,
+        // width: width ?? double.infinity,
         alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 12.w),
+        constraints: BoxConstraints(
+          minWidth: width ?? 80.w,
+          maxWidth: double.infinity,
+        ),
         decoration: BoxDecoration(
           color: backgroundColor ?? buttonTheme.backgroundColor,
           borderRadius: borderRadius ?? buttonTheme.borderRadius,

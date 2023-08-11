@@ -124,10 +124,10 @@ class ChoosefriendForGameScreen extends StatelessWidget {
                                       } else {
                                         showNotificationPopUp(
                                           context: context,
-                                          dialogTitle:
+                                          popUpTitle:
                                               AppLocalizations.of(context)!
                                                   .disconnected,
-                                          dialogContent:
+                                          popUpText:
                                               AppLocalizations.of(context)!
                                                   .thereIsNoInternetConnection,
                                           buttonText:

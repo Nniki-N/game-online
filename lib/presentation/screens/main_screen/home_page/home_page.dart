@@ -63,8 +63,8 @@ class HomePage extends StatelessWidget {
                   } else {
                     showNotificationPopUp(
                       context: context,
-                      dialogTitle: AppLocalizations.of(context)!.disconnected,
-                      dialogContent: AppLocalizations.of(context)!
+                      popUpTitle: AppLocalizations.of(context)!.disconnected,
+                      popUpText: AppLocalizations.of(context)!
                           .thereIsNoInternetConnection,
                       buttonText: AppLocalizations.of(context)!.ok,
                     );
@@ -85,8 +85,8 @@ class HomePage extends StatelessWidget {
                   } else {
                     showNotificationPopUp(
                       context: context,
-                      dialogTitle: AppLocalizations.of(context)!.disconnected,
-                      dialogContent: AppLocalizations.of(context)!
+                      popUpTitle: AppLocalizations.of(context)!.disconnected,
+                      popUpText: AppLocalizations.of(context)!
                           .thereIsNoInternetConnection,
                       buttonText: AppLocalizations.of(context)!.ok,
                     );

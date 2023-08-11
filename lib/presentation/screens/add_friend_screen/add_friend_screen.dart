@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/errors/friends_error.dart';
+import 'package:game/common/utils/error_localization_convertor.dart';
 import 'package:game/common/utils/string_extension.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_bloc.dart';
 import 'package:game/presentation/bloc/form_validation_bloc/form_validation_event.dart';
@@ -58,8 +59,8 @@ class AddFriendScreen extends StatelessWidget {
               if (!isPopUpShown) {
                 showNotificationPopUp(
                   context: context,
-                  dialogTitle: AppLocalizations.of(context)!.friendWasAdded,
-                  dialogContent: AppLocalizations.of(context)!
+                  popUpTitle: AppLocalizations.of(context)!.friendWasAdded,
+                  popUpText: AppLocalizations.of(context)!
                       .thisUserWasAddedToYourConnections,
                   buttonText: AppLocalizations.of(context)!.ok,
                 );
@@ -81,15 +82,17 @@ class AddFriendScreen extends StatelessWidget {
               if (showPopupWithError) {
                 showNotificationPopUp(
                   context: context,
-                  dialogTitle: friendsError.errorTitle,
-                  dialogContent: friendsError.errorText,
+                  popUpTitle: getLocalizatedError(context, error: friendsError)
+                      .errorTitle,
+                  popUpText: getLocalizatedError(context, error: friendsError)
+                      .errorText,
                   buttonText: AppLocalizations.of(context)!.ok,
                 );
               } else if (showPopupWithBasicSentences) {
                 showNotificationPopUp(
                   context: context,
-                  dialogTitle: AppLocalizations.of(context)!.addingFriendError,
-                  dialogContent: AppLocalizations.of(context)!
+                  popUpTitle: AppLocalizations.of(context)!.addingFriendError,
+                  popUpText: AppLocalizations.of(context)!
                       .somethingWentWrongWhileAddingFriend,
                   buttonText: AppLocalizations.of(context)!.ok,
                 );
@@ -174,9 +177,9 @@ class AddFriendScreen extends StatelessWidget {
                                 } else {
                                   showNotificationPopUp(
                                     context: context,
-                                    dialogTitle: AppLocalizations.of(context)!
+                                    popUpTitle: AppLocalizations.of(context)!
                                         .disconnected,
-                                    dialogContent: AppLocalizations.of(context)!
+                                    popUpText: AppLocalizations.of(context)!
                                         .thereIsNoInternetConnection,
                                     buttonText:
                                         AppLocalizations.of(context)!.ok,

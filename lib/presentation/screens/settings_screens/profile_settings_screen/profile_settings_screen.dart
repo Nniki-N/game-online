@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/errors/account_error.dart';
 import 'package:game/common/errors/profile_avatar_error.dart';
+import 'package:game/common/utils/error_localization_convertor.dart';
 import 'package:game/common/utils/string_extension.dart';
 import 'package:game/domain/entities/account.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
@@ -62,8 +63,12 @@ class ProfileSettingsScreen extends StatelessWidget {
             if (showPopupWithError) {
               showNotificationPopUp(
                 context: context,
-                dialogTitle: profileAvatarError.errorTitle,
-                dialogContent: profileAvatarError.errorText,
+                popUpTitle:
+                    getLocalizatedError(context, error: profileAvatarError)
+                        .errorTitle,
+                popUpText:
+                    getLocalizatedError(context, error: profileAvatarError)
+                        .errorText,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
             }
@@ -82,15 +87,17 @@ class ProfileSettingsScreen extends StatelessWidget {
               if (showPopupWithError) {
                 showNotificationPopUp(
                   context: context,
-                  dialogTitle: accountError.errorTitle,
-                  dialogContent: accountError.errorText,
+                  popUpTitle: getLocalizatedError(context, error: accountError)
+                      .errorTitle,
+                  popUpText: getLocalizatedError(context, error: accountError)
+                      .errorText,
                   buttonText: AppLocalizations.of(context)!.ok,
                 );
               } else {
                 showNotificationPopUp(
                   context: context,
-                  dialogTitle: AppLocalizations.of(context)!.error,
-                  dialogContent: AppLocalizations.of(context)!
+                  popUpTitle: AppLocalizations.of(context)!.error,
+                  popUpText: AppLocalizations.of(context)!
                       .somethingWentWrongPleaseTryAgain,
                   buttonText: AppLocalizations.of(context)!.ok,
                 );
@@ -186,9 +193,9 @@ class ProfileSettingsScreen extends StatelessWidget {
                             } else {
                               showNotificationPopUp(
                                 context: context,
-                                dialogTitle:
+                                popUpTitle:
                                     AppLocalizations.of(context)!.disconnected,
-                                dialogContent: AppLocalizations.of(context)!
+                                popUpText: AppLocalizations.of(context)!
                                     .thereIsNoInternetConnection,
                                 buttonText: AppLocalizations.of(context)!.ok,
                               );
@@ -262,9 +269,9 @@ class ProfileSettingsScreen extends StatelessWidget {
                             } else {
                               showNotificationPopUp(
                                 context: context,
-                                dialogTitle:
+                                popUpTitle:
                                     AppLocalizations.of(context)!.disconnected,
-                                dialogContent: AppLocalizations.of(context)!
+                                popUpText: AppLocalizations.of(context)!
                                     .thereIsNoInternetConnection,
                                 buttonText: AppLocalizations.of(context)!.ok,
                               );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide TextTheme;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:game/common/errors/auth_error.dart';
+import 'package:game/common/utils/error_localization_convertor.dart';
 import 'package:game/common/utils/string_extension.dart';
 import 'package:game/presentation/bloc/account_bloc/account_bloc.dart';
 import 'package:game/presentation/bloc/account_bloc/account_event.dart';
@@ -81,15 +82,17 @@ class SettingsRegisterScreen extends StatelessWidget {
             if (authError != null && showPopupWithError) {
               showNotificationPopUp(
                 context: context,
-                dialogTitle: authError.errorTitle,
-                dialogContent: authError.errorText,
+                popUpTitle:
+                    getLocalizatedError(context, error: authError).errorTitle,
+                popUpText:
+                    getLocalizatedError(context, error: authError).errorText,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
             } else if (authError != null && showPopupWithBasicSentences) {
               showNotificationPopUp(
                 context: context,
-                dialogTitle: AppLocalizations.of(context)!.registrationError,
-                dialogContent: AppLocalizations.of(context)!
+                popUpTitle: AppLocalizations.of(context)!.registrationError,
+                popUpText: AppLocalizations.of(context)!
                     .somethingWentWrongRegistration,
                 buttonText: AppLocalizations.of(context)!.ok,
               );
@@ -280,9 +283,9 @@ class SettingsRegisterScreen extends StatelessWidget {
                                 } else {
                                   showNotificationPopUp(
                                     context: context,
-                                    dialogTitle: AppLocalizations.of(context)!
+                                    popUpTitle: AppLocalizations.of(context)!
                                         .disconnected,
-                                    dialogContent: AppLocalizations.of(context)!
+                                    popUpText: AppLocalizations.of(context)!
                                         .thereIsNoInternetConnection,
                                     buttonText:
                                         AppLocalizations.of(context)!.ok,

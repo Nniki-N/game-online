@@ -9,15 +9,15 @@ typedef DialogOptionsBuilder<T> = Map<String, T?> Function();
 
 /// A custom basic method to show dialog popup.
 ///
-/// [dialogTitle] is a text that is shown as a title of a dialog popup.
+/// [popUpTitle] is a text that is shown as a title of a dialog popup.
 ///
-/// [dialogContent] is a text that is shown as a text of a dialog popup.
+/// [popUpText] is a text that is shown as a text of a dialog popup.
 ///
 /// [dialogOptionsBuilder] is a map of names of buttons and values that they return.
 Future<T?> showGenericPopUp<T>({
   required BuildContext context,
-  required String dialogTitle,
-  required String dialogContent,
+  required String popUpTitle,
+  required String popUpText,
   required DialogOptionsBuilder dialogOptionsBuilder,
 }) async {
   final options = dialogOptionsBuilder();
@@ -48,15 +48,16 @@ Future<T?> showGenericPopUp<T>({
               children: [
                 // The dialog title.
                 CustomText(
-                  text: dialogTitle,
+                  text: popUpTitle,
                   textAlign: TextAlign.center,
                   fontSize: 26.sp,
                   color: popUpTheme.titleColor,
+                  maxLines: 3,
                 ),
                 SizedBox(height: 10.h),
                 // The dialog content text.
                 CustomText(
-                  text: dialogContent,
+                  text: popUpText,
                   maxLines: 4,
                   textAlign: TextAlign.center,
                   color: popUpTheme.textColor,
