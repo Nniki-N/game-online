@@ -50,7 +50,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.game"
+        applicationId "com.nniki.tictactoe"
         multiDexEnabled true
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion

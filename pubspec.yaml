@@ -2,6 +2,8 @@ name: game
 description: A Flutter project for a game.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
+version: 1.1.0+2
+
 
 environment:
   sdk: '>=3.0.0-348.0.dev <4.0.0'

@@ -44,10 +44,8 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController =
-        TextEditingController(text: 'user1@gmail.com');
-    final TextEditingController passwordController =
-        TextEditingController(text: '12345678');
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     final TextTheme textTheme = Theme.of(context).extension<TextTheme>()!;
     final ButtonTheme buttonTheme = Theme.of(context).extension<ButtonTheme>()!;

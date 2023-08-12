@@ -77,10 +77,12 @@ Future<void> main() async {
           create: (_) => AppearanceBloc(
             appearanceRepository: getIt(),
           )..add(const InitializeAppearanceEvent()),
+          lazy: false,
         ),
         BlocProvider(
           create: (_) => InternetConnectionBloc()
             ..add(const InitializeInternetConnectionEvent()),
+          lazy: false,
         ),
         BlocProvider(
           create: (_) => ProfileAvatarBloc(

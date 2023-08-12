@@ -64,6 +64,6 @@ class DefaultFirebaseOptions {
     projectId: 'game-online-6a05f',
     storageBucket: 'game-online-6a05f.appspot.com',
     iosClientId: '281626527451-fagrmciq3pveqr78d37nme52g61neoqn.apps.googleusercontent.com',
-    iosBundleId: 'com.example.game',
+    iosBundleId: 'com.nniki.tictactoe',
   );
 }
