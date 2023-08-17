@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:281626527451:android:a74f8e99de23c328ca2efe",
+        "mobilesdk_app_id": "1:281626527451:android:dd54dc477389e31fca2efe",
         "android_client_info": {
-          "package_name": "com.example.game"
+          "package_name": "com.nniki.tictactoe"
         }
       },
       "oauth_client": [
         {
-          "client_id": "281626527451-gcpd850rp857rr3olko0o00bhsds7b8v.apps.googleusercontent.com",
+          "client_id": "281626527451-qfltm9vjiuhfh1dj5taequvtvoad55qi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.game",
+            "package_name": "com.nniki.tictactoe",
             "certificate_hash": "52ea8cbd0dd051111d100c63e37a1eb342862885"
           }
         },
@@ -39,46 +39,10 @@
               "client_type": 3
             },
             {
-              "client_id": "281626527451-fagrmciq3pveqr78d37nme52g61neoqn.apps.googleusercontent.com",
+              "client_id": "281626527451-15dtftgm4v0j0jehp3mf1dfoacj2qd9t.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.game"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:281626527451:android:dd54dc477389e31fca2efe",
-        "android_client_info": {
-          "package_name": "com.nniki.tictactoe"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "281626527451-2aj45tikbmcp5hmc6tevsuo2ehojn6u7.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDnAfpoONd2rsLHPoFUrqBSUw6RfI55KfQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "281626527451-2aj45tikbmcp5hmc6tevsuo2ehojn6u7.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "281626527451-fagrmciq3pveqr78d37nme52g61neoqn.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.game"
+                "bundle_id": "com.nniki.tictactoe.RunnerTests"
               }
             }
           ]
