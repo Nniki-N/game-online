@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDnAfpoONd2rsLHPoFUrqBSUw6RfI55KfQ',
-    appId: '1:281626527451:android:a74f8e99de23c328ca2efe',
+    appId: '1:281626527451:android:dd54dc477389e31fca2efe',
     messagingSenderId: '281626527451',
     projectId: 'game-online-6a05f',
     storageBucket: 'game-online-6a05f.appspot.com',
@@ -59,11 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyA87riye-6WuoAPaDyvkDYZMJVdb1JjV3o',
-    appId: '1:281626527451:ios:132560bcf1cc5220ca2efe',
+    appId: '1:281626527451:ios:4b6c937cebe364caca2efe',
     messagingSenderId: '281626527451',
     projectId: 'game-online-6a05f',
     storageBucket: 'game-online-6a05f.appspot.com',
-    iosClientId: '281626527451-fagrmciq3pveqr78d37nme52g61neoqn.apps.googleusercontent.com',
+    androidClientId: '281626527451-gcpd850rp857rr3olko0o00bhsds7b8v.apps.googleusercontent.com',
+    iosClientId: '281626527451-lhi5jlbi0n7o3ujn5tg37i2nghb5h90l.apps.googleusercontent.com',
     iosBundleId: 'com.nniki.tictactoe',
   );
 }
